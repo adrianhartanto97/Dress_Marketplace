@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Service\Test_Service\Test;
 use Illuminate\Http\Response;
+use GuzzleHttp\Client;
 
 class TestController extends Controller
 {
@@ -21,7 +22,14 @@ class TestController extends Controller
     
     public function test2(Request $request)
     {
-        $value = $request->cookie('name');
-        return view('pages.index', ['name' => $value, 'login' => 'Adrianzz']);
+        $client = new Client();
+        $value = $client->post('http://localhost/dress_marketplace/api/test', [
+            'form_params' => [
+                'name' => 'Adrian'
+            ]
+        ]);
+        //$value = $request->cookie('name');
+//        return view('pages.index', ['name' => json_decode($value->getBody())->name, 'login' => 'Adrianzz']);
+         return view('pages.index', ['name' => json_decode($value->getStatusCode()), 'login' => 'Adrianzz']);
     }
 }

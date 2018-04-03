@@ -7,7 +7,7 @@ var Login = function() {
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             rules: {
-                username: {
+                email: {
                     required: true
                 },
                 password: {
@@ -19,8 +19,8 @@ var Login = function() {
             },
 
             messages: {
-                username: {
-                    required: "Username is required."
+                email: {
+                    required: "Email is required."
                 },
                 password: {
                     required: "Password is required."
@@ -157,31 +157,24 @@ var Login = function() {
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
             rules: {
-
-                fullname: {
+                full_name: {
+                    required: true
+                },
+                gender: {
+                    required: true
+                },
+                phone_number: {
                     required: true
                 },
                 email: {
                     required: true,
                     email: true
                 },
-                address: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-
-                username: {
-                    required: true
-                },
                 password: {
                     required: true
                 },
                 rpassword: {
+                    required: true,
                     equalTo: "#register_password"
                 },
 

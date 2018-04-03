@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers\API_Controller;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use \Firebase\JWT\JWT;
+
+use App\User;
+
+class UserController extends Controller
+{
+    private $user;
+    private $jwt_key;
+    public function __construct(User $user){
+        $this->user = $user;
+        $this->jwt_key = "YYKPRvHTWOJ2DJaEPkXWiuGbAQpPmQ9x";
+    }
+    
+    public function register(Request $request)
+    {
+        try 
+        {
+            $user_dbase = DB::table('user')->where('email',$request->email)->count();
+            if ($user_dbase > 0) {
+                return response()->json(['status'=>false,'message'=>'Email already exist'],200);
+            }
+
+            else {
+                $user = $this->user->create([
+                  'full_name' => $request->get('full_name'),
+                  'email' => $request->get('email'),
+                  'password' => bcrypt($request->get('password')),
+                    'gender' => $request->get('gender'),
+                    'phone_number' => $request->get('phone_number'),
+                    'balance' => 0
+                ]);
+            }
+        }
+        catch(Exception $error)
+        {
+            return response()->json(['error'=>'something went wrong, try again later'],500);
+        }
+        return response()->json(['status'=>true,'message'=>'User created successfully','data'=>$user],200);
+    }
+    
+    public function login(Request $request)
+    {
+        $token = null;
+        try {
+            $user_dbase = DB::table('user')->where('email',$request->email)->first();
+            if (!$user_dbase) {
+                return response()->json(['status'=>false,'message'=>'User Not Found']);
+            }
+            else {
+                $pass_dbase = $user_dbase->password;
+                if(!Hash::check($request->password, $pass_dbase))
+                {
+                    return response()->json(['status'=>false,'message'=>'Invalid Credentials']);
+                }
+                else {
+                    try {
+                        $expire  = time() + 1440;
+                        $data = array(
+                            'exp'  => $expire,           // Expire
+                            'data' => [                  // Data related to the signer user
+                                'user_id'   => $user_dbase->user_id,
+                                'email'   => $user_dbase->email,
+                            ]
+                        );
+                        $jwt = JWT::encode($data, $this->jwt_key);
+                        return response()->json(['status'=>true,'jwt'=>$jwt],200);
+                    }
+                    catch (Exception $error) {
+                        return response()->json(['status'=>false,'message'=>'failed_to_create_token'], 500);
+                    }
+                }
+            }
+        } catch (Exception $error) {
+            return response()->json(['error'=>$error->getMessage()],500);
+        }
+    }
+}

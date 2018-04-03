@@ -8,11 +8,11 @@ use App\Service\Test_Service\Test;
 
 class TestController extends Controller
 {
-    public function test()
+    public function test(Request $request)
     {
         $test = new Test();
         return response()->json([
-            'name' => $test->test(),
+            'name' => $request->name,
         ]);
     }
 }

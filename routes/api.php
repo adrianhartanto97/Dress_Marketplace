@@ -13,8 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
-Route::post('test', 'API_Controller\TestController@test');
+Route::post('register', 'API_Controller\UserController@register');
+Route::post('login', 'API_Controller\UserController@login');
