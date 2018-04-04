@@ -35,6 +35,7 @@
         
         <!-- BEGIN THEME LAYOUT STYLES -->
         <!-- END THEME LAYOUT STYLES -->
+        {{ HTML::script('public/global/plugins/jquery.min.js') }}
         
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
@@ -63,6 +64,17 @@
                         <button class="close" data-close="alert"></button>
                         <span>{{ session('status') }}</span>
                     </div>
+                @elseif (session()->has('register_status') && session()->get('register_status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('register_message')}}</span>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            $('.register-form').hide();
+                            $('.login-form').show();                                                       
+                        });     
+                    </script>
                 @endif
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
@@ -122,16 +134,31 @@
 -->
             <!-- END FORGOT PASSWORD FORM -->
             <!-- BEGIN REGISTRATION FORM -->
-            <form class="register-form" action="index.html" method="post">
+            <form class="register-form" action="{{ action('Web_Controller\UserController@register') }}" method="post">
+                {{ csrf_field() }}
                 <h3 class="font-green">Sign Up</h3>
+                @if (session()->has('register_status') && session()->get('register_status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('register_message')}}</span>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            $('.login-form').hide();
+                            $('.register-form').show();
+                            $('#gender').val('{{old('gender')}}');
+                        });     
+                    </script>
+                @endif
                 <p class="hint"> Enter your personal details below: </p>
+                
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Full Name</label>
-                    <input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="full_name" /> 
+                    <input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="full_name" value="{{ old('full_name') }}"/> 
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Gender</label>
-                    <select name="gender" class="form-control">
+                    <select name="gender" class="form-control" value="{{ old('gender') }}" id="gender">
                         <option value="">Select Gender</option>
                         <option value="M">Male</option>
                         <option value="F">Female</option>
@@ -139,18 +166,18 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Phone Number</label>
-                    <input class="form-control placeholder-no-fix" type="text" placeholder="Phone Number" name="phone_number" /> 
+                    <input class="form-control placeholder-no-fix" type="text" placeholder="Phone Number" name="phone_number" value="{{ old('phone_number') }}"/> 
                 </div>
                 
                 <p class="hint"> Enter your account details below: </p>
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">Email</label>
-                    <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email" /> 
+                    <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="register_email" value="{{ old('register_email') }}" /> 
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Password</label>
-                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" name="password" /> </div>
+                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" name="register_password" /> </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
                     <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" name="rpassword" /> </div>

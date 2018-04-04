@@ -16,6 +16,43 @@ class UserController extends Controller
     public function login_page() {
         return view('login');
     }
+
+    public function register(Request $request)
+    {
+        $full_name = $request->input('full_name');
+        $gender = $request->input('gender');
+        $phone_number = $request->input('phone_number');
+        $email = $request->input('register_email');
+        $password = $request->input('register_password');
+
+        $client = new Client();
+        try {
+            $res = $client->post('http://localhost/dress_marketplace/api/register', [
+                'form_params' => [
+                    'full_name' => $full_name,
+                    'gender' => $gender,
+                    'phone_number' => $phone_number,
+                    'email' => $email,
+                    'password' => $password
+                ]
+            ]);
+        }
+
+        catch (ServerException $e) {
+            return Redirect::back()->with('status' , 'Error');
+        }
+
+        $body = json_decode($res->getBody());
+        $register_status = $body->status;
+        if ($body->status == false) {
+            $message = $body->message;
+            return Redirect::back()->with('register_status', $register_status)->with('register_message', $message)->withInput();           
+        }
+        else {
+            $message = $body->message;
+            return Redirect::back()->with('register_status', $register_status)->with('register_message', $message);
+        }
+    }
     
     public function login(Request $request) {
         $email = $request->input('email');
@@ -35,12 +72,17 @@ class UserController extends Controller
         }
 
         $body = json_decode($res->getBody());
-        if ($body->status == false and $body->message == 'User Not Found') {
-            return Redirect::back()->with('status' , $body->message);
+        $status = $body->status;
+        if ($body->status == false) {
+            $message = $body->message;
+            return Redirect::back()->with('status' , $message);
         }
 
-        else if ($body->status == false and $body->message == 'Invalid Credentials') {
-            return Redirect::back()->with('status' , $body->message);
-        }           
+        else {
+            $cookie = cookie('jwt', $body->jwt);
+            $response = new \Illuminate\Http\Response(view('pages.index', ['name' => 'AD', 'login' => 'Adrianzz']));
+            $response->withCookie($cookie);
+            return $response;
+        }          
     }
 }

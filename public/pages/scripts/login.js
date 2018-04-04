@@ -168,7 +168,6 @@ var Login = function() {
                 },
                 email: {
                     required: true,
-                    email: true
                 },
                 password: {
                     required: true

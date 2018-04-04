@@ -20,16 +20,7 @@
         {{ HTML::style('public/layouts/layout/css/themes/darkblue.min.css') }}
         {{ HTML::style('public/layouts/layout/css/custom.min.css') }}
         <!-- END THEME LAYOUT STYLES -->
-    </head>
-    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
-        <div class="page-wrapper">
-            @include('layout.header',['login' => $login])
-            <div class="clearfix"> </div>
-            <div class="page-container">
-                @yield('content')
-            </div>
-        </div>
-        
+
         <!-- BEGIN CORE PLUGINS -->
         {{ HTML::script('public/global/plugins/jquery.min.js') }}
         {{ HTML::script('public/global/plugins/bootstrap/js/bootstrap.min.js') }}
@@ -49,5 +40,14 @@
         {{ HTML::script('public/layouts/global/scripts/quick-sidebar.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-nav.min.js') }}
         <!-- END THEME LAYOUT SCRIPTS -->
+    </head>
+    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
+        <div class="page-wrapper">
+            @include('layout.header',['login' => $login])
+            <div class="clearfix"> </div>
+            <div class="page-container">
+                @yield('content')
+            </div>
+        </div>
     </body>
 </html>
