@@ -5,10 +5,11 @@ namespace App\Http\Controllers\API_Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Exception;
+use \Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use \Firebase\JWT\JWT;
+use \Firebase\JWT\ExpiredException;
 
 use App\User;
 
@@ -64,7 +65,7 @@ class UserController extends Controller
                 }
                 else {
                     try {
-                        $expire  = time() + 1440;
+                        $expire  = time() + 86400;
                         $data = array(
                             'exp'  => $expire,           // Expire
                             'data' => [                  // Data related to the signer user
@@ -75,7 +76,7 @@ class UserController extends Controller
                         $jwt = JWT::encode($data, $this->jwt_key);
                         return response()->json(['status'=>true,'jwt'=>$jwt],200);
                     }
-                    catch (Exception $error) {
+                    catch (\Exception $error) {
                         return response()->json(['status'=>false,'message'=>'failed_to_create_token'], 500);
                     }
                 }
@@ -83,5 +84,21 @@ class UserController extends Controller
         } catch (Exception $error) {
             return response()->json(['error'=>$error->getMessage()],500);
         }
+    }
+
+    public function getAuthUser (Request $request) {
+        $jwt = $request->token;
+        try {
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user = DB::table('user')
+                    ->select('user_id', 'email', 'full_name', 'gender', 'phone_number',DB::raw('CASE WHEN COALESCE(avatar,"") = "" THEN "profile_image/default.png" ELSE avatar END as avatar, balance'))
+                    ->where('user_id',$decoded->data->user_id)
+                    ->first();
+        }
+        catch(Exception $error)
+        {
+            return response()->json(['error'=>$error->getMessage()],500);
+        }
+        return response()->json(['status' => true, 'result' => $user], 200);
     }
 }

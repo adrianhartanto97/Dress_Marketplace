@@ -18,5 +18,7 @@ Route::get('/', function () {
 Route::get('login_page', 'Web_Controller\UserController@login_page');
 Route::post('login', 'Web_Controller\UserController@login');
 Route::post('register', 'Web_Controller\UserController@register');
+Route::get('logout', 'Web_Controller\UserController@logout');
 Route::get('test', 'Web_Controller\TestController@test');
 Route::get('test2', 'Web_Controller\TestController@test2');
+Route::get('index', 'Web_Controller\AppController@index');

@@ -43,7 +43,7 @@
     </head>
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
         <div class="page-wrapper">
-            @include('layout.header',['login' => $login])
+            @include('layout.header',['login_info' => $login_info])
             <div class="clearfix"> </div>
             <div class="page-container">
                 @yield('content')

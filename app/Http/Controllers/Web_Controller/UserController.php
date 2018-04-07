@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
+use Exception;
 
 class UserController extends Controller
 {
@@ -80,9 +81,15 @@ class UserController extends Controller
 
         else {
             $cookie = cookie('jwt', $body->jwt);
-            $response = new \Illuminate\Http\Response(view('pages.index', ['name' => 'AD', 'login' => 'Adrianzz']));
-            $response->withCookie($cookie);
-            return $response;
+            // $response = new \Illuminate\Http\Response(view('pages.index', ['name' => 'AD', 'login' => 'Adrianzz']));
+            // $response->withCookie($cookie);
+            //return $response;
+            return redirect('index')->withCookie($cookie);
         }          
+    }
+
+    public function logout() {
+        $cookie = \Cookie::forget('jwt');
+        return redirect('index')->withCookie($cookie);
     }
 }
