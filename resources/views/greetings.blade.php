@@ -7,7 +7,6 @@
         <!-- END GLOBAL MANDATORY STYLES -->
     </head>
     <body>
-        @include('layout.header',['login' => $login])
-        <h1>Hello, {{ $name }}</h1>
+        {!! $data !!}
     </body>
 </html>
