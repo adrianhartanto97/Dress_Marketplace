@@ -80,7 +80,8 @@ class UserController extends Controller
         }
 
         else {
-            $cookie = cookie('jwt', $body->jwt);
+           //$cookie = cookie('jwt', $body->jwt);
+            $cookie = cookie()->forever('jwt', $body->jwt);
             // $response = new \Illuminate\Http\Response(view('pages.index', ['name' => 'AD', 'login' => 'Adrianzz']));
             // $response->withCookie($cookie);
             //return $response;

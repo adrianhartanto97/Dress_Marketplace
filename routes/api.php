@@ -20,3 +20,5 @@ use Illuminate\Http\Request;
 Route::post('register', 'API_Controller\UserController@register');
 Route::post('login', 'API_Controller\UserController@login');
 Route::post('get_auth_user', 'API_Controller\UserController@getAuthUser');
+Route::post('check_store_name', 'API_Controller\StoreController@check_store_name');
+Route::post('register_store_name', 'API_Controller\StoreController@register_store_name');

@@ -1,0 +1,17 @@
+[
+            {
+                "courier_id": "1",
+                "courier_name": "JNE",
+				"alias_name": "jne"
+            },
+            {
+                "courier_id": "2",
+                "courier_name": "POS Indonesia",
+				"alias_name": "pos"
+            },
+			{
+                "courier_id": "3",
+                "courier_name": "TIKI",
+				"alias_name": "tiki"
+            }
+]

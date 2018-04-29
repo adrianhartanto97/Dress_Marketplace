@@ -24,8 +24,8 @@ class TestController extends Controller
         $string = "";
         $n = 12;
         $J_sum = 4;
-        $maks_epoch_ffa = 1;
-        $maks_epoch_psnn = 10;
+        $maks_epoch_ffa = 2;
+        $maks_epoch_psnn = 50;
         $LR = 0.1;
         $jumlah_firefly = 3;
         $B0 = 0.4; //base beta (koefisien ketertarikan awal untuk setiap kunang-kunang)
@@ -428,19 +428,19 @@ class TestController extends Controller
     }
 
     public function test3(Request $request) {
-        $daftar_firefly = array();
-        for ($i=0;$i<3;$i++) {
-            $daftar_firefly[$i] = new stdClass();
-            $daftar_firefly[$i]->intensitas = 1;
-            $daftar_firefly[$i]->best = 2;
-        }
-        $string = "";
-        for ($i=0;$i<3;$i++) {
-            $daftar_firefly[$i] = $this->hitung($daftar_firefly[$i]);
-            $string = $string.($daftar_firefly[$i]->best)."<br>";
-        }
+        // $daftar_firefly = array();
+        // for ($i=0;$i<3;$i++) {
+        //     $daftar_firefly[$i] = new stdClass();
+        //     $daftar_firefly[$i]->intensitas = 1;
+        //     $daftar_firefly[$i]->best = 2;
+        // }
+        // $string = "";
+        // for ($i=0;$i<3;$i++) {
+        //     $daftar_firefly[$i] = $this->hitung($daftar_firefly[$i]);
+        //     $string = $string.($daftar_firefly[$i]->best)."<br>";
+        // }
         
-        return view('greetings', ['data' => $string]);
+        return view('welcome');
     }
 
     private function hitung($firefly) {

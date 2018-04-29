@@ -10,17 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth.custom'], function () {
+    Route::get('test3', 'Web_Controller\TestController@test3');
 });
-
 Route::get('login_page', 'Web_Controller\UserController@login_page');
 Route::post('login', 'Web_Controller\UserController@login');
 Route::post('register', 'Web_Controller\UserController@register');
 Route::get('logout', 'Web_Controller\UserController@logout');
 Route::get('test', 'Web_Controller\TestController@test');
 Route::get('test2', 'Web_Controller\TestController@test2');
-Route::get('test3', 'Web_Controller\TestController@test3');
+//Route::get('test3', 'Web_Controller\TestController@test3');
 Route::get('algoritma_ffa_psnn', 'Web_Controller\TestController@algoritma_FFA_PSNN');
 Route::get('index', 'Web_Controller\AppController@index');
+Route::get('', 'Web_Controller\AppController@index');
