@@ -21,7 +21,7 @@
                                 <div class="col-xs-12">
                                     <p>
                                         <i class="fa fa-money"></i>
-                                        IDR 0
+                                        IDR {{ number_format($login_info->user_info->balance,0,",",".") }}
                                     </p>
                                 </div>
                             </div>
@@ -29,10 +29,18 @@
                                 <div class="col-xs-12">
                                     <p><b>My Store</b></p>
                                     <p style="margin-top:-15px;">
-                                        <i class="fa fa-building"></i>
-                                        aaa
+                                        @if ($user_store_info->have_store == true)
+                                            <i class="fa fa-building"></i>
+                                            {{$user_store_info->store->store_name}}
+                                        @else
+                                            no store yet
+                                        @endif
                                     </p>
-                                    <button style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Seller Panel</button>
+                                    @if ($user_store_info->have_store == true)
+                                        <a href="{{url('/test3')}}" style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Seller Panel</a>
+                                    @else
+                                        <a href="{{url('/open_store')}}" style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Store</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

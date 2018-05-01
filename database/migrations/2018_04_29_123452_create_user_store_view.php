@@ -18,6 +18,7 @@ class CreateUserStoreView extends Migration
             a.user_id,
             a.email,
             a.full_name,
+            b.store_id,
             b.name as 'store_name',
             b.photo,
             b.banner,

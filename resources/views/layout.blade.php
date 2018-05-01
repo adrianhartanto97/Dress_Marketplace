@@ -40,6 +40,10 @@
         {{ HTML::script('public/layouts/global/scripts/quick-sidebar.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-nav.min.js') }}
         <!-- END THEME LAYOUT SCRIPTS -->
+
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        @yield('css')
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
     </head>
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
         <div class="page-wrapper">
@@ -49,5 +53,6 @@
                 @yield('content')
             </div>
         </div>
+        @yield('script')
     </body>
 </html>

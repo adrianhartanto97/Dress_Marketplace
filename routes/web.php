@@ -23,3 +23,5 @@ Route::get('test2', 'Web_Controller\TestController@test2');
 Route::get('algoritma_ffa_psnn', 'Web_Controller\TestController@algoritma_FFA_PSNN');
 Route::get('index', 'Web_Controller\AppController@index');
 Route::get('', 'Web_Controller\AppController@index');
+Route::get('open_store', 'Web_Controller\AppController@open_store_page');
+Route::post('register_store', 'Web_Controller\AppController@register_store');
