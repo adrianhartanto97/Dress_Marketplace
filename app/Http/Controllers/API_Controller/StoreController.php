@@ -14,6 +14,7 @@ use \Firebase\JWT\ExpiredException;
 use App\Store;
 use App\Store_Bank_Account;
 use App\Store_Courier_Service;
+use App\Store_Supporting_Document;
 
 class StoreController extends Controller
 {
@@ -120,17 +121,54 @@ class StoreController extends Controller
 
                     $photo = $request->file('photo');
                     if ($photo) {
-                        $photo->storeAs('Store/photo', $request->store_name."_photo.".$photo->getClientOriginalExtension() , 'public');
+                        $photo_path = $photo->storeAs('Store/photo', $request->store_name."_photo.".$photo->getClientOriginalExtension() , 'public');
+                        $store->photo = $photo_path;
                     }
 
                     $banner = $request->file('banner');
                     if ($banner) {
-                        $banner->storeAs('Store/banner', $request->store_name."_banner.".$banner->getClientOriginalExtension() , 'public');
+                        $banner_path = $banner->storeAs('Store/banner', $request->store_name."_banner.".$banner->getClientOriginalExtension() , 'public');
+                        $store->banner = $banner_path;
                     }
 
                     $store->save();
 
                     $store_id = $store->store_id;
+
+                    $store_supporting_document = new Store_Supporting_Document();
+                    $store_supporting_document->store_id = $store_id;
+                    $ktp = $request->file('ktp');
+                    if ($ktp) {
+                        $ktp_path = $ktp->storeAs('Store/documents/ktp', $request->store_name."_ktp.".$ktp->getClientOriginalExtension() , 'public');
+                        $store_supporting_document->ktp = $ktp_path;
+                    }
+
+                    $siup = $request->file('siup');
+                    if ($siup) {
+                        $siup_path = $siup->storeAs('Store/documents/siup', $request->store_name."_siup.".$siup->getClientOriginalExtension() , 'public');
+                        $store_supporting_document->siup = $siup_path;
+                    }
+
+                    $npwp = $request->file('npwp');
+                    if ($npwp) {
+                        $npwp_path = $npwp->storeAs('Store/documents/npwp', $request->store_name."_npwp.".$npwp->getClientOriginalExtension() , 'public');
+                        $store_supporting_document->npwp = $npwp_path;
+                    }
+
+                    $skdp = $request->file('skdp');
+                    if ($skdp) {
+                        $skdp_path = $skdp->storeAs('Store/documents/skdp', $request->store_name."_skdp.".$skdp->getClientOriginalExtension() , 'public');
+                        $store_supporting_document->skdp = $skdp_path;
+                    }
+
+                    $tdp = $request->file('tdp');
+                    if ($tdp) {
+                        $tdp_path = $tdp->storeAs('Store/documents/tdp', $request->store_name."_tdp.".$tdp->getClientOriginalExtension() , 'public');
+                        $store_supporting_document->tdp = $tdp_path;
+                    }
+
+                    $store_supporting_document->save();
+
                     $store_bank_account = new Store_Bank_Account();
                     $store_bank_account->store_id = $store_id;
                     $store_bank_account->bank_name = $request->bank_name;
@@ -138,9 +176,13 @@ class StoreController extends Controller
                     $store_bank_account->bank_account_number = $request->bank_account_number;
                     $store_bank_account->name_in_bank = $request->name_in_bank_account;
 
+                    $store_bank_account->save();
+
                     $store_courier_service = new Store_Courier_Service();
                     $store_courier_service->store_id = $store_id;
                     $store_courier_service->courier_id= $request->courier;
+
+                    $store_courier_service->save();
 
                     DB::commit();
                     $status = true;

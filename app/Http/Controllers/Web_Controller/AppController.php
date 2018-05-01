@@ -164,7 +164,7 @@ class AppController extends Controller
             [
                 'name'     => 'courier',
                 'contents' => $request->courier
-            ],
+            ]
         ];
 
         if (Input::file('ktp')) {
@@ -243,5 +243,6 @@ class AppController extends Controller
         $store_info = json_decode($store->getBody());
         
         return redirect('index');
+        //print_r($store_info);
     }
 }

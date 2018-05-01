@@ -8,7 +8,6 @@ class Store extends Model
 {
     protected $table = 'store';
     protected $fillable = [
-            'store_id',
             'user_id',
             'name',
             'photo',
@@ -24,4 +23,5 @@ class Store extends Model
             'store_active_status',
             'reject_comment'
     ];
+    protected $primaryKey = 'store_id';
 }
