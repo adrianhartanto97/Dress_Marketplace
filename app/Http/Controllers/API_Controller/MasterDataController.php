@@ -34,4 +34,33 @@ class MasterDataController extends Controller
 
         return response()->json(['courier'=>$data],200);
     }
+
+    public function get_dress_attributes(Request $request) {
+        $style = DB::table('product_style_attribute')->select('*')->get();
+        $price = DB::table('product_price_attribute')->select('*')->get();
+        $size = DB::table('product_size_attribute')->select('*')->get();
+        $season = DB::table('product_season_attribute')->select('*')->get();
+        $neckline = DB::table('product_neckline_attribute')->select('*')->get();
+        $sleevelength = DB::table('product_sleevelength_attribute')->select('*')->get();
+        $waiseline = DB::table('product_waiseline_attribute')->select('*')->get();
+        $material = DB::table('product_material_attribute')->select('*')->get();
+        $fabrictype = DB::table('product_fabrictype_attribute')->select('*')->get();
+        $decoration = DB::table('product_decoration_attribute')->select('*')->get();
+        $patterntype = DB::table('product_patterntype_attribute')->select('*')->get();
+        
+        return response()->json(
+            [
+                'style'=>$style, 
+                'price'=>$price,
+                'size'=>$size,
+                'season'=>$season,
+                'neckline'=>$neckline,
+                'sleevelength'=>$sleevelength,
+                'waiseline'=>$waiseline,
+                'material'=>$material,
+                'fabrictype'=>$fabrictype,
+                'decoration'=>$decoration,
+                'patterntype'=>$patterntype
+            ], 200);
+    }
 }

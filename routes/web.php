@@ -25,3 +25,4 @@ Route::get('index', 'Web_Controller\AppController@index');
 Route::get('', 'Web_Controller\AppController@index');
 Route::get('open_store', 'Web_Controller\AppController@open_store_page');
 Route::post('register_store', 'Web_Controller\AppController@register_store');
+Route::get('seller_panel', 'Web_Controller\SellerController@seller_panel_dashboard');

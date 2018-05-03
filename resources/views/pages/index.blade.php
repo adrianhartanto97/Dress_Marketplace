@@ -37,7 +37,7 @@
                                         @endif
                                     </p>
                                     @if ($user_store_info->have_store == true)
-                                        <a href="{{url('/test3')}}" style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Seller Panel</a>
+                                        <a href="{{url('/seller_panel')}}" style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Seller Panel</a>
                                     @else
                                         <a href="{{url('/open_store')}}" style="margin-top:-10px;" type="button" class="btn blue btn-sm btn-block">Open Store</a>
                                     @endif
