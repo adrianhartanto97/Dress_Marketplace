@@ -42,10 +42,10 @@
         <!-- END THEME LAYOUT SCRIPTS -->
 
         <!-- BEGIN PAGE LEVEL PLUGINS -->
-        
+        @yield('css')
         <!-- BEGIN PAGE LEVEL PLUGINS -->
     </head>
-    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-sidebar-fixed">
         <div class="page-wrapper">
             <!-- BEGIN HEADER -->
             <div class="page-header navbar navbar-fixed-top">
@@ -53,7 +53,7 @@
                 <div class="page-header-inner ">
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
-                        <a href="index.html">
+                        <a href="#">
                             <h3 style="color:white; margin:10px;">{{$store_info->store_name}}</h3>
                             <!-- <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" />  -->
                         </a>
@@ -154,7 +154,7 @@
                             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
                             
                             <li class="nav-item @if($active_nav == 'dashboard')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/seller_panel')}}" class="nav-link">
                                     <i class="icon-home"></i>
                                     <span class="title">Dashboard</span>
                                     <span class="@if($active_nav == 'dashboard')selected @else arrow @endif"></span>
@@ -168,7 +168,7 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'products')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/seller_panel_product')}}" class="nav-link">
                                     <i class="icon-list"></i>
                                     <span class="title">Products</span>
                                     <span class="@if($active_nav == 'products')selected @else arrow @endif"></span>
@@ -214,6 +214,6 @@
                 <!-- END CONTENT -->
             </div>
         </div>
-        
+        @yield('script')
     </body>
 </html>

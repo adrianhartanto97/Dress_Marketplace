@@ -109,4 +109,39 @@ class SellerController extends Controller
             return redirect('index');
         }
     }
+
+    public function seller_panel_product (Request $request) {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+        $dress_attributes = null;
+        try {
+            $client = new Client();
+            $res = $client->post($this->base_url.'get_dress_attributes', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $dress_attributes = json_decode($res->getBody());
+        }
+        catch(Exception $e) {
+
+        }
+
+        if ($store) {
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.seller_panel_product', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'products', 'dress_attributes' => $dress_attributes]);
+            
+        }
+        else {
+            return redirect('index');
+        }
+    }
+
+    public function test(Request $request) {
+        $size = $request->size;
+        $price = $request->price_range;
+        $size[1] = (int)$size[1];
+        var_dump($price);
+    }
 }

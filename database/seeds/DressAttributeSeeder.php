@@ -24,6 +24,7 @@ class DressAttributeSeeder extends Seeder
         DB::table('product_patterntype_attribute')->delete();
 
         DB::table('product_style_attribute')->insert([
+            ['style_id' => 0, 'style_name' => 'default', 'created_at'=> new \dateTime],
             ['style_id' => 1, 'style_name' => 'bohemia', 'created_at'=> new \dateTime],
             ['style_id' => 2, 'style_name' => 'brief', 'created_at'=> new \dateTime],
             ['style_id' => 3, 'style_name' => 'casual','created_at'=> new \dateTime],
@@ -39,6 +40,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_price_attribute')->insert([
+            ['price_id' => 0, 'price_name' => 'default', 'created_at'=> new \dateTime],
             ['price_id' => 1, 'price_name' => 'low', 'created_at'=> new \dateTime],
             ['price_id' => 2, 'price_name' => 'average', 'created_at'=> new \dateTime],
             ['price_id' => 3, 'price_name' => 'medium', 'created_at'=> new \dateTime],
@@ -55,6 +57,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_season_attribute')->insert([
+            ['season_id' => 0, 'season_name' => 'default', 'created_at'=> new \dateTime],
             ['season_id' => 1, 'season_name' => 'autumn', 'created_at'=> new \dateTime],
             ['season_id' => 2, 'season_name' => 'winter', 'created_at'=> new \dateTime],
             ['season_id' => 3, 'season_name' => 'spring', 'created_at'=> new \dateTime],
@@ -62,6 +65,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_neckline_attribute')->insert([
+            ['neckline_id' => 0, 'neckline_name' => 'default', 'created_at'=> new \dateTime],
             ['neckline_id' => 1, 'neckline_name' => 'o-neck', 'created_at'=> new \dateTime],
             ['neckline_id' => 2, 'neckline_name' => 'backless', 'created_at'=> new \dateTime],
             ['neckline_id' => 3, 'neckline_name' => 'boat-neck', 'created_at'=> new \dateTime],
@@ -80,6 +84,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_sleevelength_attribute')->insert([
+            ['sleevelength_id' => 0, 'sleevelength_name' => 'default', 'created_at'=> new \dateTime],
             ['sleevelength_id' => 1, 'sleevelength_name' => 'full', 'created_at'=> new \dateTime],
             ['sleevelength_id' => 2, 'sleevelength_name' => 'halfsleeves', 'created_at'=> new \dateTime],
             ['sleevelength_id' => 3, 'sleevelength_name' => 'butterfly', 'created_at'=> new \dateTime],
@@ -92,6 +97,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_waiseline_attribute')->insert([
+            ['waiseline_id' => 0, 'waiseline_name' => 'default', 'created_at'=> new \dateTime],
             ['waiseline_id' => 1, 'waiseline_name' => 'dropped', 'created_at'=> new \dateTime],
             ['waiseline_id' => 2, 'waiseline_name' => 'empire', 'created_at'=> new \dateTime],
             ['waiseline_id' => 3, 'waiseline_name' => 'natural', 'created_at'=> new \dateTime],
@@ -99,6 +105,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_material_attribute')->insert([
+            ['material_id' => 0, 'material_name' => 'default', 'created_at'=> new \dateTime],
             ['material_id' => 1, 'material_name' => 'microfiber', 'created_at'=> new \dateTime],
             ['material_id' => 2, 'material_name' => 'polyster', 'created_at'=> new \dateTime],
             ['material_id' => 3, 'material_name' => 'silk', 'created_at'=> new \dateTime],
@@ -122,6 +129,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_fabrictype_attribute')->insert([
+            ['fabrictype_id' => 0, 'fabrictype_name' => 'default', 'created_at'=> new \dateTime],
             ['fabrictype_id' => 1, 'fabrictype_name' => 'chiffon', 'created_at'=> new \dateTime],
             ['fabrictype_id' => 2, 'fabrictype_name' => 'broadcloth', 'created_at'=> new \dateTime],
             ['fabrictype_id' => 3, 'fabrictype_name' => 'jersey', 'created_at'=> new \dateTime],
@@ -141,6 +149,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_decoration_attribute')->insert([
+            ['decoration_id' => 0, 'decoration_name' => 'default', 'created_at'=> new \dateTime],
             ['decoration_id' => 1, 'decoration_name' => 'ruffles', 'created_at'=> new \dateTime],
             ['decoration_id' => 2, 'decoration_name' => 'embroidary', 'created_at'=> new \dateTime],
             ['decoration_id' => 3, 'decoration_name' => 'bow', 'created_at'=> new \dateTime],
@@ -167,6 +176,7 @@ class DressAttributeSeeder extends Seeder
         ]);
 
         DB::table('product_patterntype_attribute')->insert([
+            ['patterntype_id' => 0, 'patterntype_name' => 'default', 'created_at'=> new \dateTime],
             ['patterntype_id' => 1, 'patterntype_name' => 'animal', 'created_at'=> new \dateTime],
             ['patterntype_id' => 2, 'patterntype_name' => 'print', 'created_at'=> new \dateTime],
             ['patterntype_id' => 3, 'patterntype_name' => 'dot', 'created_at'=> new \dateTime],

@@ -7,15 +7,10 @@ var FormRepeater = function () {
                 $(this).repeater({
         			show: function () {
 	                	$(this).slideDown();
-                        $('.date-picker').datepicker({
-                            rtl: App.isRTL(),
-                            orientation: "left",
-                            autoclose: true
-                        });
 		            },
 
 		            hide: function (deleteElement) {
-		                if(confirm('Are you sure you want to delete this element?')) {
+		                if(confirm('Are you sure you want to delete this price range?')) {
 		                    $(this).slideUp(deleteElement);
 		                }
 		            },
