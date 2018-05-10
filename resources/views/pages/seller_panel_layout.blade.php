@@ -74,7 +74,7 @@
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-user">
-                                <a href="login_page" style="color:white">
+                                <a href="{{url('/index')}}" style="color:white">
                                     <span class="username"> <b>Back Home</b> </span>
                                     <i class="icon-logout"></i>
                                 </a>
@@ -161,7 +161,7 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'store_settings')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/seller_panel_store_settings')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">Store Settings</span>
                                     <span class="@if($active_nav == 'store_settings')selected @else arrow @endif"></span>

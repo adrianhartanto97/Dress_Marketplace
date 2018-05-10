@@ -110,6 +110,20 @@ class SellerController extends Controller
         }
     }
 
+    public function seller_panel_store_settings (Request $request) 
+    {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+
+        if ($store) {
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.seller_panel_store_settings', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'store_settings']);
+        }
+        else {
+            return redirect('index');
+        }
+    }
+
     public function seller_panel_product (Request $request) {
         $jwt = $request->cookie('jwt');
         $store = $this->check_user_store($jwt);

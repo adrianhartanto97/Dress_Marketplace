@@ -27,6 +27,7 @@ class AppController extends Controller
     private function get_login_info($jwt) {
         $login_status = true;
         $user_info = new stdClass();
+        $user_store_info = new stdClass();
         $client = new Client();
         if ($jwt) {
             try{
@@ -51,15 +52,17 @@ class AppController extends Controller
                 $login_status = false;
             }
 
-            // $body = json_decode($response->getBody());
-            // $status = $body->status;
-            // if ($body->status != true) {
-            //     $login_status = false;
-            // }
-
-            // else {
-            //     $user_info = $body->result;
-            // }  
+            try {
+                $user_store = $client->post($this->base_url.'get_user_store', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+                $user_store_info = json_decode($user_store->getBody());
+            }
+            catch (Exception $e) {
+                $login_status = false;
+            }
         }
         else {
             $login_status = false;
@@ -68,6 +71,7 @@ class AppController extends Controller
         $result = new stdClass();
         $result->login_status = $login_status;
         $result->user_info = $user_info;
+        $result->user_store_info = $user_store_info;
 
         return $result;
     }
@@ -75,21 +79,11 @@ class AppController extends Controller
     public function index(Request $request)
     {
         $client = new Client();
-        $user_store_info = null;
         $jwt = $request->cookie('jwt');
 
         $login_info = $this->get_login_info($jwt);
 
-        if ($login_info->login_status == true) {    
-            $user_store = $client->post($this->base_url.'get_user_store', [
-                'form_params' => [
-                    'token' => $jwt
-                ]
-            ]);
-            $user_store_info = json_decode($user_store->getBody());
-        }
-
-        return view('pages.index', ['login_info' => $login_info, 'user_store_info' => $user_store_info]);
+        return view('pages.index', ['login_info' => $login_info]);
     }
 
     public function open_store_page(Request $request) 

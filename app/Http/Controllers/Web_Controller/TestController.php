@@ -439,8 +439,20 @@ class TestController extends Controller
         //     $daftar_firefly[$i] = $this->hitung($daftar_firefly[$i]);
         //     $string = $string.($daftar_firefly[$i]->best)."<br>";
         // }
+        srand(5); 
+        $a = rand(1, 10);
+        $b = rand(1, 10);
+        $c = rand(1, 10);
+        $d = rand(1, 10);
+        $e = rand(1, 10);
+
+        echo($a);
+        echo($b);
+        echo($c);
+        echo($d);
+        echo($e);
         
-        return view('welcome');
+        //return view('welcome');
     }
 
     private function hitung($firefly) {

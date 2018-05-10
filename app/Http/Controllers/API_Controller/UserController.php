@@ -63,21 +63,28 @@ class UserController extends Controller
                 {
                     return response()->json(['status'=>false,'message'=>'Invalid Credentials']);
                 }
-                else {
-                    try {
-                        $expire  = time() + 86400;
-                        $data = array(
-                            'exp'  => $expire,           // Expire
-                            'data' => [                  // Data related to the signer user
-                                'user_id'   => $user_dbase->user_id,
-                                'email'   => $user_dbase->email,
-                            ]
-                        );
-                        $jwt = JWT::encode($data, $this->jwt_key);
-                        return response()->json(['status'=>true,'jwt'=>$jwt],200);
+                else
+                {
+                    if ($user_dbase->active_status == '2')
+                    {
+                        return response()->json(['status'=>false,'message'=>'User Non-Active']);
                     }
-                    catch (\Exception $error) {
-                        return response()->json(['status'=>false,'message'=>'failed_to_create_token'], 500);
+                    else {
+                        try {
+                            $expire  = time() + 86400;
+                            $data = array(
+                                'exp'  => $expire,           // Expire
+                                'data' => [                  // Data related to the signer user
+                                    'user_id'   => $user_dbase->user_id,
+                                    'email'   => $user_dbase->email,
+                                ]
+                            );
+                            $jwt = JWT::encode($data, $this->jwt_key);
+                            return response()->json(['status'=>true,'jwt'=>$jwt],200);
+                        }
+                        catch (\Exception $error) {
+                            return response()->json(['status'=>false,'message'=>'failed_to_create_token'], 500);
+                        }
                     }
                 }
             }
