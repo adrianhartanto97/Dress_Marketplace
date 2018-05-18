@@ -132,7 +132,7 @@ var FormWizard = function () {
             });
 
             var displayConfirm = function() {
-                $('#tab5 .form-control-static', form).each(function(){
+                $('#tab4 .form-control-static', form).each(function(){
                     var input = $('[name="'+$(this).attr("data-display")+'"]', form);
                     if (input.is(":radio")) {
                         input = $('[name="'+$(this).attr("data-display")+'"]:checked', form);
@@ -143,12 +143,12 @@ var FormWizard = function () {
                         $(this).html(input.find('option:selected').text());
                     } else if (input.is(":radio") && input.is(":checked")) {
                         $(this).html(input.attr("data-title"));
-                    } else if ($(this).attr("data-display") == 'payment[]') {
-                        var payment = [];
-                        $('[name="payment[]"]:checked', form).each(function(){ 
-                            payment.push($(this).attr('data-title'));
+                    } else if ($(this).attr("data-display") == 'courier[]') {
+                        var courier = [];
+                        $('[name="courier[]"]:checked', form).each(function(){ 
+                            courier.push($(this).attr('data-title'));
                         });
-                        $(this).html(payment.join("<br>"));
+                        $(this).html(courier.join("<br>"));
                     }
                 });
             }
@@ -308,7 +308,7 @@ jQuery(document).ready(function() {
     var courier_list = null;
     var province_input = $("select[name='province']");
     var city_input = $("select[name='city']");
-    var courier_input = $("select[name='courier']");
+    var courier_input = $("#courier_input");
     $.ajax({
         type:"POST",
         url : "http://localhost/dress_marketplace/api/get_province_list",
@@ -359,8 +359,12 @@ jQuery(document).ready(function() {
             courier_list = response.courier;
             $.each(courier_list, function(index, value) {          
                 courier_input.append(
-                    $('<option></option>').val(value.courier_id).html(value.courier_name)
+//                    $('<option></option>').val(value.courier_id).html(value.courier_name)
+                        '<label><input type="checkbox" class="icheck" name="courier[]" data-title="' + value.courier_name +  '" value="' + value.courier_id + '">' + value.courier_name + '</label>'
                 );
+            });
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue'
             });
         },
         error: function() {

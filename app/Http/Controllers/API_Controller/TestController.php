@@ -10,9 +10,10 @@ class TestController extends Controller
 {
     public function test(Request $request)
     {
-        $test = new Test();
-        return response()->json([
-            'name' => $request->name,
-        ]);
+        $test = $request->test;
+        foreach($test as &$t) {
+            $t = "adrians";
+        }
+        return response()->json(['data'=>$test],200);
     }
 }

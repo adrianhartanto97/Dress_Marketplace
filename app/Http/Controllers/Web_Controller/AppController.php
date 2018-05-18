@@ -139,27 +139,36 @@ class AppController extends Controller
                 'name'     => 'description',
                 'contents' => $request->description
             ],
-            [
-                'name'     => 'bank_name',
-                'contents' => $request->bank_name
-            ],
-            [
-                'name'     => 'bank_account_number',
-                'contents' => $request->bank_account_number
-            ],
-            [
-                'name'     => 'branch',
-                'contents' => $request->branch
-            ],
-            [
-                'name'     => 'name_in_bank_account',
-                'contents' => $request->name_in_bank_account
-            ],
-            [
-                'name'     => 'courier',
-                'contents' => $request->courier
-            ]
+            // [
+            //     'name'     => 'bank_name',
+            //     'contents' => $request->bank_name
+            // ],
+            // [
+            //     'name'     => 'bank_account_number',
+            //     'contents' => $request->bank_account_number
+            // ],
+            // [
+            //     'name'     => 'branch',
+            //     'contents' => $request->branch
+            // ],
+            // [
+            //     'name'     => 'name_in_bank_account',
+            //     'contents' => $request->name_in_bank_account
+            // ],
+            // [
+            //     'name'     => 'courier',
+            //     'contents' => json_encode($request->courier)
+            // ]
         ];
+
+        $courier_list = $request->courier;
+        for ($i = 0; $i<count($courier_list); $i++) {
+            $array = [
+                'name'     => 'courier['.$i.']',
+                'contents' => $courier_list[$i]
+            ];
+            array_push($multipart, $array);
+        }
 
         if (Input::file('ktp')) {
             $ktp_file = Input::file('ktp');
@@ -237,7 +246,7 @@ class AppController extends Controller
         $store_info = json_decode($store->getBody());
         
         return redirect('index');
-        //print_r($store_info);
+        // var_dump($store_info);
     }
 
 }

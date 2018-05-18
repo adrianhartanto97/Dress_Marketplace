@@ -169,20 +169,23 @@ class StoreController extends Controller
 
                     $store_supporting_document->save();
 
-                    $store_bank_account = new Store_Bank_Account();
-                    $store_bank_account->store_id = $store_id;
-                    $store_bank_account->bank_name = $request->bank_name;
-                    $store_bank_account->branch = $request->branch;
-                    $store_bank_account->bank_account_number = $request->bank_account_number;
-                    $store_bank_account->name_in_bank = $request->name_in_bank_account;
+                    // $store_bank_account = new Store_Bank_Account();
+                    // $store_bank_account->store_id = $store_id;
+                    // $store_bank_account->bank_name = $request->bank_name;
+                    // $store_bank_account->branch = $request->branch;
+                    // $store_bank_account->bank_account_number = $request->bank_account_number;
+                    // $store_bank_account->name_in_bank = $request->name_in_bank_account;
 
-                    $store_bank_account->save();
+                    // $store_bank_account->save();
 
-                    $store_courier_service = new Store_Courier_Service();
-                    $store_courier_service->store_id = $store_id;
-                    $store_courier_service->courier_id= $request->courier;
+                    $courier = $request->courier;
+                    foreach($courier as $c) {
+                        $store_courier_service = new Store_Courier_Service();
+                        $store_courier_service->store_id = $store_id;
+                        $store_courier_service->courier_id= $c;
 
-                    $store_courier_service->save();
+                        $store_courier_service->save();
+                    }
 
                     DB::commit();
                     $status = true;
@@ -192,7 +195,7 @@ class StoreController extends Controller
                 catch(Exception $error) {
                     DB::rollback();
                     $status = false;
-                    $message = $error;
+                    $message = $error->getMessage();
                 }
             }
         }

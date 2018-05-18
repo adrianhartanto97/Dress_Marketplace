@@ -2,6 +2,7 @@
 
 @section('css')
     {{ HTML::style('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css') }}
+    {{ HTML::style('public/global/plugins/icheck/skins/all.css') }}
 @endsection
 
 @section('content')
@@ -13,7 +14,7 @@
                 <div class="caption">
                     <i class=" icon-layers font-red"></i>
                     <span class="caption-subject font-red bold uppercase"> Open Store -
-                        <span class="step-title"> Step 1 of 5 </span>
+                        <span class="step-title"> Step 1 of 4 </span>
                     </span>
                 </div>
             <div id="field" data-field-id="{{$jwt}}"></div>    
@@ -38,23 +39,23 @@
                                             <i class="fa fa-check"></i> Store Information </span>
                                     </a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="#tab3" data-toggle="tab" class="step active">
                                         <span class="number"> 3 </span>
                                         <span class="desc">
                                             <i class="fa fa-check"></i> Bank Account </span>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li>
-                                    <a href="#tab4" data-toggle="tab" class="step">
-                                        <span class="number"> 4 </span>
+                                    <a href="#tab3" data-toggle="tab" class="step">
+                                        <span class="number"> 3 </span>
                                         <span class="desc">
                                             <i class="fa fa-check"></i> Courier Service </span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#tab5" data-toggle="tab" class="step">
-                                        <span class="number"> 5 </span>
+                                    <a href="#tab4" data-toggle="tab" class="step">
+                                        <span class="number"> 4 </span>
                                         <span class="desc">
                                             <i class="fa fa-check"></i> Confirm </span>
                                     </a>
@@ -331,7 +332,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab3">
+                                <!-- <div class="tab-pane" id="tab3">
                                     <h3 class="block">Provide your store bank account</h3>
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Bank Name
@@ -365,20 +366,30 @@
                                             <input type="text" class="form-control" name="name_in_bank_account">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="tab-pane" id="tab4">
+                                </div> -->
+                                <div class="tab-pane" id="tab3">
                                     <h3 class="block">Choose Courier Service</h3>
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Courier Service
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <select class="form-control" name="courier">
-                                            </select>
+                                            <div class="input-group">
+                                                <div class="icheck-list" id="courier_input">
+                                                    <!-- <label>
+                                                        <input type="checkbox" class="icheck" name="courier"> Checkbox 1 </label>
+                                                    <label>
+                                                        <input type="checkbox" class="icheck" name="courier"> Checkbox 2 </label>
+                                                    <label>
+                                                        <input type="checkbox" class="icheck" name="courier"> Checkbox 3 </label> -->
+                                                </div>
+                                            </div>
+                                            <!-- <select class="form-control" name="courier">
+                                            </select> -->
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab5">
+                                <div class="tab-pane" id="tab4">
                                     <h3 class="block">Confirm registration</h3>
                                     <h4 class="form-section">Store Infomation</h4>
                                     <div class="form-group">
@@ -435,7 +446,7 @@
                                             <p class="form-control-static" data-display="description"> </p>
                                         </div>
                                     </div>
-                                    <h4 class="form-section">Bank Account</h4>
+                                    <!-- <h4 class="form-section">Bank Account</h4>
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Bank Name:</label>
                                         <div class="col-md-4">
@@ -459,12 +470,12 @@
                                         <div class="col-md-4">
                                             <p class="form-control-static" data-display="name_in_bank_account"> </p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <h4 class="form-section">Courier Service</h4>
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Courier:</label>
                                         <div class="col-md-4">
-                                            <p class="form-control-static" data-display="courier"> </p>
+                                            <p class="form-control-static" data-display="courier[]"> </p>
                                         </div>
                                     </div>
                                 </div>
@@ -499,6 +510,7 @@
     {{HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js')}}
     {{HTML::script('public/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}
     {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
+    {{HTML::script('public/global/plugins/icheck/icheck.min.js')}}
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->

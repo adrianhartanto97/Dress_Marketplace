@@ -25,7 +25,7 @@ class TestController extends Controller
         $n = 12;
         $J_sum = 4;
         $maks_epoch_ffa = 2;
-        $maks_epoch_psnn = 50;
+        $maks_epoch_psnn = 10;
         $LR = 0.1;
         $jumlah_firefly = 3;
         $B0 = 0.4; //base beta (koefisien ketertarikan awal untuk setiap kunang-kunang)
@@ -149,8 +149,8 @@ class TestController extends Controller
                 }
 
                 //aktivasi sigmoid
-                $ex = round(exp(-1*$pi), 20);
-                $y = round(1 / (1.0 + $ex) , 20);
+                $ex = round(exp(-1*$pi), 10);
+                $y = round(1 / (1.0 + $ex) , 10);
 
                 if ($y == 0) {
                     $y=0.000000000000000000001;
@@ -166,9 +166,9 @@ class TestController extends Controller
                             $hj += ($firefly->w[$b][$l] * $data[$p][$b]);
                         }
                         $pi_h = $pi / $hj;
-                        $delta = round($delta*$pi_h, 20);
+                        $delta = round($delta*$pi_h, 10);
 
-                        $w_temp[$k][$l] = round($firefly->w[$k][$l] + $delta, 20);
+                        $w_temp[$k][$l] = round($firefly->w[$k][$l] + $delta, 10);
                         if ($w_temp[$k][$l] > 1) {$w_temp[$k][$l] = 1;}
                         if ($w_temp[$k][$l] < -1) {$w_temp[$k][$l] = -1;}
                         //$string = $string." k : ".$k." , l : ".$l. " , delta : ".$w_temp[$k][$l]."<br>";
@@ -197,8 +197,8 @@ class TestController extends Controller
                         $pi *= $h[$jj];                 
                     }
                     //aktivasi sigmoid
-                    $ex = round(exp(-1*$pi), 20);
-                    $y = round(1 / (1.0 + $ex) , 20);
+                    $ex = round(exp(-1*$pi), 10);
+                    $y = round(1 / (1.0 + $ex) , 10);
 
                     if ($y == 0) {
                         $y=0.000000000000000000001;
@@ -208,9 +208,10 @@ class TestController extends Controller
                         $true_counter++ ;
                     }
 
-                    if (round($y) <> $data[$pp][13] ) {
-                        $nilai_kesalahan += (round($y) - $data[$pp][13]) * (round($y) - $data[$pp][13]);
-                    }
+                    // if (round($y) <> $data[$pp][13] ) {
+                    //     $nilai_kesalahan += (round($y) - $data[$pp][13]) * (round($y) - $data[$pp][13]);
+                    // }
+                    $nilai_kesalahan += ($y - $data[$pp][13]) * ($y - $data[$pp][13]);
                 }
                 $RMSE = sqrt($nilai_kesalahan/$total_data);
 
@@ -387,7 +388,7 @@ class TestController extends Controller
                         if (round($y) <> $data[$pp][13] ) {
                             //$nilai_kesalahan += 0.5 * (round($y) - $data[$pp][13]) * (round($y) - $data[$pp][13]);
                             //$nilai_kesalahan++; 
-                            $nilai_kesalahan += (round($y) - $data[$pp][13]) * (round($y) - $data[$pp][13]);
+                            $nilai_kesalahan += ($y - $data[$pp][13]) * ($y - $data[$pp][13]);
                         }
                     }
                     $RMSE = sqrt($nilai_kesalahan/$total_data);
@@ -411,7 +412,8 @@ class TestController extends Controller
     }
 
     private function sigmoid_bipolar($x) {
-        return (exp($x) - exp(-1*$x)) / (exp($x) + exp(-1*$x));
+        // return (exp($x) - exp(-1*$x)) / (exp($x) + exp(-1*$x));
+        return (1 - exp(-1*$x)) / (1 + exp(-1*$x));
     }
     
     public function test2(Request $request)
