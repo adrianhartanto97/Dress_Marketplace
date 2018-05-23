@@ -28,4 +28,14 @@ Route::post('register_store', 'Web_Controller\AppController@register_store');
 Route::get('seller_panel', 'Web_Controller\SellerController@seller_panel_dashboard');
 Route::get('seller_panel_store_settings', 'Web_Controller\SellerController@seller_panel_store_settings');
 Route::get('seller_panel_product', 'Web_Controller\SellerController@seller_panel_product');
+
+//admin
+Route::get('admin_login_page', 'Web_Controller\AdminController@login_page');
+Route::post('admin_login', 'Web_Controller\AdminController@login');
+Route::group(['middleware' => 'auth.admin'], function () {
+    Route::get('admin/logout', 'Web_Controller\AdminController@logout');
+    Route::get('admin/', 'Web_Controller\AdminController@manage_store');
+    Route::get('admin/manage_store', 'Web_Controller\AdminController@manage_store');
+});
+
 Route::post('proses', 'Web_Controller\SellerController@test');

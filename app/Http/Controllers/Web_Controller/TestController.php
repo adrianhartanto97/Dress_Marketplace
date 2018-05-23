@@ -23,14 +23,17 @@ class TestController extends Controller
         $total_data = 500;
         $string = "";
         $n = 12;
-        $J_sum = 4;
+        $J_sum = 5;
         $maks_epoch_ffa = 2;
         $maks_epoch_psnn = 10;
-        $LR = 0.1;
+        $LR = 0.05;
         $jumlah_firefly = 3;
         $B0 = 0.4; //base beta (koefisien ketertarikan awal untuk setiap kunang-kunang)
         $g = 0.5; //gamma (koefisien penarik / pengundang kunang-kunang lain)
-        $a = 0.5; //alpha
+        $a = 0.1; //alpha
+        $momentum = 0.5;
+
+        srand(8); 
 
         //inisialisasi dataset
         $data = array();
@@ -72,7 +75,7 @@ class TestController extends Controller
 
         //hitung intensitas masing-masing firefly
         for ($i = 0; $i < $jumlah_firefly; $i++) {
-            $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n);
+            $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n, $momentum);
             $string = $string." intensitas : ".$daftar_firefly[$i]->intensitas."<br>";
             $string = $string." ---- true : ".$daftar_firefly[$i]->true_counter."<br>";
             // for ($k = 0; $k <= $n; $k++) {
@@ -112,7 +115,7 @@ class TestController extends Controller
                             }
                         }
 
-                        $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n);
+                        $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n, $momentum);
                         
                         if ($daftar_firefly[$i]->intensitas > $intensitas_terbaik) {
                             $intensitas_terbaik = $daftar_firefly[$i]->intensitas;
@@ -129,7 +132,7 @@ class TestController extends Controller
         return view('greetings', ['data' => $string]);
     }
 
-    private function komputasi_psnn($data, $total_data, $firefly, $maks_epoch_psnn, $J_sum, $LR, $n)
+    private function komputasi_psnn($data, $total_data, $firefly, $maks_epoch_psnn, $J_sum, $LR, $n, $momentum)
     {   
         $w_temp = array();
         $RMSE_terbaik = 1000000;
@@ -162,13 +165,13 @@ class TestController extends Controller
                         $hj = 0;
                         $pi_h = 1;
 
-                        for ($b = 0; $b <= $n; $b++) {
-                            $hj += ($firefly->w[$b][$l] * $data[$p][$b]);
-                        }
-                        $pi_h = $pi / $hj;
+                        // for ($b = 0; $b <= $n; $b++) {
+                        //     $hj += ($firefly->w[$b][$l] * $data[$p][$b]);
+                        // }
+                        $pi_h = $pi / $h[$l];
                         $delta = round($delta*$pi_h, 10);
 
-                        $w_temp[$k][$l] = round($firefly->w[$k][$l] + $delta, 10);
+                        $w_temp[$k][$l] = round($firefly->w[$k][$l] + ($delta * $momentum), 10);
                         if ($w_temp[$k][$l] > 1) {$w_temp[$k][$l] = 1;}
                         if ($w_temp[$k][$l] < -1) {$w_temp[$k][$l] = -1;}
                         //$string = $string." k : ".$k." , l : ".$l. " , delta : ".$w_temp[$k][$l]."<br>";
@@ -182,7 +185,7 @@ class TestController extends Controller
                     }
                 }
 
-                //hitung MSE
+                //hitung RMSE
                 $nilai_kesalahan = 0;
                 $y_temp = array();
                 $true_counter=0;
@@ -219,7 +222,7 @@ class TestController extends Controller
                     $RMSE_terbaik = $RMSE;
                     $true_counter_terbaik = $true_counter;
                     $weight_terbaik = $firefly->w;
-                }                 
+                }                
             }
         }
 
@@ -441,19 +444,82 @@ class TestController extends Controller
         //     $daftar_firefly[$i] = $this->hitung($daftar_firefly[$i]);
         //     $string = $string.($daftar_firefly[$i]->best)."<br>";
         // }
-        srand(5); 
-        $a = rand(1, 10);
-        $b = rand(1, 10);
-        $c = rand(1, 10);
-        $d = rand(1, 10);
-        $e = rand(1, 10);
-
-        echo($a);
-        echo($b);
-        echo($c);
-        echo($d);
-        echo($e);
         
+        $stop_gamma = false;
+        $gamma_min = 1;
+        $gamma_max = 30;
+        $gamma_current = $gamma_min;
+        $string = "";
+        // while (!$stop_gamma) {
+        //     $string = $string.$gamma_current."<br>";
+
+        //     //cek kriteria stop gamma
+        //     if ($gamma_current >= 0.01 && $gamma_current < 0.10) {
+        //         $gamma_step = 0.01;
+        //     }
+        //     else if ($gamma_current >= 0.10 && $gamma_current < 1.00) {
+        //         $gamma_step = 0.1;
+        //     }
+        //     else if ($gamma_current >= 1.00 && $gamma_current < 10.00) {
+        //         $gamma_step = 1;
+        //     }
+        //     else {
+        //         $gamma_step = 10;
+        //     }
+
+        //     $gamma_current = round($gamma_current + $gamma_step,2);
+        //     if ($gamma_current > $gamma_max) {
+        //         $stop_gamma = true;
+        //     }
+        // }
+
+        // $stop_beta = false;
+        // $beta_min = 0.1;
+        // $beta_max = 1;
+        // $beta_current = $beta_min;
+        // $beta_step = 0.1;
+        // while (!$stop_beta) {
+        //     $string = $string.$beta_current."<br>";
+
+        //     //cek kriteria stop beta
+        //     $beta_current = round($beta_current + $beta_step,2);
+        //     if ($beta_current > $beta_max) {
+        //         $stop_beta = true;
+        //     }
+        // }
+
+        // $stop_alpha = false;
+        // $alpha_min = 0.1;
+        // $alpha_max = 0.2;
+        // $alpha_current = $alpha_min;
+        // $alpha_step = 0.02;
+        // while (!$stop_alpha) {
+        //     $string = $string.$alpha_current."<br>";
+
+        //     //cek kriteria stop alpha
+        //     $alpha_current = round($alpha_current + $alpha_step,2);
+        //     if ($alpha_current > $alpha_max) {
+        //         $stop_alpha = true;
+        //     }
+        // }
+
+        $stop_momentum = false;
+        $momentum_min = 0.1;
+        $momentum_max = 1;
+        $momentum_current = $momentum_min;
+        $momentum_step = 0.1;
+        while (!$stop_momentum) {
+            $string = $string.$momentum_current."<br>";
+
+            //cek kriteria stop momentum
+            $momentum_current = round($momentum_current + $momentum_step,2);
+            if ($momentum_current > $momentum_max) {
+                $stop_momentum = true;
+            }
+        }
+        
+        return view('greetings', ['data' => $string]);
+        //print_r($string);
         //return view('welcome');
     }
 

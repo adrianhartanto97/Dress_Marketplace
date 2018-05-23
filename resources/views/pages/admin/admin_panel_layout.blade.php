@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Dress Marketplace</title>
+        <title>Admin Page Dress Marketplace</title>
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />  
@@ -54,7 +54,7 @@
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
                         <a href="#">
-                            <h3 style="color:white; margin:10px;">{{$store_info->store_name}}</h3>
+                            <h3 style="color:white; margin:10px;">Admin Page</h3>
                             <!-- <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" />  -->
                         </a>
                         <div class="menu-toggler sidebar-toggler">
@@ -74,51 +74,11 @@
                             <!-- BEGIN USER LOGIN DROPDOWN -->
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-user">
-                                <a href="{{url('/index')}}" style="color:white">
-                                    <span class="username"> <b>Back Home</b> </span>
+                                <a href="{{url('/admin/logout')}}" style="color:white">
+                                    <span class="username"> <b>Logout</b> </span>
                                     <i class="icon-logout"></i>
                                 </a>
                             </li>
-                            
-                            <li class="dropdown dropdown-user">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <img alt="" class="img-circle" src="{{asset('/public/storage').'/'.$login_info->user_info->avatar}}" />
-                                    <span class="username username-hide-on-mobile"> <b>{{ $login_info->user_info->full_name }}</b> </span>
-                                    <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
-                                        <a href="page_user_profile_1.html">
-                                            <i class="icon-user"></i> My Profile </a>
-                                    </li>
-                                    <li>
-                                        <a href="app_calendar.html">
-                                            <i class="icon-calendar"></i> My Calendar </a>
-                                    </li>
-                                    <li>
-                                        <a href="app_inbox.html">
-                                            <i class="icon-envelope-open"></i> My Inbox
-                                            <span class="badge badge-danger"> 3 </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="app_todo.html">
-                                            <i class="icon-rocket"></i> My Tasks
-                                            <span class="badge badge-success"> 7 </span>
-                                        </a>
-                                    </li>
-                                    <li class="divider"> </li>
-                                    <li>
-                                        <a href="page_user_lock_1.html">
-                                            <i class="icon-lock"></i> Lock Screen </a>
-                                    </li>
-                                    <li>
-                                        <a href="logout">
-                                            <i class="icon-key"></i> Log Out </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- END USER LOGIN DROPDOWN -->
                             
                         </ul>
                     </div>
@@ -153,48 +113,41 @@
                             <!-- END SIDEBAR TOGGLER BUTTON -->
                             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
                             
-                            <li class="nav-item @if($active_nav == 'dashboard')active @else @endif">
+                            <li class="nav-item @if($active_nav == 'manage_store')active @else @endif">
                                 <a href="{{url('/seller_panel')}}" class="nav-link">
-                                    <i class="icon-home"></i>
-                                    <span class="title">Dashboard</span>
-                                    <span class="@if($active_nav == 'dashboard')selected @else arrow @endif"></span>
+                                    <i class="icon-settings"></i>
+                                    <span class="title">Manage Store</span>
+                                    <span class="@if($active_nav == 'manage_store')selected @else arrow @endif"></span>
                                 </a>
                             </li>
-                            <li class="nav-item @if($active_nav == 'store_settings')active @else @endif">
+                            <li class="nav-item @if($active_nav == 'manage_product')active @else @endif">
                                 <a href="{{url('/seller_panel_store_settings')}}" class="nav-link">
                                     <i class="icon-settings"></i>
-                                    <span class="title">Store Settings</span>
-                                    <span class="@if($active_nav == 'store_settings')selected @else arrow @endif"></span>
+                                    <span class="title">Manage Product</span>
+                                    <span class="@if($active_nav == 'manage_product')selected @else arrow @endif"></span>
                                 </a>
                             </li>
-                            <li class="nav-item @if($active_nav == 'products')active @else @endif">
+                            <li class="nav-item @if($active_nav == 'manage_user')active @else @endif">
                                 <a href="{{url('/seller_panel_product')}}" class="nav-link">
-                                    <i class="icon-list"></i>
-                                    <span class="title">Products</span>
-                                    <span class="@if($active_nav == 'products')selected @else arrow @endif"></span>
+                                    <i class="icon-settings"></i>
+                                    <span class="title">Manage User</span>
+                                    <span class="@if($active_nav == 'manage_user')selected @else arrow @endif"></span>
                                 </a>
                             </li>
-                            <li class="nav-item @if($active_nav == 'sales')active @else @endif">
+                            <li class="nav-item @if($active_nav == 'verify_payment')active @else @endif">
                                 <a href="index.html" class="nav-link">
-                                    <i class="icon-basket"></i>
-                                    <span class="title">Sales</span>
-                                    <span class="@if($active_nav == 'sales')selected @else arrow @endif"></span>
+                                    <i class="icon-settings"></i>
+                                    <span class="title">Verify Payment</span>
+                                    <span class="@if($active_nav == 'verify_payment')selected @else arrow @endif"></span>
                                 </a>
                             </li>
-                            <li class="nav-item @if($active_nav == 'rfq')active @else @endif">
+                            <li class="nav-item @if($active_nav == 'algo')active @else @endif">
                                 <a href="index.html" class="nav-link">
-                                    <i class="icon-notebook"></i>
-                                    <span class="title">Request for Quotation</span>
-                                    <span class="@if($active_nav == 'rfq')selected @else arrow @endif"></span>
+                                    <i class="icon-settings"></i>
+                                    <span class="title">FFA - PSNN Algorithm</span>
+                                    <span class="@if($active_nav == 'algo')selected @else arrow @endif"></span>
                                 </a>
-                            </li>
-                            <li class="nav-item @if($active_nav == 'partnership')active @else @endif">
-                                <a href="index.html" class="nav-link">
-                                    <i class="icon-user-following"></i>
-                                    <span class="title">Partnership</span>
-                                    <span class="@if($active_nav == 'partnership')selected @else arrow @endif"></span>
-                                </a>
-                            </li>
+                            </li>\
                         </ul>
                         <!-- END SIDEBAR MENU -->
                         <!-- END SIDEBAR MENU -->
