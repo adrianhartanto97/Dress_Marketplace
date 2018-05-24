@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('admin/logout', 'Web_Controller\AdminController@logout');
     Route::get('admin/', 'Web_Controller\AdminController@manage_store');
     Route::get('admin/manage_store', 'Web_Controller\AdminController@manage_store');
+    Route::post('admin/reject_store', 'Web_Controller\AdminController@reject_store');
+    Route::post('admin/accept_store', 'Web_Controller\AdminController@accept_store');
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');

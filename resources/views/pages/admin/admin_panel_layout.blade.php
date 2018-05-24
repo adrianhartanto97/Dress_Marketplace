@@ -1,4 +1,5 @@
 <html>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <head>
         <title>Admin Page Dress Marketplace</title>
         <!-- BEGIN GLOBAL MANDATORY STYLES -->

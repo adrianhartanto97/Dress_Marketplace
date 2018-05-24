@@ -62,4 +62,36 @@ class AdminController extends Controller
         $pending_store = DB::table('view_store_pending')->get();
         return view('pages.admin.admin_panel_manage_store',['active_nav' => "manage_store", 'pending_store' => $pending_store]);
     }
+
+    public function accept_store (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('store')
+            ->where('store_id', $request->store_id)
+            ->update(['store_active_status' => '1']);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
+
+    public function reject_store (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('store')
+            ->where('store_id', $request->store_id)
+            ->update(['store_active_status' => '2', 'reject_comment' => $request->reject_comment]);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
 }
