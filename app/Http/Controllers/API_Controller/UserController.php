@@ -38,7 +38,8 @@ class UserController extends Controller
                   'password' => bcrypt($request->get('password')),
                     'gender' => $request->get('gender'),
                     'phone_number' => $request->get('phone_number'),
-                    'balance' => 0
+                    'balance' => 0,
+                    'active_status' => '1'
                 ]);
             }
         }

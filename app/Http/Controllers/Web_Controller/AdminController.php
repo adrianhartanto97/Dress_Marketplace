@@ -94,4 +94,50 @@ class AdminController extends Controller
         }
         return response()->json(['status' => $status, 'message' => $message], 200);
     }
+
+    public function manage_user (Request $request)
+    {
+        $active_user = DB::table('user')
+        ->select('user_id', 'email', 'full_name', DB::raw('CASE WHEN COALESCE(avatar,"") = "" THEN "profile_image/default.png" ELSE avatar END as avatar'))
+        ->where(DB::raw('COALESCE(active_status,"1")') , "1")
+        ->get();
+
+        $nonactive_user = DB::table('user')
+        ->select('user_id', 'email', 'full_name', DB::raw('CASE WHEN COALESCE(avatar,"") = "" THEN "profile_image/default.png" ELSE avatar END as avatar'))
+        ->where('active_status' , "2")
+        ->get();
+        return view('pages.admin.admin_panel_manage_user',['active_nav' => "manage_user", 'active_user' => $active_user, 'nonactive_user' => $nonactive_user]);
+    }
+
+    public function set_nonactive_user (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('user')
+            ->where('user_id', $request->user_id)
+            ->update(['active_status' => '2']);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
+
+    public function set_active_user (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('user')
+            ->where('user_id', $request->user_id)
+            ->update(['active_status' => '1']);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
 }

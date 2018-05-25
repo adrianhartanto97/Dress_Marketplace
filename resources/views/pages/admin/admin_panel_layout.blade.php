@@ -115,7 +115,7 @@
                             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
                             
                             <li class="nav-item @if($active_nav == 'manage_store')active @else @endif">
-                                <a href="{{url('/seller_panel')}}" class="nav-link">
+                                <a href="{{url('/admin/manage_store')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">Manage Store</span>
                                     <span class="@if($active_nav == 'manage_store')selected @else arrow @endif"></span>
@@ -129,7 +129,7 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'manage_user')active @else @endif">
-                                <a href="{{url('/seller_panel_product')}}" class="nav-link">
+                                <a href="{{url('/admin/manage_user')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">Manage User</span>
                                     <span class="@if($active_nav == 'manage_user')selected @else arrow @endif"></span>

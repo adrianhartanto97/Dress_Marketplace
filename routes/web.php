@@ -38,6 +38,9 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('admin/manage_store', 'Web_Controller\AdminController@manage_store');
     Route::post('admin/reject_store', 'Web_Controller\AdminController@reject_store');
     Route::post('admin/accept_store', 'Web_Controller\AdminController@accept_store');
+    Route::get('admin/manage_user', 'Web_Controller\AdminController@manage_user');
+    Route::post('admin/set_nonactive_user', 'Web_Controller\AdminController@set_nonactive_user');
+    Route::post('admin/set_active_user', 'Web_Controller\AdminController@set_active_user');
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');
