@@ -152,10 +152,138 @@ class SellerController extends Controller
         }
     }
 
+    public function add_product (Request $request)
+    {
+        try {
+            $client = new Client();
+            $jwt = $request->cookie('jwt');
+            $photo_file = Input::file('photo');
+            $multipart = [
+                [
+                    'name'     => 'token',
+                    'contents' => $jwt
+                ],
+                [
+                    'name'     => 'name',
+                    'contents' => $request->name
+                ],
+                [
+                    'name'     => 'min_order',
+                    'contents' => $request->min_order
+                ],
+                [
+                    'name'     => 'weight',
+                    'contents' => $request->weight
+                ],
+                [
+                    'name'     => 'description',
+                    'contents' => $request->description
+                ],
+                [
+                    'name'     => 'photo',
+                    'contents' => fopen( $photo_file->getRealPath(), 'r'),
+                    'filename' => 'photo.'.$photo_file->getClientOriginalExtension()
+                ],
+                [
+                    'name'     => 'style_id',
+                    'contents' => $request->style
+                ],
+                [
+                    'name'     => 'season_id',
+                    'contents' => $request->season
+                ],
+                [
+                    'name'     => 'neckline_id',
+                    'contents' => $request->neckline
+                ],
+                [
+                    'name'     => 'sleevelength_id',
+                    'contents' => $request->sleevelength
+                ],
+                [
+                    'name'     => 'waiseline_id',
+                    'contents' => $request->waiseline
+                ],
+                [
+                    'name'     => 'material_id',
+                    'contents' => $request->material
+                ],
+                [
+                    'name'     => 'fabrictype_id',
+                    'contents' => $request->fabrictype
+                ],
+                [
+                    'name'     => 'decoration_id',
+                    'contents' => $request->decoration
+                ],
+                [
+                    'name'     => 'patterntype_id',
+                    'contents' => $request->patterntype
+                ],
+                // [
+                //     'name'     => 'price',
+                //     'contents' => $request->price_range
+                // ],
+                // [
+                //     'name'     => 'size',
+                //     'contents' => $request->size
+                // ]
+            ];
+
+            $size = $request->size;
+            for ($i = 0; $i<count($size); $i++) {
+                $array = [
+                    'name'     => 'size['.$i.']',
+                    'contents' => $size[$i]
+                ];
+                array_push($multipart, $array);
+            }
+
+            $price = $request->price_range;
+            for ($i = 0; $i<count($price); $i++) {
+                $qty_min = [
+                    'name'     => 'price['.$i.'][qty_min]',
+                    'contents' => $price[$i]['qty_min']
+                ];
+                array_push($multipart, $qty_min);
+
+                $qty_max = [
+                    'name'     => 'price['.$i.'][qty_max]',
+                    'contents' => $price[$i]['qty_max']
+                ];
+                array_push($multipart, $qty_max);
+
+                $price_p = [
+                    'name'     => 'price['.$i.'][price]',
+                    'contents' => $price[$i]['price']
+                ];
+                array_push($multipart, $price_p);
+            }
+
+            $product = $client->post($this->base_url.'add_product', [
+                'multipart' => $multipart
+            ]);
+            $product_info = json_decode($product->getBody());
+            
+            //return redirect('index');
+            //var_dump($product_info);
+            
+        }
+
+        catch (Exception $e)
+        {
+            //var_dump($e->getMessage());
+            $status = $false;
+            $message = $e->getMessage();
+        }
+
+        return Redirect::back()->with('status', $product_info->status)->with('message', $product_info->message);
+    }
+
     public function test(Request $request) {
         $size = $request->size;
         $price = $request->price_range;
         $size[1] = (int)$size[1];
-        var_dump($price);
+        var_dump($size);
     }
 }

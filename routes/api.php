@@ -29,3 +29,4 @@ Route::post('get_city_by_province', 'API_Controller\MasterDataController@get_cit
 Route::post('get_courier_list', 'API_Controller\MasterDataController@get_courier_list');
 Route::post('get_dress_attributes', 'API_Controller\MasterDataController@get_dress_attributes');
 Route::post('register_store', 'API_Controller\StoreController@register_store');
+Route::post('add_product', 'API_Controller\StoreController@add_product');

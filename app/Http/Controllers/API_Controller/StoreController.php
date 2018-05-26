@@ -15,6 +15,9 @@ use App\Store;
 use App\Store_Bank_Account;
 use App\Store_Courier_Service;
 use App\Store_Supporting_Document;
+use App\Product;
+use App\Product_Size;
+use App\Product_Price;
 
 class StoreController extends Controller
 {
@@ -190,6 +193,101 @@ class StoreController extends Controller
                     DB::commit();
                     $status = true;
                     $message = "Store registered successfully ";
+                }
+
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                }
+            }
+        }
+        catch(Exception $error) {
+            return response()->json(['error'=>$error],500);
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function add_product (Request $request) {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            if ($store == null) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+
+            else {
+                DB::beginTransaction();
+                try {
+                    $product = new Product();
+                    $product->store_id = $store->store_id;
+                    $product->name = $request->name;
+                    $product->min_order = $request->min_order;
+                    $product->weight = $request->weight;
+                    $product->description = $request->description;
+                    $product->style_id = $request->style_id;
+                    $product->season_id = $request->season_id;
+                    $product->neckline_id = $request->neckline_id;
+                    $product->sleevelength_id = $request->sleevelength_id;
+                    $product->waiseline_id = $request->waiseline_id;
+                    $product->material_id = $request->material_id;
+                    $product->fabrictype_id = $request->fabrictype_id;
+                    $product->decoration_id = $request->decoration_id;
+                    $product->patterntype_id = $request->patterntype_id;
+                    $product->product_type = "0";
+                    $product->product_active_status = "0";
+                    $product->product_ownership = "0";
+
+                    $product->save();
+
+                    $product_id = $product->product_id;
+
+                    $photo = $request->file('photo');
+                    if ($photo) {
+                        $photo_path = $photo->storeAs('Product/photo', $product_id."_photo.".$photo->getClientOriginalExtension() , 'public');
+                        
+                        $product = Product::where('product_id', $product_id)->first();
+                        $product->photo = $photo_path;
+
+                        $product->save();
+                    }
+
+                    $size = $request->size;
+
+                    if ($size) {
+                        foreach($size as $sz) {
+                            $product_size = new Product_Size();
+                            $product_size->product_id = $product_id;
+                            $product_size->size_id = $sz;
+
+                            $product_size->save();
+                            // DB::table('product_size')->insert([
+                            //     ['product_id' => $product_id, 'size_id' => $sz]
+                            // ]);
+                        }
+                    }
+
+                    $price = $request->price;
+                    if ($price) {
+                        foreach($price as $pr) {
+                            $product_price = new Product_Price();
+                            $product_price->product_id = $product_id;
+                            $product_price->qty_min = $pr['qty_min'];
+                            $product_price->qty_max = $pr['qty_max'];
+                            $product_price->price = $pr['price'];
+
+                            $product_price->save();
+                        }
+                    }   
+                    DB::commit();
+                    $status = true;
+                    $message = "Product registered successfully ";
                 }
 
                 catch(Exception $error) {

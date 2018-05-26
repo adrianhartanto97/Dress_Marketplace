@@ -18,11 +18,23 @@
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
                 <div class="form">
-                <form class="form-horizontal" action="{{ action('Web_Controller\SellerController@test') }}" id="submit_form" method="POST">
+                <form class="form-horizontal" action="{{ action('Web_Controller\SellerController@add_product') }}" id="submit_form" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
+                    @if (session()->has('status') && session()->get('status') == false)
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{ session('message')}}</span>
+                        </div>
+                    @elseif(session()->has('status') && session()->get('status') == true)
+                        <div class="alert alert-success">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{ session('message')}}</span>
+                        </div>
+                    @endif
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" name="store_id" value="{{$store_info->store_id}}"/>
                                 <div class="form-group">
                                     <label class="control-label col-md-3">Name
                                         <span class="required"> * </span>
