@@ -26,7 +26,8 @@ class Product extends Model
         'patterntype_id',
         'product_type',
         'product_active_status',
-        'product_ownership'
+        'product_ownership',
+        'reject_comment'
     ];
     protected $primaryKey = 'product_id';
 }

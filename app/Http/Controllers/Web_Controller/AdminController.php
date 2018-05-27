@@ -140,4 +140,64 @@ class AdminController extends Controller
         }
         return response()->json(['status' => $status, 'message' => $message], 200);
     }
+
+    public function manage_product (Request $request)
+    {
+        $pending_product = DB::table('view_product')
+                            ->select('*')
+                            ->where("product_type" , "0")
+                            ->where("product_active_status" , "0")
+                            ->where("product_ownership" , "0")
+                            ->get();
+
+        foreach ($pending_product as $p) {
+            $price = DB::table('product_price')
+                    ->select('*')
+                    ->where("product_id" , $p->product_id)
+                    ->get();
+
+            $size =  DB::table('product_size')
+                    ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
+                    ->select('product_size.size_id', 'product_size_attribute.size_name')
+                    ->where("product_id" , $p->product_id)
+                    ->get();
+            $p->price = $price;
+            $p->size = $size;
+        }
+
+        return view('pages.admin.admin_panel_manage_product',['active_nav' => "manage_product", 'pending_product' => $pending_product]);
+        //print_r($pending_product);
+    }
+
+    public function accept_product (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('product')
+            ->where('product_id', $request->product_id)
+            ->update(['product_active_status' => '1']);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
+
+    public function reject_product (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('product')
+            ->where('product_id', $request->product_id)
+            ->update(['product_active_status' => '2', 'reject_comment' => $request->reject_comment]);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
 }

@@ -122,7 +122,7 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'manage_product')active @else @endif">
-                                <a href="{{url('/seller_panel_store_settings')}}" class="nav-link">
+                                <a href="{{url('/admin/manage_product')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">Manage Product</span>
                                     <span class="@if($active_nav == 'manage_product')selected @else arrow @endif"></span>
