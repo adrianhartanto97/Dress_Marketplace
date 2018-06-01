@@ -249,4 +249,13 @@ class AppController extends Controller
         // var_dump($store_info);
     }
 
+    public function product_detail(Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+
+        return view('pages.product_detail', ['login_info' => $login_info]);
+    }
+
 }
