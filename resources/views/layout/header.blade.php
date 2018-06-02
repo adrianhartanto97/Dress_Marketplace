@@ -27,7 +27,7 @@
                             
                             @if($login_info->login_status == false)
                             <li class="dropdown dropdown-user">
-                                <a href="login_page" style="color:white">
+                                <a href="{{url('/login_page')}}" style="color:white">
                                     <span class="username"> <b>Login</b> </span>
                                     <i class="icon-login"></i>
                                 </a>

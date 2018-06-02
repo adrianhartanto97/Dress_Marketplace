@@ -249,13 +249,24 @@ class AppController extends Controller
         // var_dump($store_info);
     }
 
-    public function product_detail(Request $request)
+    public function product_detail(Request $request, $product_id)
     {
+        $client = new Client();
         $jwt = $request->cookie('jwt');
 
         $login_info = $this->get_login_info($jwt);
 
-        return view('pages.product_detail', ['login_info' => $login_info]);
-    }
+        $product_detail_api = $client->post($this->base_url.'get_product_detail', [
+            'form_params' => [
+                'product_id' => $product_id
+            ]
+        ]);
+        $product_detail = json_decode($product_detail_api->getBody());
+
+        if ($product_detail->status)
+            return view('pages.product_detail', ['login_info' => $login_info, 'product_detail' => $product_detail]);
+        else 
+            print_r($product_detail->message);
+        }
 
 }

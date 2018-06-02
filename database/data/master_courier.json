@@ -2,16 +2,19 @@
             {
                 "courier_id": "1",
                 "courier_name": "JNE",
-				"alias_name": "jne"
+				"alias_name": "jne",
+                "logo" : "Courier/jne.png"
             },
             {
                 "courier_id": "2",
                 "courier_name": "POS Indonesia",
-				"alias_name": "pos"
+				"alias_name": "pos",
+                "logo" : "Courier/pos.png"
             },
 			{
                 "courier_id": "3",
                 "courier_name": "TIKI",
-				"alias_name": "tiki"
+				"alias_name": "tiki",
+                "logo" : "Courier/tiki.png"
             }
 ]

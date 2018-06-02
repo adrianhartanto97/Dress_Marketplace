@@ -29,7 +29,7 @@ Route::get('seller_panel', 'Web_Controller\SellerController@seller_panel_dashboa
 Route::get('seller_panel_store_settings', 'Web_Controller\SellerController@seller_panel_store_settings');
 Route::get('seller_panel_product', 'Web_Controller\SellerController@seller_panel_product');
 Route::post('add_product', 'Web_Controller\SellerController@add_product');
-Route::get('product_detail', 'Web_Controller\AppController@product_detail');
+Route::get('product_detail/{product_id}', 'Web_Controller\AppController@product_detail');
 
 //admin
 Route::get('admin_login_page', 'Web_Controller\AdminController@login_page');

@@ -30,3 +30,4 @@ Route::post('get_courier_list', 'API_Controller\MasterDataController@get_courier
 Route::post('get_dress_attributes', 'API_Controller\MasterDataController@get_dress_attributes');
 Route::post('register_store', 'API_Controller\StoreController@register_store');
 Route::post('add_product', 'API_Controller\StoreController@add_product');
+Route::post('get_product_detail', 'API_Controller\ProductController@get_product_detail');

@@ -19,7 +19,8 @@ class CourierSeeder extends Seeder
             Courier::create(array(
                 'courier_id' => $obj->courier_id,
                 'courier_name' => $obj->courier_name,
-                'alias_name' => $obj->alias_name
+                'alias_name' => $obj->alias_name,
+                'logo' => $obj->logo
             ));
         }
     }
