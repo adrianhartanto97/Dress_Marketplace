@@ -321,7 +321,7 @@
                             <div class="caption">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img alt="" width="100%" class="img-square" src="{{asset('/public/storage').'/Product/photo/21_photo.jpg'}}" />
+                                        <img alt="" width="100%" class="img-square" src="{{asset('/public/storage').'/'.$product_detail->store_info->photo}}" />
                                     </div>
                                     <div class="col-md-8">
                                         {{$product_detail->store_info->name}}

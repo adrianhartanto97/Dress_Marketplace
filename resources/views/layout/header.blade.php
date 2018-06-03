@@ -212,31 +212,49 @@
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-calendar"></i>
-                                    <span class="badge badge-default"> 3 </span>
+                                    <i class="icon-bag"></i>
+                                    <span class="badge badge-default"> {{$login_info->user_cart_info->total_qty}} </span>
                                 </a>
                                 <ul class="dropdown-menu extended tasks">
                                     <li class="external">
-                                        <h3>You have
-                                            <span class="bold">12 pending</span> tasks</h3>
-                                        <a href="app_todo.html">view all</a>
+                                        <h3>
+                                            <span class="bold">{{$login_info->user_cart_info->total_qty}} items</span> in shopping bag</h3>
+                                        
+                                        @if ($login_info->user_cart_info->total_qty != 0)
+                                            <a href="{{url('/view_shopping_bag')}}">view all</a>
+                                        @endif
                                     </li>
                                     <li>
                                         <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-                                            <li>
-                                                <a href="javascript:;">
-                                                    <span class="task">
-                                                        <span class="desc">New release v1.2 </span>
-                                                        <span class="percent">30%</span>
-                                                    </span>
-                                                    <span class="progress">
-                                                        <span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="sr-only">40% Complete</span>
-                                                        </span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
+                                            @foreach ($login_info->user_cart_info->bag as $store)
+                                                <div class="panel panel-info">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title">{{$store->store_name}}</h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <ul class="list-group">
+                                                            @foreach ($store->product as $p)
+                                                            <li class="list-group-item">
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <img class="img-responsive" src="{{asset('/public/storage/').'/'.$p->product_photo}}" width="100%" style="margin: 0 auto;">
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        <div class="row">
+                                                                            <b>{{$p->product_name}}</b>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            Total : {{$p->total_qty}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                            <!-- <li>
                                                 <a href="javascript:;">
                                                     <span class="task">
                                                         <span class="desc">Application deployment</span>
@@ -313,7 +331,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </li>
                                 </ul>

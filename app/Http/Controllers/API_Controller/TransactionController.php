@@ -84,4 +84,51 @@ class TransactionController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function view_shopping_bag (Request $request) {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $bag = DB::table('view_cart_summary')
+                    ->select(DB::raw('DISTINCT store_id, store_name, store_photo'))
+                    ->where('user_id',$user_id)
+                    ->get();
+            foreach ($bag as $b) {
+                $product = DB::table('view_cart_summary')
+                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                            ->where('user_id',$user_id)
+                            ->where('store_id',$b->store_id)
+                            ->get();
+                foreach ($product as $p) {
+                    $product_size = DB::table('view_cart_detail')
+                            ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                            ->where('user_id',$user_id)
+                            ->where('store_id',$b->store_id)
+                            ->where('product_id',$p->product_id)
+                            ->get();
+                    $p->size_info = $product_size;
+                }
+                $b->product = $product;
+            }
+
+            $total_qty = DB::table('view_cart_summary')
+                        ->select(DB::raw('coalesce(sum(total_qty),0) as "total_qty"'))
+                        ->where('user_id',$user_id)
+                        ->first()->total_qty;
+            $total_price = DB::table('view_cart_summary')
+                        ->select(DB::raw('coalesce(sum(price_total),0) as "total_price"'))
+                        ->where('user_id',$user_id)
+                        ->first()->total_price;
+            $status = true;
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+        return response()->json(['status'=>$status,'bag'=>$bag,'total_qty'=>$total_qty, 'total_price'=>$total_price],200);
+    }
 }

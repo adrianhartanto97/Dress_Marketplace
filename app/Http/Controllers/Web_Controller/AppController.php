@@ -28,6 +28,7 @@ class AppController extends Controller
         $login_status = true;
         $user_info = new stdClass();
         $user_store_info = new stdClass();
+        $user_cart_info = new stdClass();
         $client = new Client();
         if ($jwt) {
             try{
@@ -63,6 +64,18 @@ class AppController extends Controller
             catch (Exception $e) {
                 $login_status = false;
             }
+
+            try {
+                $user_cart = $client->post($this->base_url.'view_shopping_bag', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+                $user_cart_info = json_decode($user_cart->getBody());
+            }
+            catch (Exception $e) {
+                $login_status = false;
+            }
         }
         else {
             $login_status = false;
@@ -72,6 +85,7 @@ class AppController extends Controller
         $result->login_status = $login_status;
         $result->user_info = $user_info;
         $result->user_store_info = $user_store_info;
+        $result->user_cart_info = $user_cart_info;
 
         return $result;
     }
@@ -304,6 +318,30 @@ class AppController extends Controller
         catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function view_shopping_bag (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+
+        $client = new Client();
+        try {
+            $user_cart = $client->post($this->base_url.'view_shopping_bag', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+            $result = json_decode($user_cart->getBody());
+
+            return view('view_shopping_bag', ['login_info' => $login_info, 'result' => $result]);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+        
     }
 
 }
