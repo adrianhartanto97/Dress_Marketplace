@@ -30,6 +30,7 @@ Route::get('seller_panel_store_settings', 'Web_Controller\SellerController@selle
 Route::get('seller_panel_product', 'Web_Controller\SellerController@seller_panel_product');
 Route::post('add_product', 'Web_Controller\SellerController@add_product');
 Route::get('product_detail/{product_id}', 'Web_Controller\AppController@product_detail');
+Route::post('add_to_bag', 'Web_Controller\AppController@add_to_bag');
 
 //admin
 Route::get('admin_login_page', 'Web_Controller\AdminController@login_page');

@@ -3,6 +3,7 @@
 @section('css')
     {{ HTML::style('public/global/plugins/fancybox/source/jquery.fancybox.css') }}
     {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css') }}
     <style>
     </style>
 @endsection
@@ -13,6 +14,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9">
+                    @if (session()->has('status') && session()->get('status') == false)
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{ session('message')}}</span>
+                        </div>
+                    @elseif (session()->has('status') && session()->get('status') == true)
+                        <div class="alert alert-success">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{ session('message')}}</span>
+                        </div>
+                    @endif
                     <div class="row" id="product_info">
                         <div class="col-md-4" style="text-align:center;">
                             <div class="row" style="text-align:center;">
@@ -120,9 +132,61 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12" style="text-align:center; margin-top:20px;">
-                                    <button type="button" class="btn red btn-lg" @if($login_info->login_status == false) disabled @endif>Add to Bag</button>
+                                    <button type="button" class="btn red btn-lg" data-toggle="modal" href="#add_to_bag" @if($login_info->login_status == false) disabled @endif>Add to Bag</button>
                                 </div>
                             </div>
+
+                            <!--begin modal -->
+                            <div class="modal fade bs-modal-sm" id="add_to_bag" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title">Add to Bag</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <div class="row" style="text-align:center;">
+                                                            <img class="img-responsive" src="{{asset('/public/storage/').'/'.$product_detail->product_info->photo}}" width="90%" style="margin: 0 auto;">
+                                                        </div>
+                                                    <div class="row" style ="margin-top:20px; text-align:center;">
+                                                        <h3>{{$product_detail->product_info->product_name}}</h3>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-7" style="text-align : center;">
+                                                    <form method="post" action="{{ action('Web_Controller\AppController@add_to_bag') }}" class="form-horizontal" id="form1">
+                                                        {{ csrf_field() }}
+                                                        <div class="form-body">
+                                                            <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                                            @foreach ($product_detail->product_info->size as $s)
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3">
+                                                                    {{$s->size_name}}
+                                                                </label>
+                                                                <div class="col-md-7">
+                                                                    <input id="touchspin_{{$s->size_id}}" type="text" value ="0" name="size[{{$s->size_id}}]" class="dress_size" onchange="hitung()">
+                                                                </div>
+                                                            </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </form>
+
+                                                    <h4 style="margin-top:50px;"><b id="total_harga"></b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                            <button type="submit" id="btn_bag" class="btn red" form="form1" disabled>Add to Bag</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!--end modal -->
                         </div>
                     </div>
 
@@ -318,6 +382,8 @@
     <!--BEGIN PAGE LEVEL PLUGINS-->
     {{HTML::script('public/global/plugins/fancybox/source/jquery.fancybox.pack.js')}}
     {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
+    {{HTML::script('public/global/plugins/fuelux/js/spinner.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js')}}
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
@@ -334,5 +400,59 @@
             //alert(tinggi);
             $('#store_info').height(tinggi-30);
         });
+
+        @foreach ($product_detail->product_info->size as $s)
+        $("#touchspin_{{$s->size_id}}").TouchSpin({
+            verticalbuttons: true,
+            verticalupclass: 'glyphicon glyphicon-plus',
+            verticaldownclass: 'glyphicon glyphicon-minus'
+        });
+        @endforeach
+
+        var arr = [];
+        @foreach ($product_detail->product_info->price as $p)
+            arr.push({
+                qty_min: "{{$p->qty_min}}",
+                qty_max : "{{$p->qty_max}}",
+                price : "{{$p->price}}"
+            });
+        @endforeach
+
+        function hitung()
+        {
+            var total = 0;
+            var min_order = {{$product_detail->product_info->min_order}}
+            $( ".dress_size" ).each(function() {
+                total += parseInt($(this).val());
+            });
+            //alert(total);
+
+            var harga = 0;
+            arr.forEach(function(element) {
+                if(element.qty_max != "max") {
+                    if (total >= parseInt(element.qty_min) && total <= parseInt(element.qty_max)) {
+                        harga = element.price;
+                    }
+                }
+                else if(element.qty_max == "max"){
+                    if (total >= parseInt(element.qty_min)) {
+                        harga = element.price;
+                    }
+                }
+            });
+
+            if (total >= min_order) {
+                $('#btn_bag').prop('disabled', false);
+            }
+            else {
+                $('#btn_bag').prop('disabled', true);
+            }
+
+            var total_harga = total * harga;
+            $('#total_harga').html('Total : IDR ' + total_harga.toLocaleString());
+
+            //alert(harga);
+
+        }
     </script>
 @endsection

@@ -160,6 +160,8 @@
                                     <span class="@if($active_nav == 'dashboard')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+
+                            @if($store_info->store_active_status == "1" || $store_info->store_active_status == "2")
                             <li class="nav-item @if($active_nav == 'store_settings')active @else @endif">
                                 <a href="{{url('/seller_panel_store_settings')}}" class="nav-link">
                                     <i class="icon-settings"></i>
@@ -167,6 +169,9 @@
                                     <span class="@if($active_nav == 'store_settings')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+                            @endif
+
+                            @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'products')active @else @endif">
                                 <a href="{{url('/seller_panel_product')}}" class="nav-link">
                                     <i class="icon-list"></i>
@@ -174,6 +179,9 @@
                                     <span class="@if($active_nav == 'products')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+                            @endif
+
+                            @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'sales')active @else @endif">
                                 <a href="index.html" class="nav-link">
                                     <i class="icon-basket"></i>
@@ -181,6 +189,9 @@
                                     <span class="@if($active_nav == 'sales')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+                            @endif
+
+                            @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'rfq')active @else @endif">
                                 <a href="index.html" class="nav-link">
                                     <i class="icon-notebook"></i>
@@ -188,6 +199,9 @@
                                     <span class="@if($active_nav == 'rfq')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+                            @endif
+
+                            @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'partnership')active @else @endif">
                                 <a href="index.html" class="nav-link">
                                     <i class="icon-user-following"></i>
@@ -195,6 +209,8 @@
                                     <span class="@if($active_nav == 'partnership')selected @else arrow @endif"></span>
                                 </a>
                             </li>
+                            @endif
+
                         </ul>
                         <!-- END SIDEBAR MENU -->
                         <!-- END SIDEBAR MENU -->

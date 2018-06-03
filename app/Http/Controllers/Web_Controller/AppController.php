@@ -267,6 +267,43 @@ class AppController extends Controller
             return view('pages.product_detail', ['login_info' => $login_info, 'product_detail' => $product_detail]);
         else 
             print_r($product_detail->message);
+    }
+
+    public function add_to_bag (Request $request)
+    {
+        $product_id= $request->product_id;
+        $jwt = $request->cookie('jwt');
+
+        $size = $request->size;
+        
+        $arr = array();
+
+        foreach ($size as $key => $value) {
+            $obj = new stdClass();
+            $obj->size_id = $key;
+            $obj->qty = $value;
+            array_push($arr, $obj);
         }
+
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'add_to_bag', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'product_id' => $product_id,
+                    'product_size_qty' => $arr
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 
 }
