@@ -339,9 +339,31 @@ class AppController extends Controller
         }
         catch (Exception $e) {
             echo $e->getMessage();
+        }  
+    }
+
+    public function delete_product_from_bag (Request $request)
+    {
+        $product_id= $request->product_id;
+        $jwt = $request->cookie('jwt');
+
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'delete_product_from_bag', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'product_id' => $product_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
 
-        
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 }

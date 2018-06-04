@@ -12,6 +12,17 @@
                 <h1>Shopping Bag</h1>
             </div>
             <div class="row" style="margin-top:50px;">
+                @if (session()->has('status') && session()->get('status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @elseif (session()->has('status') && session()->get('status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @endif
                 <div class="col-md-12">
                     @foreach($result->bag as $store)
                     <div class="portlet box green">
@@ -57,7 +68,11 @@
                                                 IDR {{$p->price_total}}
                                            </td>
                                            <td style="text-align:center;vertical-align:middle;">
-                                                <button class="btn red">Delete from Bag</button>
+                                                <form method="post" action="{{ action('Web_Controller\AppController@delete_product_from_bag') }}">
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" name="product_id" value="{{$p->product_id}}">
+                                                    <button class="btn red" type="submit">Delete from Bag</button>
+                                                </form>
                                            </td>
                                         </tr>
                                         @endforeach

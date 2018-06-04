@@ -33,3 +33,4 @@ Route::post('add_product', 'API_Controller\StoreController@add_product');
 Route::post('get_product_detail', 'API_Controller\ProductController@get_product_detail');
 Route::post('add_to_bag', 'API_Controller\TransactionController@add_to_bag');
 Route::post('view_shopping_bag', 'API_Controller\TransactionController@view_shopping_bag');
+Route::post('delete_product_from_bag', 'API_Controller\TransactionController@delete_product_from_bag');

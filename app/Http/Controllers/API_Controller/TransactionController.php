@@ -131,4 +131,40 @@ class TransactionController extends Controller
         }
         return response()->json(['status'=>$status,'bag'=>$bag,'total_qty'=>$total_qty, 'total_price'=>$total_price],200);
     }
+
+    public function delete_product_from_bag (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $product_id = $request->product_id;
+            
+            $product = DB::table('view_cart_detail')
+                    ->where([
+                        'user_id' =>$user_id,
+                        'product_id' => $product_id
+                    ])->first();
+
+            DB::table('cart')
+                ->where([
+                    'user_id' =>$user_id,
+                    'product_id' => $product_id
+                ])->delete();
+
+            DB::commit();
+            $status = true;
+            $message = $product->product_name." Deleted from Bag";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }
