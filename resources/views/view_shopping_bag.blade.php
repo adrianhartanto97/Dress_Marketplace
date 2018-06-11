@@ -56,7 +56,7 @@
                                                 <span style="margin-left:20px;"></span><b>{{$p->product_name}}</b>
                                            </td>
                                            <td style="text-align:center;vertical-align:middle;">
-                                                IDR {{$p->price_unit}}
+                                                IDR {{number_format($p->price_unit)}}
                                            </td>
                                            <td style="text-align:center;vertical-align:middle;">
                                                 <b>Total : {{$p->total_qty}}</b> <br>
@@ -65,7 +65,7 @@
                                                 @endforeach
                                            </td>
                                            <td style="text-align:center;vertical-align:middle;">
-                                                IDR {{$p->price_total}}
+                                                IDR {{number_format($p->price_total)}}
                                            </td>
                                            <td style="text-align:center;vertical-align:middle;">
                                                 <form method="post" action="{{ action('Web_Controller\AppController@delete_product_from_bag') }}">
@@ -82,6 +82,27 @@
                         </div>
                     </div>
                     @endforeach
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-2">
+                    <b>Total : </b>
+                </div>
+                <div class="col-md-2">
+                    <b>{{$result->total_qty}} item(s)</b>
+                </div>
+                <div class="col-md-2">
+                    <b>IDR {{number_format($result->total_price)}}</b>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-offset-6 col-md-2">
+                    <a class="btn green" href="{{url('/index')}}">Continue Shopping</a>
+                </div>
+                <div class="col-md-3">
+                    <a class="btn blue" href="{{url('/checkout')}}">Checkout</a>
                 </div>
             </div>
         </div>

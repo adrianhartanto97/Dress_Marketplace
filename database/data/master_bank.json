@@ -1,0 +1,26 @@
+[
+        {
+            "bank_id": "1",
+            "bank_name": "BCA",
+            "branch": "Diponegoro Medan",
+            "account_number": "xxxx xxxx xx",
+            "name_in_account": "PT Firefly",
+            "logo": "Bank/bca.png"
+        },
+        {
+            "bank_id": "2",
+            "bank_name": "Bank Mandiri",
+            "branch": "Plaza Mandiri",
+            "account_number": "xxx-xx-xxxxxxx-x",
+            "name_in_account": "PT Firefly",
+            "logo": "Bank/mandiri.png"
+        },
+        {
+            "bank_id": "3",
+            "bank_name": "BRI",
+            "branch": "Sudirman",
+            "account_number": "xxxx.xx.xxxxxx.xx.x",
+            "name_in_account": "PT Firefly",
+            "logo": "Bank/bri.png"
+        }
+]

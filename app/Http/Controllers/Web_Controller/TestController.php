@@ -528,4 +528,8 @@ class TestController extends Controller
         $firefly->best++;
         return $firefly;
     }
+
+    public function test4(Request $request) {
+        return view('pages.checkout_successful');
+    }
 }

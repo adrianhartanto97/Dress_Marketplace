@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use \Exception;
+use \stdClass;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use GuzzleHttp\Client;
 
 use App\Store;
 use App\Store_Courier_Service;
@@ -17,6 +19,7 @@ use App\Product;
 use App\Product_Size;
 use App\Product_Price;
 use App\Cart;
+use App\Sales_Transaction_Header;
 
 class TransactionController extends Controller
 {
@@ -38,37 +41,39 @@ class TransactionController extends Controller
             foreach ($product_size_qty as $p) {
                 $p = (object)$p;
 
-                //cek cart
-                $product_db = DB::table('cart')
-                            ->where([
-                                'user_id' =>$user_id,
-                                'product_id' => $product_id,
-                                'product_size_id' => $p->size_id
-                            ])
-                            ->first();
-                
-                //jika sudah ada, update
-                if ($product_db != null) {
+                if ($p->qty > 0) {
+                    //cek cart
                     $product_db = DB::table('cart')
-                            ->where([
-                                'user_id' =>$user_id,
-                                'product_id' => $product_id,
-                                'product_size_id' => $p->size_id
-                            ])
-                            ->update(['product_qty' => $p->qty + $product_db->product_qty]);
-                }
+                                ->where([
+                                    'user_id' =>$user_id,
+                                    'product_id' => $product_id,
+                                    'product_size_id' => $p->size_id
+                                ])
+                                ->first();
+                    
+                    //jika sudah ada, update
+                    if ($product_db != null) {
+                        $product_db = DB::table('cart')
+                                ->where([
+                                    'user_id' =>$user_id,
+                                    'product_id' => $product_id,
+                                    'product_size_id' => $p->size_id
+                                ])
+                                ->update(['product_qty' => $p->qty + $product_db->product_qty]);
+                    }
 
-                //jika belum ada, insert
-                else {
-                    $cart = new Cart();
-                    $cart->user_id = $user_id;
-                    $cart->product_id = $product_id;
-                    $cart->product_size_id = $p->size_id;
-                    $cart->product_qty = $p->qty;
+                    //jika belum ada, insert
+                    else {
+                        $cart = new Cart();
+                        $cart->user_id = $user_id;
+                        $cart->product_id = $product_id;
+                        $cart->product_size_id = $p->size_id;
+                        $cart->product_qty = $p->qty;
 
-                    $cart->save();
+                        $cart->save();
+                    }
+                    //var_dump($p);
                 }
-                //var_dump($p);
             }
 
             DB::commit();
@@ -166,5 +171,200 @@ class TransactionController extends Controller
         }
 
         return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function get_checkout_info(Request $request) {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $bag = DB::table('view_cart_summary')
+                    ->select(DB::raw('DISTINCT store_id, store_name, store_photo'))
+                    ->where('user_id',$user_id)
+                    ->get();
+            foreach ($bag as $b) {
+                $total_weight = 0;
+                $total_qty = 0;
+                $total_price = 0;
+                $product = DB::table('view_cart_summary')
+                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total, total_weight'))
+                            ->where('user_id',$user_id)
+                            ->where('store_id',$b->store_id)
+                            ->get();
+                foreach ($product as $p) {
+                    $product_size = DB::table('view_cart_detail')
+                            ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                            ->where('user_id',$user_id)
+                            ->where('store_id',$b->store_id)
+                            ->where('product_id',$p->product_id)
+                            ->get();
+                    $p->size_info = $product_size;
+
+                    $total_weight += (int)$p->total_weight;
+                    $total_qty += (int)$p->total_qty;
+                    $total_price += (int)$p->price_total;
+                }
+                $b->product = $product;
+                $b->total_qty = $total_qty;
+                $b->total_price = $total_price;
+
+                $store =  DB::table('store')
+                            ->where('store_id',$b->store_id)
+                            ->first();
+
+                $client = new Client();
+
+                $master_courier = $users = DB::table('store_courier_service as a')
+                                ->join('master_courier as b', 'a.courier_id', '=', 'b.courier_id')
+                                ->select('b.courier_id', 'b.courier_name', 'b.alias_name')
+                                ->where('a.store_id',$b->store_id)
+                                ->get();
+                
+                $arr = [];
+                foreach ($master_courier as $c) {
+                    $result = new stdClass();
+                    $api = $client->post('https://api.rajaongkir.com/starter/cost', [
+                        'headers' => [
+                            'key' => '727457f12c70c429f153a24a259d4d64'
+                        ],
+                        'verify' => false,
+                        'form_params' => [
+                            'origin' => $store->city,
+                            'destination' => $request->destination_city,
+                            'weight' => $total_weight,
+                            'courier' => $c->alias_name
+                        ]
+                    ]);
+                    $result->courier_id = $c->courier_id;
+                    $result->courier_name = $c->courier_name;
+                    $result->query = json_decode($api->getBody())->rajaongkir->query;
+                    $result->cost = json_decode($api->getBody())->rajaongkir->results[0]->costs;
+
+                    array_push($arr,$result);
+                }
+
+                $b->courier_service = $arr;
+            }
+            $total_qty = DB::table('view_cart_summary')
+                        ->select(DB::raw('coalesce(sum(total_qty),0) as "total_qty"'))
+                        ->where('user_id',$user_id)
+                        ->first()->total_qty;
+            $total_price = DB::table('view_cart_summary')
+                        ->select(DB::raw('coalesce(sum(price_total),0) as "total_price"'))
+                        ->where('user_id',$user_id)
+                        ->first()->total_price;
+            $user = DB::table('user')
+                    ->select('balance')
+                    ->where('user_id',$user_id)
+                    ->first();
+            $available_points = $user->balance;
+            
+            $status = true;
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+        return response()->json(['status'=>$status,'result'=>$bag, 'total_qty'=>$total_qty, 'total_price'=>$total_price , 'available_points' => $available_points],200);
+    }
+
+    public function checkout(Request $request)
+    {
+        $status = true;
+        $message="";
+        $data = null;
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction = new Sales_Transaction_Header();
+            $transaction->user_id = $user_id;
+            $transaction->receiver_name = $request->receiver_name;
+            $transaction->address = $request->address;
+            $transaction->province = $request->province;
+            $transaction->city = $request->city;
+            $transaction->phone_number = $request->phone_number;
+            $transaction->postal_code = $request->postal_code;
+            $transaction->use_point = $request->use_point;
+
+            $transaction->save();
+            $transaction_id = $transaction->transaction_id;
+
+            $bag = DB::table('cart')
+                    ->where('user_id',$user_id)
+                    ->get();
+            
+            foreach($bag as $b)
+            {
+                DB::table('sales_transaction_product')->insert([
+                        'transaction_id' => $transaction_id, 
+                        'product_id' => $b->product_id,
+                        'product_size_id' => $b->product_size_id,
+                        'product_qty' => $b->product_qty,
+                        'accept_status' => '0'
+                    ]
+                );
+            }
+
+            $courier = $request->courier;
+
+            foreach ($courier as $c)
+            {
+                $c = (object)$c;
+                DB::table('sales_transaction_shipping')->insert([
+                    'transaction_id' => $transaction_id, 
+                    'store_id' => $c->store_id,
+                    'courier_id' => $c->courier_id,
+                    'courier_service' => $c->courier_service,
+                    'fee' => $c->fee,
+                    'note' => $c->note,
+                    'shipping_status' => '0',
+                    'receipt_status' => '0'
+                ]
+                );
+            }
+
+            foreach ($courier as $c)
+            {
+                $c = (object)$c;
+                DB::table('sales_transaction_state')->insert([
+                    'transaction_id' => $transaction_id, 
+                    'store_id' => $c->store_id,
+                    'order_number' => "ORD-".$transaction_id."-".$c->store_id,
+                    'state' => '1'
+                ]
+                );
+            }
+
+            DB::table('user')
+                ->where('user_id', $user_id)
+                ->update(['balance' => DB::raw("balance - ".$request->use_point)]);
+
+            DB::commit();
+            $status = true;
+            $message = "Checkout Successfully";
+
+            $data = new stdClass();
+
+            $data->transaction_id = $transaction_id;
+            $data->total_price = DB::table('view_transaction_summary')
+                            ->where('transaction_id',$transaction_id)
+                            ->first()->total_price;
+            $data->bank = DB::table('company_bank_account')
+                            ->get();
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message, 'data' =>$data],200);
     }
 }

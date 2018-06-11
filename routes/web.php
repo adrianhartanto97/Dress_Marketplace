@@ -33,6 +33,10 @@ Route::get('product_detail/{product_id}', 'Web_Controller\AppController@product_
 Route::post('add_to_bag', 'Web_Controller\AppController@add_to_bag');
 Route::get('view_shopping_bag', 'Web_Controller\AppController@view_shopping_bag');
 Route::post('delete_product_from_bag', 'Web_Controller\AppController@delete_product_from_bag');
+Route::get('checkout', 'Web_Controller\AppController@checkout_page');
+Route::get('checkout_courier_page', 'Web_Controller\AppController@get_checkout_courier_page');
+Route::post('do_checkout', 'Web_Controller\AppController@checkout');
+Route::get('checkout_success', 'Web_Controller\AppController@checkout_success');
 
 //admin
 Route::get('admin_login_page', 'Web_Controller\AdminController@login_page');

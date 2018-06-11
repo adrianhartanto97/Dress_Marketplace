@@ -14,6 +14,7 @@ use \Firebase\JWT\JWT;
 use \Exception;
 use \stdClass;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 
 class AppController extends Controller
 {
@@ -366,4 +367,156 @@ class AppController extends Controller
         }
     }
 
+    public function checkout_page(Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'get_province_list', [
+                'form_params' => [
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return view('pages.checkout', ['login_info' => $login_info, 'province' => $body->province]);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }   
+    }
+
+    public function get_checkout_courier_page(Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'get_checkout_info', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'destination_city' => $request->destination_city
+                ]
+            ]);
+
+            $result = json_decode($res->getBody());
+
+            return view('pages.checkout_courier', ['result' => $result]);
+            //var_dump($result);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        $receiver_name = $request->receiver_name;
+        $address = $request->address;
+        $province = $request->province;
+        $city = $request->city;
+        $phone_number = $request->phone_number;
+        $postal_code = $request->postal_code;
+        $use_point = $request->use_point;
+
+        $store_id = $request->store_id;
+        $courier_id = $request->courier_id;
+        $courier_service = $request->courier_service;
+        $fee = $request->fee;
+        $note = $request->note;
+
+        $arr = [];
+
+        foreach ($store_id as $key => $value) {
+            $obj = new stdClass();
+            $obj->store_id = $value;
+            array_push($arr, $obj);
+        }
+
+        for($i=0;$i<sizeof($arr);$i++)
+        {
+            foreach ($courier_id as $key => $value) {
+                if ($key == $arr[$i]->store_id) {
+                    $arr[$i]->courier_id = $value;
+                }
+            }
+
+            foreach ($courier_service as $key => $value) {
+                if ($key == $arr[$i]->store_id) {
+                    $arr[$i]->courier_service = $value;
+                }
+            }
+
+            foreach ($fee as $key => $value) {
+                if ($key == $arr[$i]->store_id) {
+                    $arr[$i]->fee = $value;
+                }
+            }
+
+            if ($note) {
+                foreach ($note as $key => $value) {
+                    if ($key == $arr[$i]->store_id) {
+                        $arr[$i]->note = (string)$value;
+                    }
+                }
+            }
+        }
+
+        //print_r($arr);
+
+        $jwt = $request->cookie('jwt');
+        $login_info = $this->get_login_info($jwt);
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'checkout', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'receiver_name' => $receiver_name,
+                    'address' => $address,
+                    'province' => $province,
+                    'city' => $city,
+                    'phone_number' => $phone_number,
+                    'postal_code' => $postal_code,
+                    'use_point' => $use_point,
+                    'courier' => $arr
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            //print_r($body);
+
+            if ($body->status) {
+                //return redirect()->action('Web_Controller\AppController@checkout_success', ['data' => $body->data]);
+                //return view('pages.checkout_successful', ['login_info' => $login_info, 'data' => $body->data]);
+                return redirect('checkout_success')->with(['data' => $body->data]);
+            }
+            else {
+                echo $body->message;
+            }
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function checkout_success(Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $login_info = $this->get_login_info($jwt);
+
+        $data = Session::get('data');
+
+        if ($data) {
+            return view('pages.checkout_successful', ['login_info' => $login_info, 'data' => $data]);
+        }
+        else {
+            echo "error";
+        }
+    }
 }
