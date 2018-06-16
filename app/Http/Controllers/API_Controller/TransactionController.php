@@ -383,11 +383,26 @@ class TransactionController extends Controller
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
 
+            // $transaction = DB::table('view_sales_transaction_payment')
+            //             ->where('payment_status', 'Waiting for Payment')
+            //             ->orWhere('payment_status', 'Payment Confirmation Sent')
+            //             ->where('user_id', $user_id)
+            //             ->get();
+            // $q->where(function ($query) {
+            //     $query->where('gender', 'Male')
+            //         ->where('age', '>=', 18);
+            // })->orWhere(function($query) {
+            //     $query->where('gender', 'Female')
+            //         ->where('age', '>=', 65);	
+            // })
             $transaction = DB::table('view_sales_transaction_payment')
-                        ->where('payment_status', 'Waiting for Payment')
-                        ->orWhere('payment_status', 'Payment Confirmation Sent')
-                        ->where('user_id', $user_id)
-                        ->get();
+                            ->where('user_id', $user_id)
+                            ->where(function ($query) {
+                                $query->where('payment_status', 'Waiting for Payment')
+                                    ->orWhere('payment_status', 'Payment Confirmation Sent');
+                            })
+                            ->get();
+
             foreach ($transaction as $t) {
                 $order_store = DB::table('view_sales_transaction_store')
                                 ->where('transaction_id', $t->transaction_id)

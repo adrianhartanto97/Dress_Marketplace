@@ -416,4 +416,63 @@ class StoreController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function seller_get_shipping_confirmation (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            if ($store) {
+                $order = DB::table('view_order_shipping')
+                        ->where('store_id', $store->store_id)
+                        ->where('state', '3')
+                        ->where('shipping_status', '0')
+                        ->get();
+
+                foreach ($order as $o)
+                {
+                    $product = DB::table('view_order_approve_summary_product')
+                                        ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                        ->where('transaction_id',$o->transaction_id)
+                                        ->where('store_id',$o->store_id)
+                                        ->where('accept_status','1')
+                                        ->get();
+                    foreach ($product as $p) {
+                        $product_size = DB::table('view_order_approve_detail_product')
+                                ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                                ->where('transaction_id',$o->transaction_id)
+                                ->where('store_id',$o->store_id)
+                                ->where('accept_status','1')
+                                ->where('product_id',$p->product_id)
+                                ->get();
+                        $p->size_info = $product_size;
+                    }
+
+                    if (sizeof($product) == 0) {
+                        $product_res = "No Product";
+                    }
+                    else {
+                        $product_res = $product;
+                    }
+                    $o->product = $product_res;
+                    
+                }
+
+                return response()->json(['status'=>true,'result'=>$order],200);
+            }
+            else {
+                return response()->json(['status'=>false,'message'=>"You don't have store"],200);
+            }
+        }
+        catch (Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }
