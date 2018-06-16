@@ -200,4 +200,108 @@ class AdminController extends Controller
         }
         return response()->json(['status' => $status, 'message' => $message], 200);
     }
+
+    public function verify_payment(Request $request)
+    {
+        $payment = DB::table('view_sales_transaction_payment as a')
+                    ->join('user as b', 'a.user_id', '=', 'b.user_id')
+                    ->join('company_bank_account as c', 'a.company_bank_id', '=', 'c.bank_id')
+                    ->select('a.*', 'b.email', 'b.full_name', 'c.bank_name', 'c.account_number')
+                    ->Where('a.payment_status', 'Payment Confirmation Sent')
+                    ->get();
+        
+
+        return view('pages.admin.admin_panel_verify_payment',['active_nav' => "verify_payment", 'payment' => $payment]);
+    }
+
+    public function accept_payment (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->cookie('jwt');
+            $transaction_id = $request->transaction_id;
+            $receive_amount = $request->receive_amount;
+            $transaction = DB::table('view_sales_transaction_payment')
+                            ->where('transaction_id', $transaction_id)
+                            ->first();
+            $invoice_grand_total = $transaction->invoice_grand_total;
+            $user_id = $transaction->user_id;
+
+            DB::table('sales_transaction_payment')
+            ->where('transaction_id', $transaction_id)
+            ->update(
+                [
+                    'receive_amount' => $receive_amount, 
+                    'status' => '1'
+                ]
+            );
+
+            DB::table('sales_transaction_state')
+            ->where('transaction_id', $transaction_id)
+            ->update(
+                [ 
+                    'state' => '2'
+                ]
+            );
+
+            $dif = $receive_amount - $invoice_grand_total;
+            if ($dif > 0){
+                DB::table('user')
+                ->where('user_id', $user_id)
+                ->update(['balance' => DB::raw("balance + ".$dif)]);
+            }
+
+            DB::commit();
+            $status= true;
+            $message = "success";
+        }
+        catch (Exception $e) {
+            DB::rollback();
+            $status = false;
+            $message = $e->getMessage();
+        }
+
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
+
+    public function reject_payment (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->cookie('jwt');
+            $transaction_id = $request->transaction_id;
+            $receive_amount = $request->receive_amount;
+            $transaction = DB::table('view_sales_transaction_payment')
+                            ->where('transaction_id', $transaction_id)
+                            ->first();
+            $invoice_grand_total = $transaction->invoice_grand_total;
+            $user_id = $transaction->user_id;
+
+            DB::table('sales_transaction_payment')
+            ->where('transaction_id', $transaction_id)
+            ->update(
+                [
+                    'receive_amount' => $receive_amount, 
+                    'status' => '2',
+                    'reject_comment' => $request->reject_comment
+                ]
+            );
+
+            DB::table('user')
+            ->where('user_id', $user_id)
+            ->update(['balance' => DB::raw("balance + ".$receive_amount)]);
+            
+
+            DB::commit();
+            $status= true;
+            $message = "success";
+        }
+        catch (Exception $e) {
+            DB::rollback();
+            $status = false;
+            $message = $e->getMessage();
+        }
+
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
 }

@@ -183,7 +183,7 @@
 
                             @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'sales')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/seller_panel_sales_order')}}" class="nav-link">
                                     <i class="icon-basket"></i>
                                     <span class="title">Sales</span>
                                     <span class="@if($active_nav == 'sales')selected @else arrow @endif"></span>

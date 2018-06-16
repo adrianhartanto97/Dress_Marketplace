@@ -136,7 +136,7 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'verify_payment')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/admin/verify_payment')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">Verify Payment</span>
                                     <span class="@if($active_nav == 'verify_payment')selected @else arrow @endif"></span>

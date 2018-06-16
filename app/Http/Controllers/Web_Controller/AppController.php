@@ -423,6 +423,11 @@ class AppController extends Controller
         $postal_code = $request->postal_code;
         $use_point = $request->use_point;
 
+        if ($use_point == null)
+        {
+            $use_point = 0;
+        }
+
         $store_id = $request->store_id;
         $courier_id = $request->courier_id;
         $courier_service = $request->courier_service;
@@ -517,6 +522,79 @@ class AppController extends Controller
         }
         else {
             echo "error";
+        }
+    }
+
+    public function get_purchase_page (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $login_info = $this->get_login_info($jwt);
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'get_purchase_payment', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $purchase_payment = json_decode($res->getBody())->result;
+            $bank = json_decode($res->getBody())->bank;
+
+            $res = $client->post($this->base_url.'get_order_status', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $order = json_decode($res->getBody())->result;
+
+            return view('pages.purchase', 
+                [
+                    'login_info' => $login_info, 
+                    'purchase_payment' => $purchase_payment,
+                    'bank' => $bank,
+                    'order' => $order
+                ]
+            );
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function confirm_payment (Request $request)
+    {
+        $transaction_id = $request->transaction_id;
+        $company_bank_id = $request->company_bank_id;
+        $amount = $request->amount;
+        $sender_bank = $request->sender_bank;
+        $sender_account_number = $request->sender_account_number;
+        $sender_name = $request->sender_name;
+        $note = $request->note;
+        $jwt = $request->cookie('jwt');
+
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'confirm_payment', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'company_bank_id' => $company_bank_id,
+                    'amount' => $amount,
+                    'sender_bank' => $sender_bank,
+                    'sender_account_number' => $sender_account_number,
+                    'sender_name' => $sender_name,
+                    'note' => $note,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 }

@@ -267,17 +267,100 @@ class SellerController extends Controller
             
             //return redirect('index');
             //var_dump($product_info);
+
+            $status = $product_info->status;
+            $message = $product_info->message;
             
         }
 
         catch (Exception $e)
         {
             //var_dump($e->getMessage());
-            $status = $false;
+            $status = false;
             $message = $e->getMessage();
         }
 
-        return Redirect::back()->with('status', $product_info->status)->with('message', $product_info->message);
+        return Redirect::back()->with('status', $status)->with('message', $message);
+    }
+
+    public function sales_order (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+
+        if ($store) {
+            $login_info = $this->get_login_info($jwt);
+            $client = new Client();
+            try {
+                $res = $client->post($this->base_url.'seller_get_order', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $order = json_decode($res->getBody())->result;
+
+                return view('pages.seller_panel_sales', 
+                    [
+                        'login_info' => $login_info, 
+                        'store_info' => $store,
+                        'active_nav' => 'sales',
+                        'order' => $order
+                    ]
+                );
+               
+            }
+            catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            
+        }
+        else {
+            return redirect('index');
+        }
+    }
+
+    public function approve_order_product (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $status = $request->status;
+
+            $arr= [];
+            foreach ($status as $key => $value) {
+                $obj = new stdClass();
+                $obj->product_id = $key;
+                $obj->status = $value;
+                array_push($arr, $obj);
+            }
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'approve_order_product', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'store_id' => $store_id,
+                    'product' => $arr
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            //print_r($body);
+
+            if ($body->status) {
+                return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+            }
+            else {
+                echo $body->message;
+            }
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function test(Request $request) {

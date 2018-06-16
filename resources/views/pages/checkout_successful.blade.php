@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="row" style="margin-top:50px; text-align:center;">
-            <a class="btn blue">Confirm Payment</a>
+            <a class="btn blue" href="{{url('/purchase')}}">Confirm Payment</a>
         </div>
     </div>
 </div>

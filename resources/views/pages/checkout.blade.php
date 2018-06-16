@@ -240,7 +240,7 @@
 
             $('#total_price').text('Total Price : IDR ' + tmp_total_price.toLocaleString());
 
-            if (point > balance) {
+            if (point > balance || point > global_total_price) {
                 $('#submit_button').prop('disabled', true);
             }
             else {

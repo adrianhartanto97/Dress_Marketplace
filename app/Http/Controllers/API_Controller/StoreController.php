@@ -303,4 +303,117 @@ class StoreController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function seller_get_order (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            if ($store) {
+                $order = DB::table('view_store_order')
+                        ->where('store_id', $store->store_id)
+                        ->where('state', '2')
+                        ->where('order_status', 'Waiting Seller Response')
+                        ->get();
+
+                foreach ($order as $o)
+                {
+                    $product = DB::table('view_transaction_summary_product')
+                                        ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                        ->where('transaction_id',$o->transaction_id)
+                                        ->where('store_id',$o->store_id)
+                                        ->get();
+                    foreach ($product as $p) {
+                        $product_size = DB::table('view_transaction_detail_product')
+                                ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                                ->where('transaction_id',$o->transaction_id)
+                                ->where('store_id',$o->store_id)
+                                ->where('product_id',$p->product_id)
+                                ->get();
+                        $p->size_info = $product_size;
+                    }
+                    $o->product = $product;
+                }
+                return response()->json(['status'=>true,'result'=>$order],200);
+            }
+            else {
+                return response()->json(['status'=>false,'message'=>"You don't have store"],200);
+            }
+        }
+        catch (Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function approve_order_product (Request $request)
+    {
+        $status = true;
+        $message="";
+        $data = null;
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $product = $request->product;
+
+            foreach ($product as $p) {
+                $p = (object)$p;
+                if ($p->status == "1") {
+                    DB::table('sales_transaction_product')
+                    ->where('transaction_id', $transaction_id)
+                    ->where('product_id', $p->product_id)
+                    ->update(['accept_status' => "1"]);
+                }
+                else if ($p->status == "2") {
+                    DB::table('sales_transaction_product')
+                    ->where('transaction_id', $transaction_id)
+                    ->where('product_id', $p->product_id)
+                    ->update(['accept_status' => "2"]);
+                }
+            }
+
+            DB::table('sales_transaction_state')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'state' => '3'
+                ]
+            );
+
+            DB::table('sales_transaction_order_status')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'status' => '1'
+                ]
+            );
+
+            //print_r($product);
+
+            DB::commit();
+            $status = true;
+            $message = "Approved Successfully";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }

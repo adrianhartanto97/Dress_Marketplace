@@ -289,7 +289,7 @@
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
-    {{ HTML::script('public/js/seller_panel_product.js') }}
     {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }}
+    {{ HTML::script('public/js/seller_panel_product.js') }}
     <!--END PAGE LEVEL SCRIPTS-->
 @endsection

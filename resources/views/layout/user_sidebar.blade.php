@@ -47,7 +47,7 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="javascript:;" class="list-group-item"> Purchase </a>
+                        <a href="{{url('/purchase')}}" class="list-group-item"> Purchase </a>
                         <a href="javascript:;" class="list-group-item"> Request for Quotation </a>                  
                     </div>
                 </div>

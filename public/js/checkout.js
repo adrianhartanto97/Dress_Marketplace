@@ -52,40 +52,9 @@ var FormWizard = function () {
                         required: true
                     },
 
-                    //store information
-                    business_type: {
-                        required: true
-                    },
-                    established_year: {
-                        required: true,
-                    },
-                    province: {
-                        required: true
-                    },
-                    city: {
-                        required: true
-                    },
-                    description: {
-                        required: true
-                    },
-                    
-                    //store bank
-                    bank_name: {
-                        required: true
-                    },
-                    branch: {
-                        required: true
-                    },
-                    bank_account_number: {
-                        required: true
-                    },
-                    name_in_bank_account: {
-                        required: true
-                    },
-
-                    //courier service
-                    courier_service: {
-                        required: true
+                    //use point
+                    use_point : {
+                        number : true
                     }
                 },
 

@@ -36,3 +36,8 @@ Route::post('view_shopping_bag', 'API_Controller\TransactionController@view_shop
 Route::post('delete_product_from_bag', 'API_Controller\TransactionController@delete_product_from_bag');
 Route::post('get_checkout_info', 'API_Controller\TransactionController@get_checkout_info');
 Route::post('checkout', 'API_Controller\TransactionController@checkout');
+Route::post('get_purchase_payment', 'API_Controller\TransactionController@get_purchase_payment');
+Route::post('confirm_payment', 'API_Controller\TransactionController@confirm_payment');
+Route::post('seller_get_order', 'API_Controller\StoreController@seller_get_order');
+Route::post('get_order_status', 'API_Controller\TransactionController@get_order_status');
+Route::post('approve_order_product', 'API_Controller\StoreController@approve_order_product');
