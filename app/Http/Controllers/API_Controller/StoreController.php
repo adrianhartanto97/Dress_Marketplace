@@ -475,4 +475,124 @@ class StoreController extends Controller
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
     }
+
+    public function input_receipt_number(Request $request)
+    {
+        $status = true;
+        $message="";
+        $data = null;
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $receipt_number = $request->receipt_number;
+
+            DB::table('sales_transaction_shipping')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'shipping_status' => '1',
+                    'receipt_number' => $receipt_number,
+                ]
+            );
+
+            //print_r($product);
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function finish_shipping(Request $request)
+    {
+        $status = true;
+        $message="";
+        $data = null;
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+
+            DB::table('sales_transaction_shipping')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'shipping_status' => '1',
+                    'receipt_status' => '1',
+                ]
+            );
+
+            DB::table('sales_transaction_state')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'state' => '4'
+                ]
+            );
+
+            //uang pembeli
+            $buyer = DB::table('view_order_money_movement')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->where('status', '2')
+            ->first();
+
+            DB::table('user')
+            ->where('user_id', $buyer->buyer_id)
+            ->update(
+                [ 
+                    'balance' => DB::raw("balance + ".$buyer->total_receive)
+                ]
+            );
+
+            //uang penjual
+            $seller = DB::table('view_order_money_movement')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->where('status', '1')
+            ->first();
+
+            DB::table('user')
+            ->where('user_id', $seller->seller_id)
+            ->update(
+                [ 
+                    'balance' => DB::raw("balance + ".$seller->total_receive)
+                ]
+            );
+
+            //print_r($product);
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }

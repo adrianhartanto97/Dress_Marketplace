@@ -548,12 +548,21 @@ class AppController extends Controller
 
             $order = json_decode($res->getBody())->result;
 
+            $res = $client->post($this->base_url.'get_receipt_confirmation', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $shipping = json_decode($res->getBody())->result;
+
             return view('pages.purchase', 
                 [
                     'login_info' => $login_info, 
                     'purchase_payment' => $purchase_payment,
                     'bank' => $bank,
-                    'order' => $order
+                    'order' => $order,
+                    'shipping' => $shipping,
                 ]
             );
         }
@@ -585,6 +594,33 @@ class AppController extends Controller
                     'sender_account_number' => $sender_account_number,
                     'sender_name' => $sender_name,
                     'note' => $note,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function confirm_receipt (Request $request)
+    {
+        $transaction_id = $request->transaction_id;
+        $store_id = $request->store_id;
+
+        $jwt = $request->cookie('jwt');
+
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'confirm_receipt', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'store_id' => $store_id
                 ]
             ]);
 

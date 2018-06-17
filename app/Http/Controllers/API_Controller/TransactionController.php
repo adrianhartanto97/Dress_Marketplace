@@ -569,4 +569,131 @@ class TransactionController extends Controller
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
     }
+
+    public function get_receipt_confirmation (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            
+            $order = DB::table('view_order_shipping')
+                    ->where('user_id', $user_id)
+                    ->where('state', '3')
+                    ->where('shipping_status', '1')
+                    ->get();
+
+            foreach ($order as $o)
+            {
+                $product = DB::table('view_order_approve_summary_product')
+                                    ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                    ->where('transaction_id',$o->transaction_id)
+                                    ->where('store_id',$o->store_id)
+                                    ->where('accept_status','1')
+                                    ->get();
+                foreach ($product as $p) {
+                    $product_size = DB::table('view_order_approve_detail_product')
+                            ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                            ->where('transaction_id',$o->transaction_id)
+                            ->where('store_id',$o->store_id)
+                            ->where('accept_status','1')
+                            ->where('product_id',$p->product_id)
+                            ->get();
+                    $p->size_info = $product_size;
+                }
+
+            
+                $o->product = $product;
+                    
+            }
+
+                return response()->json(['status'=>true,'result'=>$order],200);
+            
+        }
+        catch (Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function confirm_receipt(Request $request)
+    {
+        $status = true;
+        $message="";
+        $data = null;
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+
+            DB::table('sales_transaction_shipping')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'receipt_status' => '1',
+                ]
+            );
+
+            DB::table('sales_transaction_state')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'state' => '4'
+                ]
+            );
+
+            //uang pembeli
+            $buyer = DB::table('view_order_money_movement')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->where('status', '2')
+            ->first();
+
+            DB::table('user')
+            ->where('user_id', $buyer->buyer_id)
+            ->update(
+                [ 
+                    'balance' => DB::raw("balance + ".$buyer->total_receive)
+                ]
+            );
+
+            //uang penjual
+            $seller = DB::table('view_order_money_movement')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->where('status', '1')
+            ->first();
+
+            DB::table('user')
+            ->where('user_id', $seller->seller_id)
+            ->update(
+                [ 
+                    'balance' => DB::raw("balance + ".$seller->total_receive)
+                ]
+            );
+
+            //print_r($product);
+
+            DB::commit();
+            $status = true;
+            $message = "Confirm Successfully";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }

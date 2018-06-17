@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth.custom'], function () {
     Route::post('confirm_payment', 'Web_Controller\AppController@confirm_payment');
     Route::get('seller_panel_sales_order', 'Web_Controller\SellerController@sales_order');
     Route::post('approve_order_product', 'Web_Controller\SellerController@approve_order_product');
+    Route::post('input_receipt_number', 'Web_Controller\SellerController@input_receipt_number');
+    Route::post('finish_shipping', 'Web_Controller\SellerController@finish_shipping');
+    Route::post('confirm_receipt', 'Web_Controller\AppController@confirm_receipt');
 });
 Route::get('login_page', 'Web_Controller\UserController@login_page');
 Route::post('login', 'Web_Controller\UserController@login');

@@ -300,12 +300,21 @@ class SellerController extends Controller
 
                 $order = json_decode($res->getBody())->result;
 
+                $res = $client->post($this->base_url.'seller_get_shipping_confirmation', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $shipping = json_decode($res->getBody())->result;
+
                 return view('pages.seller_panel_sales', 
                     [
                         'login_info' => $login_info, 
                         'store_info' => $store,
                         'active_nav' => 'sales',
-                        'order' => $order
+                        'order' => $order, 
+                        'shipping' => $shipping
                     ]
                 );
                
@@ -361,6 +370,69 @@ class SellerController extends Controller
         catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function input_receipt_number (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $receipt_number = $request->receipt_number;
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'input_receipt_number', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'store_id' => $store_id,
+                    'receipt_number' => $receipt_number
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            //print_r($body);
+
+            if ($body->status) {
+                return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+            }
+            else {
+                echo $body->message;
+            }
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function finish_shipping (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'finish_shipping', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'store_id' => $store_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            print_r($body);
+            //return response()->json(['status' => $body->status, 'message' => $body->message], 200);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        //return response()->json(['status' => 'OK'], 200);
     }
 
     public function test(Request $request) {

@@ -42,3 +42,7 @@ Route::post('seller_get_order', 'API_Controller\StoreController@seller_get_order
 Route::post('get_order_status', 'API_Controller\TransactionController@get_order_status');
 Route::post('approve_order_product', 'API_Controller\StoreController@approve_order_product');
 Route::post('seller_get_shipping_confirmation', 'API_Controller\StoreController@seller_get_shipping_confirmation');
+Route::post('input_receipt_number', 'API_Controller\StoreController@input_receipt_number');
+Route::post('finish_shipping', 'API_Controller\StoreController@finish_shipping');
+Route::post('get_receipt_confirmation', 'API_Controller\TransactionController@get_receipt_confirmation');
+Route::post('confirm_receipt', 'API_Controller\TransactionController@confirm_receipt');

@@ -494,6 +494,167 @@
                             </div>   
                             @endforeach
                         </div>
+                        <div class="tab-pane" id="tab_3">
+                        @foreach ($shipping as $o)
+                            @if (session()->has('status') && session()->get('status') == false)
+                                <div class="alert alert-danger">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @elseif (session()->has('status') && session()->get('status') == true)
+                                <div class="alert alert-success">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @endif
+                            <div class="portlet box green">
+                                <div class="portlet-title">
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-6">
+                                            {{$o->order_number}}
+                                        </div>
+                                        <div class="col-md-6" style="text-align:right">
+                                            {{$o->store_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <form method="POST" action="{{action ('Web_Controller\AppController@confirm_receipt') }}" class="form-horizontal">
+                                        {{ csrf_field() }}
+                                        <div style="margin-top:-20px">
+                                        </div>
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Invoice Date :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->invoice_date}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Receiver Name :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->receiver_name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Shipping Address :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->address}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Province :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->province_name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">City :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->city_name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Phone Number :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->phone_number}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Postal Code :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->postal_code}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Courier :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->courier_name}} {{$o->courier_service}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Note :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->note}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Receipt Number :</label>
+                                                <div class="col-md-7">
+                                                    <p class="form-control-static">{{$o->receipt_number}}</p>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="transaction_id" value="{{$o->transaction_id}}">
+                                            <input type="hidden" name="store_id" value="{{$o->store_id}}">
+                                            <div class="panel-group accordion" id="accordion_{{$o->order_number}}_sh">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion_{{$o->order_number}}_sh" href="#collapse_{{$o->order_number}}_1_sh"> Products </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse_{{$o->order_number}}_1_sh" class="panel-collapse in">
+                                                        <div class="panel-body">
+                                                            <div class="table-scrollable">
+                                                                <table class="table table-striped table-bordered table-advance table-hover">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="text-align:center;">
+                                                                                Item </th>
+                                                                            <th class="hidden-xs" style="text-align:center;">
+                                                                                Unit Price </th>
+                                                                            <th class="hidden-xs" style="text-align:center;">
+                                                                                Qty </th>
+                                                                            <th class="hidden-xs" style="text-align:center;">
+                                                                                Subtotal </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($o->product as $p)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <img src="{{asset('/public/storage/').'/'.$p->product_photo}}" width="80px" style="margin: 0 auto;">
+                                                                                <span style="margin-left:20px;"></span><b>{{$p->product_name}}</b>
+                                                                            </td>
+                                                                            <td style="text-align:center;vertical-align:middle;">
+                                                                                IDR {{number_format($p->price_unit)}}
+                                                                            </td>
+                                                                            <td style="text-align:center;vertical-align:middle;">
+                                                                                <b>Total : {{$p->total_qty}}</b> <br>
+                                                                                @foreach($p->size_info as $sz)
+                                                                                    {{$sz->size_name}} : {{$sz->product_qty}} <br>
+                                                                                @endforeach
+                                                                            </td>
+                                                                            <td style="text-align:center;vertical-align:middle;">
+                                                                                IDR {{number_format($p->price_total)}}
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                $('#collapse_{{$o->order_number}}_1_sh').collapse('hide');
+                                            </script>
+
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="row" style="text-align:center;">
+                                                    <button type="submit" class="btn green btn-lg">I have Received</button> 
+                                               
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    
+                                </div>
+                            </div>   
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
