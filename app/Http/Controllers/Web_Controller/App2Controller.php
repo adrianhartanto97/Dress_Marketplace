@@ -30,6 +30,7 @@ class App2Controller extends Controller
         $user_info = new stdClass();
         $user_store_info = new stdClass();
         $user_cart_info = new stdClass();
+        $user_wishlist_info = new stdClass();
         $client = new Client();
         if ($jwt) {
             try{
@@ -77,6 +78,17 @@ class App2Controller extends Controller
             catch (Exception $e) {
                 $login_status = false;
             }
+            try {
+                $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+                $user_wishlist_info = json_decode($user_wishlist->getBody());
+            }
+            catch (Exception $e) {
+                $login_status = false;
+            }
         }
         else {
             $login_status = false;
@@ -87,7 +99,7 @@ class App2Controller extends Controller
         $result->user_info = $user_info;
         $result->user_store_info = $user_store_info;
         $result->user_cart_info = $user_cart_info;
-
+        $result->user_wishlist_info = $user_wishlist_info;
         return $result;
     }
 }
