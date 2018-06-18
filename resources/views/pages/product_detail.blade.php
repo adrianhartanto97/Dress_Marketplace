@@ -399,6 +399,7 @@
             var tinggi = $('#product_info').height();
             //alert(tinggi);
             $('#store_info').height(tinggi-30);
+            console.log({{$product_detail->wishlist_status?"true":"false"}});
         });
 
         @foreach ($product_detail->product_info->size as $s)
@@ -452,7 +453,8 @@
             $('#total_harga').html('Total : IDR ' + total_harga.toLocaleString());
 
             //alert(harga);
-
+            
         }
+        
     </script>
 @endsection

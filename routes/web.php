@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth.custom'], function () {
     Route::get('seller_panel_store_settings', 'Web_Controller\SellerController@seller_panel_store_settings');
     Route::get('seller_panel_product', 'Web_Controller\SellerController@seller_panel_product');
     Route::post('add_product', 'Web_Controller\SellerController@add_product');
-    Route::get('product_detail/{product_id}', 'Web_Controller\AppController@product_detail');
+    
     Route::post('add_to_bag', 'Web_Controller\AppController@add_to_bag');
     Route::get('view_shopping_bag', 'Web_Controller\AppController@view_shopping_bag');
     Route::post('delete_product_from_bag', 'Web_Controller\AppController@delete_product_from_bag');
@@ -45,6 +45,7 @@ Route::get('algoritma_ffa_psnn', 'Web_Controller\TestController@algoritma_FFA_PS
 Route::get('index', 'Web_Controller\AppController@index');
 Route::get('', 'Web_Controller\AppController@index');
 
+Route::get('product_detail/{product_id}', 'Web_Controller\AppController@product_detail');
 
 //admin
 Route::get('admin_login_page', 'Web_Controller\AdminController@login_page');

@@ -46,3 +46,6 @@ Route::post('input_receipt_number', 'API_Controller\StoreController@input_receip
 Route::post('finish_shipping', 'API_Controller\StoreController@finish_shipping');
 Route::post('get_receipt_confirmation', 'API_Controller\TransactionController@get_receipt_confirmation');
 Route::post('confirm_receipt', 'API_Controller\TransactionController@confirm_receipt');
+Route::post('add_to_wishlist', 'API_Controller\ProductController@add_to_wishlist');
+Route::post('delete_from_wishlist', 'API_Controller\ProductController@delete_from_wishlist');
+Route::post('my_wishlist', 'API_Controller\ProductController@my_wishlist');

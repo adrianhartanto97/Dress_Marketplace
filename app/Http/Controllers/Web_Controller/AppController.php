@@ -273,7 +273,8 @@ class AppController extends Controller
 
         $product_detail_api = $client->post($this->base_url.'get_product_detail', [
             'form_params' => [
-                'product_id' => $product_id
+                'product_id' => $product_id,
+                'token' => $jwt
             ]
         ]);
         $product_detail = json_decode($product_detail_api->getBody());
