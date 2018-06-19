@@ -290,7 +290,7 @@
                                             </div>
                                             <div id="collapse_sh_{{$s->order_number}}_1" class="panel-collapse in">
                                                 <div class="panel-body">
-                                                    @if ($s->product != "No Product")
+                                                    @if (sizeof($s->product) != 0)
                                                     <div class="table-scrollable">
                                                         <table class="table table-striped table-bordered table-advance table-hover">
                                                             <thead>
@@ -337,18 +337,18 @@
                                         </div>
                                     </div>
 
-                                    <!-- sini -->
-                                    @if($s->product != "No Product")
+                                    
+                                    @if (sizeof($s->product) != 0)
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Input Receipt Number :</label>
                                         <div class="col-md-7">
-                                            <input class="form-control" name="receipt_number">
+                                            <input class="form-control" name="receipt_number" required>
                                         </div>
                                     </div>
                                     @endif
                             </div>
                         </form>
-                        @if($s->product != "No Product")
+                        @if (sizeof($s->product) != 0)
                         <div class="row" style="margin-top:20px;text-align:center">
                             <button type="submit" class="btn green" form="form_shipping_{{$s->order_number}}">Submit</button>    
                         </div>

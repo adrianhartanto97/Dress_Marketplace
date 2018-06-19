@@ -452,13 +452,13 @@ class StoreController extends Controller
                         $p->size_info = $product_size;
                     }
 
-                    if (sizeof($product) == 0) {
-                        $product_res = "No Product";
-                    }
-                    else {
-                        $product_res = $product;
-                    }
-                    $o->product = $product_res;
+                    // if (sizeof($product) == 0) {
+                    //     $product_res = "No Product";
+                    // }
+                    // else {
+                    //     $product_res = $product;
+                    // }
+                    $o->product = $product;
                     
                 }
 
