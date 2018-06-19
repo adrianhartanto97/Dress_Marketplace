@@ -102,4 +102,81 @@ class App2Controller extends Controller
         $result->user_wishlist_info = $user_wishlist_info;
         return $result;
     }
+
+    public function open_wishlist_page(){
+       return view('pages.wishlist');
+    }
+
+    public function add_to_wishlist(Request $request){
+        $product_id= $request->product_id;
+        $jwt = $request->cookie('jwt');
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'add_to_wishlist', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'product_id' => $product_id,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+     }
+
+     
+ 
+     public function delete_from_wishlist (Request $request)
+     {
+         $product_id= $request->product_id;
+         $jwt = $request->cookie('jwt');
+ 
+         $client = new Client();
+         try {
+             $res = $client->post($this->base_url.'delete_from_wishlist', [
+                 'form_params' => [
+                     'token' => $jwt,
+                     'product_id' => $product_id
+                 ]
+             ]);
+ 
+             $body = json_decode($res->getBody());
+ 
+             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+         }
+ 
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }
+     }
+
+     public function my_wishlist (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+ 
+         $client = new Client();
+         try {
+             $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                 'form_params' => [
+                     'token' => $jwt
+                 ]
+             ]);
+             $result = json_decode($user_wishlist->getBody());
+ 
+             return view('pages.wishlist', ['login_info' => $login_info, 'result' => $result]);
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+     }
 }

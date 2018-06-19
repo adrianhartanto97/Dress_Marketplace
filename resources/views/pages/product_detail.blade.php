@@ -25,6 +25,8 @@
                             <span>{{ session('message')}}</span>
                         </div>
                     @endif
+
+                    
                     <div class="row" id="product_info">
                         <div class="col-md-4" style="text-align:center;">
                             <div class="row" style="text-align:center;">
@@ -38,7 +40,14 @@
                             </div>
                             <div class="row">
                                 <h3>{{$product_detail->product_info->sold}} Sold</h3>
-                                <button class="btn blue" @if($login_info->login_status == false) disabled @endif>Add to Wishlist</button>
+                                
+                                <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
+                                    {{ csrf_field() }}
+                                    <div class="form-body">
+                                        <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                    </div>
+                                </form>
+                                <button type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false) disabled @endif>Add to Wishlist</button>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -400,6 +409,7 @@
             //alert(tinggi);
             $('#store_info').height(tinggi-30);
             console.log({{$product_detail->wishlist_status?"true":"false"}});
+
         });
 
         @foreach ($product_detail->product_info->size as $s)
