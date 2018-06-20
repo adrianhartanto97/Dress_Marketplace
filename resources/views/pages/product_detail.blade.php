@@ -40,24 +40,23 @@
                             </div>
                             <div class="row">
                                 <h3>{{$product_detail->product_info->sold}} Sold</h3>
-                                
-                                <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
-                                    {{ csrf_field() }}
-                                    <div class="form-body">
-                                        <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
-                                    </div>
-                                </form>
-                                <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_wishlist') }}"  id="form3">
-                                    {{ csrf_field() }}
-                                    <div class="form-body">
-                                        <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
-                                    </div>
-                                </form>
-                              
-                                    <button id="add_to_wishlist" type="submit" class="btn blue" form="form2"  style="visibility:hidden" @if($login_info->login_status == false) disabled @endif>Add to Wishlist</button>
-                                    <button id="delete_from_wishlist" type="submit" class="btn blue" form="form3" style="visibility:hidden" @if($login_info->login_status == false) disabled @endif>Remove from Wishlist</button>
-                                
-                                
+                                @if($product_detail->wishlist_status=="true")
+                                    <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_wishlist') }}"  id="form3">
+                                        {{ csrf_field() }}
+                                        <div class="form-body">
+                                            <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                        </div>
+                                    </form>
+                                    <button  type="submit" class="btn blue" form="form3" width="200px"  @if($login_info->login_status == false) disabled @endif>Remove from Wishlist</button>                                
+                                @else
+                                    <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
+                                        {{ csrf_field() }}
+                                        <div class="form-body">
+                                            <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                        </div>
+                                    </form>
+                                    <button  type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false) disabled @endif>Add to Wishlist</button>
+                                 @endif
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -482,17 +481,7 @@
             //alert(harga);
             
         }
-        //Kenapa pas nambah ini yg rating jadi hilang?:v
-       function refresh_wishlist(){
-            if($product_detail->wishlist_status=="true"){
-                document.getElementById('add_to_wishlist').style.visibility='hidden'; // hide
-                document.getElementById('delete_from_wishlist').style.visibility='visible'; // show
-            }
-            else{
-                document.getElementById('add_to_wishlist').style.visibility='visible'; // show
-                document.getElementById('delete_from_wishlist').style.visibility='hidden'; // hide
-            }
-        }
+       
         
     </script>
 @endsection

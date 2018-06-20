@@ -1,0 +1,63 @@
+@media (min-width: 320px) and (max-width: 767px) {
+  body { 
+      padding-top: 50px;
+      overflow-x: hidden;
+  }
+  .kotak { 
+    height:150px;
+  }
+  .kotak_luar { 
+      height:200px;
+  }
+  .info-gal-con h5{
+      font-size:12px;    
+  }
+  .link_nama{
+      font-size:12px;    
+  }
+}
+@media (min-width: 768px) and (max-width: 959px) {
+  body { 
+      padding-top: 200px;
+      overflow-x: hidden;
+  }
+  .kotak { 
+    height:150px;
+  }
+  .kotak_luar { 
+      height:190px;
+  }
+  .link_nama{
+      font-size:12px;    
+  }
+}
+
+@media (min-width: 960px)  and (max-width: 1279px) {
+  body { 
+      padding-top: 100px; 
+      overflow-x: hidden;
+  }
+  .kotak { 
+    height:200px;
+  }
+    .kotak_luar { 
+    height:270px;
+  }
+    .link_nama{
+    font-size:14px;    
+  }
+}
+
+@media (min-width: 1280px) {
+    body { 
+      padding-top: 50px; 
+      overflow-x: hidden;
+  }
+  .kotak { 
+    height:250px;
+  }
+    .kotak_luar { 
+    height:240px;
+  }
+}
+  

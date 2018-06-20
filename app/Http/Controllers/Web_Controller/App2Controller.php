@@ -103,9 +103,7 @@ class App2Controller extends Controller
         return $result;
     }
 
-    public function open_wishlist_page(){
-       return view('pages.wishlist');
-    }
+   
 
     public function add_to_wishlist(Request $request){
         $product_id= $request->product_id;
@@ -173,10 +171,19 @@ class App2Controller extends Controller
              ]);
              $result = json_decode($user_wishlist->getBody());
  
-             return view('pages.wishlist', ['login_info' => $login_info, 'result' => $result]);
+             return view('pages.wishlist',
+                [
+                  'login_info' => $login_info, 
+                  'result' => $result
+                ]
+            );
          }
          catch (Exception $e) {
              echo $e->getMessage();
          }  
      }
+
+          
+    
+
 }

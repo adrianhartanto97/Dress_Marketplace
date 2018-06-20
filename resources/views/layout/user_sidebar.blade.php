@@ -63,7 +63,7 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="javascript:;" class="list-group-item"> Wishlist </a>
+                        <a href="{{url('/my_wishlist')}}" class="list-group-item"> Wishlist </a>
                         <a href="javascript:;" class="list-group-item"> Favorite Store </a>  
                         <a href="javascript:;" class="list-group-item"> Settings </a>                 
                     </div>

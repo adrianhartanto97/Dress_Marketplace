@@ -71,5 +71,5 @@ Route::post('proses', 'Web_Controller\SellerController@test');
 
 Route::post('add_to_wishlist', 'Web_Controller\App2Controller@add_to_wishlist');
 Route::post('delete_from_wishlist', 'Web_Controller\App2Controller@delete_from_wishlist');
-
+Route::get('my_wishlist', 'Web_Controller\App2Controller@my_wishlist');
 
