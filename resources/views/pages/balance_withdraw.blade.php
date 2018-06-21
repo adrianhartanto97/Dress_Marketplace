@@ -35,14 +35,37 @@
                             </div>
                         @endif
                        
-                         
+                         <!-- @foreach ($result->result as $w)
+                        <div class="col-xs-12 col-sm-6 col-md-4 baner-top ban-mar animated fadeIn " data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeIn; height:200px;width:250px;" href="product_detail/{{$w->product_id}}" target="_blank">
+                            <a href="product_detail/{{$w->product_id}}" target="_blank" class="b-link-stripe b-animate-go  swipebox">
+                                <div class="gal-spin-effect vertical kotak">
+
+                                    <img class="img-responsive" src="{{asset('/public/storage/').'/'.$w->photo}}" alt=" " style="width:100%; height:100%;margin: 0 auto;"/>
+                                    <div class="gal-text-box">
+                                        <div class="info-gal-con">
+                                            <h5> {{$w->store_name}}</h5>
+                                            <span class="separator"></span>
+                                            <p>{{$w->description}}</p>
+                                            <span class="separator"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="satu"><b><a href="product_detail/{{$w->product_id}}" target="_blank">{{$w->product_name}}</a></b></div>
+                            <div class="satu"><b><a href="product_detail/{{$w->product_id}}" target="_blank">{{$w->store_name}}</a></b></div>
+                            <div>  <a href="product_detail/{{$w->product_id}}" target="_blank" class="my-rating satu" data-rating="{{$w->rating}}"></a></div>
+
+                        </div>
+                        @endforeach   -->
                         <div class="portlet light bordered">
                             <div class="row" style="text-align:center;">
                                 <h1>My Wishlist</h1>
                             </div>
                         </div>
                         <div class="portlet light bordered">
+
                             <div class="portlet-body">
+
                                 <div class="row">
                                     @foreach ($result->result as $w)
                                     <a href="product_detail/{{$w->product_id}}" target="_blank" style="text-decoration:none;">

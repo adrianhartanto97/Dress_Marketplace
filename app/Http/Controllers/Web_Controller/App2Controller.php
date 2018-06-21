@@ -183,6 +183,59 @@ class App2Controller extends Controller
          }  
      }
 
+     public function balance_detail (Request $request){
+        $jwt = $request->cookie('jwt');
+ 
+        $login_info = $this->get_login_info($jwt);
+
+        $client = new Client();
+        try {
+            $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+            $result = json_decode($user_wishlist->getBody());
+
+            return view('pages.balance_detail',
+               [
+                 'login_info' => $login_info, 
+                 'result' => $result
+               ]
+           );
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }  
+     }
+
+     public function balance_withdraw (Request $request){
+        $jwt = $request->cookie('jwt');
+ 
+        $login_info = $this->get_login_info($jwt);
+
+        $client = new Client();
+        try {
+            $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+            $result = json_decode($user_wishlist->getBody());
+
+            return view('pages.balance_withdraw',
+               [
+                 'login_info' => $login_info, 
+                 'result' => $result
+               ]
+           );
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }  
+    }
+
+
           
     
 

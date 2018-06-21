@@ -11,7 +11,7 @@
 
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="javascript:;" class="list-group-item" style="font-size:16px;">
+                        <a href="{{url('/balance_detail')}}" class="list-group-item" style="font-size:16px;">
                             <i class="fa fa-money"></i>
                             IDR {{ number_format($login_info->user_info->balance,0,",",".") }}
                         </a>
