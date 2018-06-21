@@ -21,6 +21,7 @@ use App\Product_Price;
 use App\Cart;
 use App\Sales_Transaction_Header;
 use App\Sales_Transaction_Payment;
+use App\Withdraw;
 
 class TransactionController extends Controller
 {
@@ -686,6 +687,72 @@ class TransactionController extends Controller
             DB::commit();
             $status = true;
             $message = "Confirm Successfully";
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function withdraw (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $amount = $request->amount;
+            $bank_name = $request->bank_name;
+            $branch = $request->branch;
+            $account_number = $request->account_number;
+            $name_in_account = $request->name_in_account;
+            $password = $request->password;
+
+            $balance = DB::table('user')
+                        ->where('user_id', $user_id)
+                        ->first()->balance;
+
+            if ($amount > $balance) {
+                $status = false;
+                $message = "Insufficient balance";
+            }
+            else {
+                $password_dbase = DB::table('user')->where('user_id',$user_id)->first()->password;
+
+                if(!Hash::check($password, $password_dbase))
+                {
+                    $status = false;
+                    $message = "Wrong Password";
+                }
+                else {
+                    $withdraw = new Withdraw();
+                    $withdraw->user_id = $user_id;
+                    $withdraw->amount = $amount;
+                    $withdraw->bank_name = $bank_name;
+                    $withdraw->branch = $branch;
+                    $withdraw->account_number = $account_number;
+                    $withdraw->name_in_account = $name_in_account;
+
+                    $withdraw->save();
+
+                    DB::table('user')
+                    ->where('user_id', $user_id)
+                    ->update(
+                        [ 
+                            'balance' => DB::raw("balance - ".$amount)
+                        ]
+                    );
+
+                    DB::commit();
+                    $status = true;
+                    $message = "Submitted Successfully";
+                }
+            }  
         }
         catch(Exception $error)
         {

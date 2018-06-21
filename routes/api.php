@@ -49,3 +49,4 @@ Route::post('confirm_receipt', 'API_Controller\TransactionController@confirm_rec
 Route::post('add_to_wishlist', 'API_Controller\ProductController@add_to_wishlist');
 Route::post('delete_from_wishlist', 'API_Controller\ProductController@delete_from_wishlist');
 Route::post('my_wishlist', 'API_Controller\ProductController@my_wishlist');
+Route::post('withdraw', 'API_Controller\TransactionController@withdraw');
