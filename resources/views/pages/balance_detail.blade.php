@@ -1,36 +1,37 @@
 @extends('layout')
 
 @section('css')
-    {{ HTML::style('public/global/plugins/fancybox/source/jquery.fancybox.css') }}
-    {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
-    {{ HTML::style('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css') }}
-    {{ HTML::style('public/css/iconeffects.css')}}
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    {{ HTML::style('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all')}}
-    {{ HTML::style('public/global/plugins/font-awesome/css/font-awesome.min.css')}}
-    {{ HTML::style('public/global/plugins/simple-line-icons/simple-line-icons.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap/css/bootstrap.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')}}
+
+
+    {{ HTML::style('public/global/plugins/font-awesome/css/font-awesome.min.css') }}
+    {{ HTML::style('public/global/plugins/simple-line-icons/simple-line-icons.min.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap/css/bootstrap.min.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}
     <!-- END GLOBAL MANDATORY STYLES -->
+    
     <!-- BEGIN PAGE LEVEL PLUGINS -->
-    {{ HTML::style('public/global/plugins/datatables/datatables.min.css')}}
-    {{ HTML::style('public/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css')}}
-    {{ HTML::style('public/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}   
-    {{ HTML::style('public/global/plugins/clockface/css/clockface.css')}}   
-        <!-- END PAGE LEVEL PLUGINS -->    <!-- BEGIN THEME GLOBAL STYLES -->
-    {{ HTML::style('public/global/css/components.min.css')}}
-    {{ HTML::style('public/global/css/plugins.min.css')}}
+    {{ HTML::style('public/global/plugins/select2/css/select2.min.css') }}
+    {{ HTML::style('public/global/plugins/select2/css/select2-bootstrap.min.css') }}
+    <!-- END PAGE LEVEL PLUGINS -->
+    
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    {{ HTML::style('public/global/css/components.min.css') }}
+    {{ HTML::style('public/global/css/plugins.min.css') }}
     <!-- END THEME GLOBAL STYLES -->
+    
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    {{ HTML::style('public/pages/css/login.min.css') }}
+    <!-- END PAGE LEVEL STYLES -->
+    
     <!-- BEGIN THEME LAYOUT STYLES -->
-    {{ HTML::style('public/layouts/layout/css/layout.min.css')}}
-    {{ HTML::style('public/layouts/layout/css/themes/darkblue.min.css')}}
-    {{ HTML::style('public/layouts/layout/css/custom.min.css')}}
     <!-- END THEME LAYOUT STYLES -->
+    {{ HTML::script('public/global/plugins/jquery.min.js') }}
+
+    {{ HTML::style('public/global/plugins/datatables/datatables.min.css')}}
+   
     <!-- file:///D:/Tes/TUGAS%20AKHIR/metronic_v4.7.5/theme/admin_1/table_datatables_buttons.html -->
+   
+       
     <style>
        a {
            text-decoration:none;
@@ -64,8 +65,9 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <h1>Balance : IDR {{ number_format($login_info->user_info->balance,0,",",".") }} </h1>
-                                 <button type="button" class="btn blue btn-lg" data-toggle="modal" href="#withdraw" >Withdraw</button>                                  
+                                 <button type="button" class="btn blue btn-lg" data-toggle="modal" href="#withdraw2" >Withdraw</button>                                  
                             </div>
+                           
                         </div>
                         
                 
@@ -89,12 +91,13 @@
                                                             <input type="text" class="form-control" name="balance" value="IDR {{ number_format($login_info->user_info->balance,0,",",".") }}" readonly/>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label class="control-label col-md-4">Withdraw Amount
                                                             <span class="required"> * </span>
                                                         </label>
                                                         <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="withdraw_amount" placeholder="withdraw_amount" />
+                                                            <input type="text" class="form-control" name="amount" placeholder="withdraw_amount" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -110,7 +113,7 @@
                                                             <span class="required"> * </span>
                                                         </label>
                                                         <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="bank_account_number" placeholder="bank_account_number"/>
+                                                            <input type="text" class="form-control" name="account_number" placeholder="bank_account_number"/>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -153,6 +156,147 @@
                             <!-- /.modal-dialog -->
                         </div>
                         <!--end modal -->
+
+                        <!--begin modal -->
+                        <div class="modal fade bs-modal-sm" id="withdraw2" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4 class="modal-title">Withdraw</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                         <form class="register-form" form="form2" action="{{ action('Web_Controller\App2Controller@withdraw') }}" method="post">
+                                            {{ csrf_field() }}
+                                            @if (session()->has('status') && session()->get('status') == false)
+                                                <div class="alert alert-danger">
+                                                    <button class="close" data-close="alert"></button>
+                                                    <span>{{ session('message')}}</span>
+                                                </div>
+                                                
+                                            @endif
+                                            <p class="hint"> Enter your personal details below: </p>
+                                             
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <span class="hint">Balance</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    
+                                                    <input type="text" class="form-control" name="balance" value="IDR {{ number_format($login_info->user_info->balance,0,",",".") }}" readonly/>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Withdraw Amount</span>
+                                                     <span class="required"> * </span>
+
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Withdraw Amount</label>
+
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Withdraw Amount" name="amountr" value="{{ old('amount') }}"/> <br>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Bank Name</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Bank Name</label>
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Bank Name" name="bank_name" value="{{ old('bank_name') }}"/> <br>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Branch</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Branch</label>
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Branch" name="branch" value="{{ old('branch') }}"/> <br>
+                                                </div>
+
+                                            </div>
+
+                                             <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Account Number</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Account Number</label>
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Account Number" name="account_number" value="{{ old('account_number') }}"/> <br>
+                                                </div>
+
+                                            </div>
+
+                                             <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Name in bank account</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Name in bank Account</label>
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Name in bank Account" name="name_in_bank_acount" value="{{ old('name_in_bank_acount') }}"/> <br>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Password</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                                                    <input class="form-control placeholder-no-fix" type="password" placeholder="Password" name="password" value="{{ old('password') }}"/> <br>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                            
+                                          
+                                            
+                                
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                     <span class="hint">Password</span>
+                                                    <span class="required"> * </span>
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                                                    <input class="form-control placeholder-no-fix" type="password" placeholder="Password" name="password" value="{{ old('password') }}"/> <br>
+                                                </div>
+                                                
+                                                <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
+                                                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" name="rpassword" /> </div>
+                                            
+                                                <div class="form-actions">
+                                                    <button type="button"  class="btn green btn-outline" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
+                                                </div>
+                                        </form>
+                                        <!-- END REGISTRATION FORM -->
+                                    </div>
+                                   
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <!--end modal -->
+
+                       
 
                         <div class="form-group">
                             <div class="col-md-12" style="padding-top: 80px">
@@ -226,54 +370,34 @@
 @endsection
 
 @section('script')
-
-    <!--BEGIN PAGE LEVEL PLUGINS-->
-    {{HTML::script('public/global/plugins/fancybox/source/jquery.fancybox.pack.js')}}
-    {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
-    {{HTML::script('public/global/plugins/fuelux/js/spinner.min.js')}}
-    {{HTML::script('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js')}}
-    <!--END PAGE LEVEL PLUGINS-->
-
-    <!--BEGIN PAGE LEVEL PLUGINS-->
-    {{HTML::script('public/global/plugins/jquery.min.js')}}
-    {{HTML::script('public/global/plugins/bootstrap/js/bootstrap.min.js')}}
-    {{HTML::script('public/global/plugins/js.cookie.min.js')}}
-    {{HTML::script('public/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js')}}
-    {{HTML::script('public/global/plugins/jquery.blockui.min.js')}}
-    {{HTML::script('public/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}
+       
+ 
+    {{HTML::script('public/pages/scripts/table-datatables-buttons.min.js')}}
+  <!-- BEGIN CORE PLUGINS -->
+        {{ HTML::script('public/global/plugins/jquery.min.js') }}
+        {{ HTML::script('public/global/plugins/bootstrap/js/bootstrap.min.js') }}
+        {{ HTML::script('public/global/plugins/js.cookie.min.js') }}
+        {{ HTML::script('public/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}
+        {{ HTML::script('public/global/plugins/jquery.blockui.min.js') }}
+        {{ HTML::script('public/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}
         <!-- END CORE PLUGINS -->
-        <!-- BEGIN PAGE LEVEL PLUGINS -->
-        {{HTML::script('public/global/scripts/datatable.js')}}
-        <!-- {{HTML::script('public/global/plugins/datatables/datatables.min.js')}}
-        {{HTML::script('public/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js')}} -->
-        {{HTML::script('public/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}
         
-        {{HTML::script('public/global/plugins/moment.min.js')}}
-         {{HTML::script('public/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js')}}
-        {{HTML::script('public/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}
-        {{HTML::script('public/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}}
-        {{HTML::script('public/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}
-        {{HTML::script('public/global/plugins/clockface/js/clockface.js')}}
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        {{ HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js') }}
+        {{ HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js') }}
+        {{ HTML::script('public/global/plugins/select2/js/select2.full.min.js') }}
         <!-- END PAGE LEVEL PLUGINS -->
+        
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
-        {{HTML::script('public/global/scripts/app.min.js')}}
+        {{ HTML::script('public/global/scripts/app.min.js') }}
         <!-- END THEME GLOBAL SCRIPTS -->
+        
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        {{HTML::script('public/pages/scripts/table-datatables-buttons.min.js')}}
-        {{HTML::script('public/pages/scripts/components-date-time-pickers.min.js')}}
-
+        {{ HTML::script('public/pages/scripts/login.js') }}
         <!-- END PAGE LEVEL SCRIPTS -->
+        
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
-        {{HTML::script('public/layouts/layout/scripts/layout.min.js')}}
-        {{HTML::script('public/layouts/layout/scripts/demo.min.js')}}
-        {{HTML::script('public/layouts/global/scripts/quick-sidebar.min.js')}}
-        {{HTML::script('public/layouts/global/scripts/quick-nav.min.js')}}
         <!-- END THEME LAYOUT SCRIPTS -->
-
-         
-    
-      
-
         <script>
             $(document).ready(function()
             {
@@ -283,4 +407,6 @@
                 });
             })
         </script>
+   
+        
 @endsection

@@ -421,6 +421,7 @@ class ComposerStaticInit31b8e853ecc4a8e47069c323d5ebcc34
         'App\\Store_Supporting_Document' => __DIR__ . '/../..' . '/app/Store_Supporting_Document.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Wishlist' => __DIR__ . '/../..' . '/app/Wishlist.php',
+        'App\\Withdraw' => __DIR__ . '/../..' . '/app/Withdraw.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'BankSeeder' => __DIR__ . '/../..' . '/database/seeds/BankSeeder.php',

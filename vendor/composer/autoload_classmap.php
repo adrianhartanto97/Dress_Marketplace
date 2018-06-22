@@ -56,6 +56,7 @@ return array(
     'App\\Store_Supporting_Document' => $baseDir . '/app/Store_Supporting_Document.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\Wishlist' => $baseDir . '/app/Wishlist.php',
+    'App\\Withdraw' => $baseDir . '/app/Withdraw.php',
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
     'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
     'BankSeeder' => $baseDir . '/database/seeds/BankSeeder.php',

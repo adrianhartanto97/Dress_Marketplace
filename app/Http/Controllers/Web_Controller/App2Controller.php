@@ -183,60 +183,48 @@ class App2Controller extends Controller
          }  
      }
 
-     public function balance_detail (Request $request){
+     public function withdraw (Request $request){
         $jwt = $request->cookie('jwt');
- 
+        $amount= $request->amount;
+        $bank_name = $request->bank_name;
+        $branch = $request->branch;
+        $account_number = $request->account_number;
+        $name_in_bank_account = $request->name_in_bank_account;
+        $password =  $request->password;
+
+
+
         $login_info = $this->get_login_info($jwt);
 
         $client = new Client();
         try {
-            $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+            $req = $client->post($this->base_url.'withdraw', [
                 'form_params' => [
-                    'token' => $jwt
+                    'token' => $jwt,
+                    'amount' => $amount,
+                    'bank_name' => $bank_name,
+                    'branch' => $bank_name,
+                    'account_number' => $account_number,
+                    'name_in_bank_account' => $name_in_bank_account,
+                    'password' => $password
+
                 ]
             ]);
-            $result = json_decode($user_wishlist->getBody());
+            $body = json_decode($req->getBody());
 
             return view('pages.balance_detail',
                [
                  'login_info' => $login_info, 
-                 'result' => $result
+                 'withdraw' => $body
                ]
            );
         }
         catch (Exception $e) {
             echo $e->getMessage();
         }  
+
      }
 
-     public function balance_withdraw (Request $request){
-        $jwt = $request->cookie('jwt');
- 
-        $login_info = $this->get_login_info($jwt);
-
-        $client = new Client();
-        try {
-            $user_wishlist = $client->post($this->base_url.'my_wishlist', [
-                'form_params' => [
-                    'token' => $jwt
-                ]
-            ]);
-            $result = json_decode($user_wishlist->getBody());
-
-            return view('pages.balance_withdraw',
-               [
-                 'login_info' => $login_info, 
-                 'result' => $result
-               ]
-           );
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }  
-    }
-
-
-          
     
 
 }
