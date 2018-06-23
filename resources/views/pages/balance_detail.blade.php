@@ -65,14 +65,13 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <h1>Balance : IDR {{ number_format($login_info->user_info->balance,0,",",".") }} </h1>
-                                 <button type="button" class="btn blue btn-lg" data-toggle="modal" href="#withdraw2" >Withdraw</button>                                  
+                                 <button type="button" class="btn blue btn-lg" data-toggle="modal" href="#withdraw2" >Withdraw</button>
                             </div>
                            
                         </div>
                         
                 
-                        <!--begin modal -->
-                        <div class="modal fade bs-modal-sm" id="withdraw" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal fade " id="withdraw2" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -80,102 +79,15 @@
                                         <h4 class="modal-title">Withdraw</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-12" style="text-align:center;">
-                                                <form method="post" action="#" class="form-horizontal" id="form1">
-                                                    <input type="hidden" name="product_id" value="">
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Balance
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="balance" value="IDR {{ number_format($login_info->user_info->balance,0,",",".") }}" readonly/>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Withdraw Amount
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="amount" placeholder="withdraw_amount" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Bank Name
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="bank_name" placeholder="bank_name" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Bank Account Number
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="account_number" placeholder="bank_account_number"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Branch
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="branch" placeholder="branch" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Name in Bank Account
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="name_in_bank_acount" placeholder="name_in_bank_acount" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label col-md-4">Your Password
-                                                            <span class="required"> * </span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <input type="password" class="form-control" name="password" placeholder="password" />
-                                                        </div>
-                                                    </div>
-                                                                    
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cancel</button>
-                                        <button type="submit" id="btn_submit" class="btn red" form="form1">Submit</button>
-                                    </div>
-                                </div>
-                                <!-- /.modal-content -->
-                            </div>
-                            <!-- /.modal-dialog -->
-                        </div>
-                        <!--end modal -->
-
-                        <!--begin modal -->
-                        <div class="modal fade bs-modal-sm" id="withdraw2" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                        <h4 class="modal-title">Withdraw</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                         <form class="register-form" form="form2" action="{{ action('Web_Controller\App2Controller@withdraw') }}" method="post">
+                                         <form class="register-form" action="{{ action('Web_Controller\App2Controller@balance_withdraw') }}" method="post">
                                             {{ csrf_field() }}
-                                            @if (session()->has('status') && session()->get('status') == false)
+                                            @if (session()->has('withdraw_status') && session()->get('withdraw_status') == false)
                                                 <div class="alert alert-danger">
                                                     <button class="close" data-close="alert"></button>
-                                                    <span>{{ session('message')}}</span>
+                                                    <span>{{ session('withdraw_message')}}</span>
                                                 </div>
                                                 
                                             @endif
-                                            <p class="hint"> Enter your personal details below: </p>
                                              
                                             <div class="form-group">
                                                 <div class="col-md-4">
@@ -198,7 +110,7 @@
                                                  <div class="col-md-6">
                                                     <label class="control-label visible-ie8 visible-ie9">Withdraw Amount</label>
 
-                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Withdraw Amount" name="amountr" value="{{ old('amount') }}"/> <br>
+                                                <input class="form-control placeholder-no-fix" type="text" placeholder="Withdraw Amount" name="amount" value="{{ old('amount') }}"/> <br>
                                                 </div>
 
                                             </div>
@@ -262,29 +174,20 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group margin-top-20 margin-bottom-20">
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    <input type="checkbox" name="tnc" /> I agree to the
+                                                    <a href="javascript:;">Terms of Service </a> &
+                                                    <a href="javascript:;">Privacy Policy </a>
+                                                    <span></span>
+                                                </label>
+                                                <div id="register_tnc_error"> </div>
+                                            </div>
                                             
-
-                                            
-                                          
-                                            
-                                
-                                            <div class="form-group">
-                                                <div class="col-md-4">
-                                                     <span class="hint">Password</span>
-                                                    <span class="required"> * </span>
-                                                </div>
-                                                 <div class="col-md-6">
-                                                    <label class="control-label visible-ie8 visible-ie9">Password</label>
-                                                    <input class="form-control placeholder-no-fix" type="password" placeholder="Password" name="password" value="{{ old('password') }}"/> <br>
-                                                </div>
-                                                
-                                                <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
-                                                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" name="rpassword" /> </div>
-                                            
-                                                <div class="form-actions">
-                                                    <button type="button"  class="btn green btn-outline" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
-                                                </div>
+                                            <div class="form-actions">
+                                                <button type="button"  class="btn green btn-outline" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
+                                            </div>  
                                         </form>
                                         <!-- END REGISTRATION FORM -->
                                     </div>
@@ -296,12 +199,9 @@
                         </div>
                         <!--end modal -->
 
-                       
-
                         <div class="form-group">
                             <div class="col-md-12" style="padding-top: 80px">
                                 <h2>Transaction History</h2>
-                             
                             </div>
 
                         </div>
