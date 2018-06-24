@@ -763,4 +763,39 @@ class TransactionController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function get_review_rating (Request $request) 
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $order = DB::table('view_order_store_approval')
+                    ->where('user_id', $user_id)
+                    ->where('state', '4')
+                    ->get();
+
+            foreach ($order as $o)
+            {
+                $product = DB::table('view_order_approve_summary_product')
+                                    ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                    ->where('transaction_id',$o->transaction_id)
+                                    ->where('store_id',$o->store_id)
+                                    ->where('accept_status','1')
+                                    ->get();
+                
+                $o->product = $product;     
+            }
+
+                return response()->json(['status'=>true,'result'=>$order],200);
+            
+        }
+        catch (Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }

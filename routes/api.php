@@ -50,3 +50,4 @@ Route::post('add_to_wishlist', 'API_Controller\ProductController@add_to_wishlist
 Route::post('delete_from_wishlist', 'API_Controller\ProductController@delete_from_wishlist');
 Route::post('my_wishlist', 'API_Controller\ProductController@my_wishlist');
 Route::post('withdraw', 'API_Controller\TransactionController@withdraw');
+Route::post('get_review_rating', 'API_Controller\TransactionController@get_review_rating');
