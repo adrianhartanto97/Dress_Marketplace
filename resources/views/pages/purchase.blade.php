@@ -1,5 +1,9 @@
 @extends('layout')
 
+@section('css')
+    {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
+@endsection
+
 @section('content')
 <div class="page-content-wrapper">
     <!-- BEGIN CONTENT BODY -->
@@ -653,7 +657,70 @@
                                     
                                 </div>
                             </div>   
-                            @endforeach
+                        @endforeach
+                        </div>
+
+                        <div class="tab-pane" id="tab_4">
+                        @foreach ($review_rating as $o)
+                            @if (session()->has('status') && session()->get('status') == false)
+                                <div class="alert alert-danger">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @elseif (session()->has('status') && session()->get('status') == true)
+                                <div class="alert alert-success">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @endif
+                            <div class="portlet box green">
+                                <div class="portlet-title">
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-6">
+                                            {{$o->order_number}}
+                                        </div>
+                                        <div class="col-md-6" style="text-align:right">
+                                            {{$o->store_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <form method="POST" action="#">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="{{asset('/public/storage/').'/'.$o->store_photo}}" width="200px" height="200px" style="margin: 0 auto;">
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div style="font-size:26px;">{{$o->store_name}}</div>
+                                            <h4>Accepted : {{$o->accepted}}</h4>
+                                            <h4>Rejected : {{$o->rejected}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:20px;">
+                                        <div class="col-md-12">
+                                            How many stars would you rate it ?
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div id="store_div_{{$o->order_number}}"></div>
+                                            <input type="hidden" name="store_rating[{{$o->transaction_id}}][{{$o->store_id}}]" id="store_rating_{{$o->transaction_id}}_{{$o->store_id}}">
+                                        </div>
+                                        <script>
+                                            $("#store_div_{{$o->order_number}}").starRating({
+                                                totalStars: 5,
+                                                useFullStars: true,
+                                                disableAfterRate: false,
+                                                callback: function(currentRating, $el){
+                                                    alert('rated ' + currentRating);
+                                                    $("#store_rating_{{$o->transaction_id}}_{{$o->store_id}}").val(currentRating);
+                                                }
+                                            });
+                                        </script>
+                                    </div>
+                                    <button type="submit">tes</button>
+                                    </form>
+                                </div>
+                            </div>   
+                        @endforeach
                         </div>
                     </div>
                 </div>
@@ -665,6 +732,7 @@
 
 @section('script')
     {{HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js')}}
+    {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
 
     <script>
         @foreach ($purchase_payment as $p)

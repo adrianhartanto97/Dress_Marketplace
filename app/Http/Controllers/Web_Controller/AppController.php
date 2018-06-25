@@ -557,6 +557,14 @@ class AppController extends Controller
 
             $shipping = json_decode($res->getBody())->result;
 
+            $res = $client->post($this->base_url.'get_review_rating', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $review_rating = json_decode($res->getBody())->result;
+
             return view('pages.purchase', 
                 [
                     'login_info' => $login_info, 
@@ -564,6 +572,7 @@ class AppController extends Controller
                     'bank' => $bank,
                     'order' => $order,
                     'shipping' => $shipping,
+                    'review_rating' => $review_rating
                 ]
             );
         }
@@ -634,4 +643,6 @@ class AppController extends Controller
             echo $e->getMessage();
         }
     }
+
+
 }
