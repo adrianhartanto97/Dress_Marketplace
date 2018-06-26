@@ -183,81 +183,27 @@ class App2Controller extends Controller
          }  
      }
 
-     // public function withdraw (Request $request){
-     //    $jwt = $request->cookie('jwt');
-     //    $amount= $request->amount;
-     //    $bank_name = $request->bank_name;
-     //    $branch = $request->branch;
-     //    $account_number = $request->account_number;
-     //    $name_in_bank_account = $request->name_in_bank_account;
-     //    $password =  $request->password;
-
-
-
-     //    $login_info = $this->get_login_info($jwt);
-
-     //    $client = new Client();
-     //    try {
-     //        $req = $client->post($this->base_url.'withdraw', [
-     //            'form_params' => [
-     //                'token' => $jwt,
-     //                'amount' => $amount,
-     //                'bank_name' => $bank_name,
-     //                'branch' => $bank_name,
-     //                'account_number' => $account_number,
-     //                'name_in_bank_account' => $name_in_bank_account,
-     //                'password' => $password
-
-     //            ]
-     //        ]);
-     //        $body = json_decode($req->getBody());
-
-     //        return view('pages.balance_detail',
-     //           [
-     //             'login_info' => $login_info, 
-     //             'withdraw' => $body
-     //           ]
-     //       );
-     //    }
-     //    catch (Exception $e) {
-     //        echo $e->getMessage();
-     //    }  
-
-     // }
+    
 
      public function withdraw (Request $request){
         $jwt = $request->cookie('jwt');
-        $amount= $request->amount;
-        $bank_name = $request->bank_name;
-        $branch = $request->branch;
-        $account_number = $request->account_number;
-        $name_in_bank_account = $request->name_in_bank_account;
-        $password =  $request->password;
-
-
-
         $login_info = $this->get_login_info($jwt);
+
+       
 
         $client = new Client();
         try {
             $req = $client->post($this->base_url.'withdraw', [
                 'form_params' => [
-                    'token' => $jwt,
-                    'amount' => $amount,
-                    'bank_name' => $bank_name,
-                    'branch' => $bank_name,
-                    'account_number' => $account_number,
-                    'name_in_bank_account' => $name_in_bank_account,
-                    'password' => $password
-
+                    'token' => $jwt
+                   
                 ]
             ]);
             $body = json_decode($req->getBody());
 
             return view('pages.balance_detail',
                [
-                 'login_info' => $login_info, 
-                 'withdraw' => $body
+                 'login_info' => $login_info
                ]
            );
         }
