@@ -661,7 +661,6 @@
                         </div>
 
                         <div class="tab-pane" id="tab_4">
-                        @foreach ($review_rating as $o)
                             @if (session()->has('status') && session()->get('status') == false)
                                 <div class="alert alert-danger">
                                     <button class="close" data-close="alert"></button>
@@ -673,6 +672,7 @@
                                     <span>{{ session('message')}}</span>
                                 </div>
                             @endif
+                        @foreach ($review_rating as $o)
                             <div class="portlet box green">
                                 <div class="portlet-title">
                                     <div class="row" style="margin-top:10px;">
@@ -685,7 +685,8 @@
                                     </div>
                                 </div>
                                 <div class="portlet-body">
-                                    <form method="POST" action="#">
+                                    <form method="POST" action="{{action ('Web_Controller\AppController@submit_review_rating') }}">
+                                    {{ csrf_field() }}
                                     <div class="row">
                                         <div class="col-md-3">
                                             <img src="{{asset('/public/storage/').'/'.$o->store_photo}}" width="200px" height="200px" style="margin: 0 auto;">
@@ -702,7 +703,9 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div id="store_div_{{$o->order_number}}"></div>
-                                            <input type="hidden" name="store_rating[{{$o->transaction_id}}][{{$o->store_id}}]" id="store_rating_{{$o->transaction_id}}_{{$o->store_id}}">
+                                            <input type="hidden" name="transaction_id" value="{{$o->transaction_id}}">
+                                            <input type="hidden" name="store_id" value="{{$o->store_id}}">
+                                            <input type="hidden" name="store_rating" id="store_rating_{{$o->transaction_id}}_{{$o->store_id}}" value="0">
                                         </div>
                                         <script>
                                             $("#store_div_{{$o->order_number}}").starRating({
@@ -710,13 +713,48 @@
                                                 useFullStars: true,
                                                 disableAfterRate: false,
                                                 callback: function(currentRating, $el){
-                                                    alert('rated ' + currentRating);
+                                                    //alert('rated ' + currentRating);
                                                     $("#store_rating_{{$o->transaction_id}}_{{$o->store_id}}").val(currentRating);
                                                 }
                                             });
                                         </script>
                                     </div>
-                                    <button type="submit">tes</button>
+                                    <hr style="background-color: grey; height: 1px; border: 0;">
+                                    @foreach($o->product as $p)
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <img src="{{asset('/public/storage/').'/'.$p->product_photo}}" width="120px" height="120px" style="margin: 0 auto;">
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div style="font-size:20px;">{{$p->product_name}}</div>
+                                                <h5>How many stars would you rate it ?</h5>
+                                                <div id="product_div_{{$o->transaction_id}}_{{$p->product_id}}"></div>
+                                                <input type="hidden" name="product_rating[{{$p->product_id}}]" id="product_rating_{{$o->transaction_id}}_{{$p->product_id}}" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:10px;">
+                                            <div class="col-md-12">
+                                                <textarea type="text" class="form-control" name="product_review[{{$p->product_id}}]" placeholder="Write your review about the product here"></textarea>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            $("#product_div_{{$o->transaction_id}}_{{$p->product_id}}").starRating({
+                                                totalStars: 5,
+                                                starSize: 25,
+                                                useFullStars: true,
+                                                disableAfterRate: false,
+                                                callback: function(currentRating, $el){
+                                                    //alert('rated ' + currentRating);
+                                                    $("#product_rating_{{$o->transaction_id}}_{{$p->product_id}}").val(currentRating);
+                                                }
+                                            });
+                                        </script>
+                                    @endforeach
+                                    <div style="margin-top:15px;text-align:center">
+                                        <button type="submit" class="btn blue">
+                                            Submit
+                                        </button>
+                                    </div>
                                     </form>
                                 </div>
                             </div>   

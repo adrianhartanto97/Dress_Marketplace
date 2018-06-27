@@ -644,5 +644,55 @@ class AppController extends Controller
         }
     }
 
+    public function submit_review_rating (Request $request)
+    {
+        try {
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $store_rating = $request->store_rating;
+            $product_rating = $request->product_rating;
+            $product_review = $request->product_review;
 
+            $jwt = $request->cookie('jwt');
+
+            $arr = [];
+
+            if (sizeof ($product_rating) > 0) {
+                foreach ($product_rating as $key => $value) {
+                    $obj = new stdClass();
+                    $obj->product_id = $key;
+                    $obj->rating = $value;
+                    array_push($arr, $obj);
+                }
+
+                for($i=0;$i<sizeof($arr);$i++)
+                {
+                    foreach ($product_review as $key => $value) {
+                        if ($key == $arr[$i]->product_id) {
+                            $arr[$i]->review = $value;
+                        }
+                    }
+                }
+            }
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'submit_review_rating', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'transaction_id' => $transaction_id,
+                    'store_id' => $store_id,
+                    'store_rating' => $store_rating,
+                    'product_rating'=>$arr
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }

@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth.custom'], function () {
     Route::post('input_receipt_number', 'Web_Controller\SellerController@input_receipt_number');
     Route::post('finish_shipping', 'Web_Controller\SellerController@finish_shipping');
     Route::post('confirm_receipt', 'Web_Controller\AppController@confirm_receipt');
+    Route::post('submit_review_rating', 'Web_Controller\AppController@submit_review_rating');
 });
 Route::get('login_page', 'Web_Controller\UserController@login_page');
 Route::post('login', 'Web_Controller\UserController@login');

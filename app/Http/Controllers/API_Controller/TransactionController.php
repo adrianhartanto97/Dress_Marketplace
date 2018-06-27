@@ -22,6 +22,8 @@ use App\Cart;
 use App\Sales_Transaction_Header;
 use App\Sales_Transaction_Payment;
 use App\Withdraw;
+use App\Store_Rating;
+use App\Product_Review_Rating;
 
 class TransactionController extends Controller
 {
@@ -797,5 +799,62 @@ class TransactionController extends Controller
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
+    }
+
+    public function submit_review_rating (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $transaction_id = $request->transaction_id;
+            $store_id = $request->store_id;
+            $store_rating = $request->store_rating;
+            $product_rating = $request->product_rating;
+
+            $store = new Store_Rating();
+            $store->transaction_id = $transaction_id;
+            $store->store_id = $store_id;
+            $store->rating = $store_rating;
+            $store->status = "1";
+            $store->save();
+
+            if (sizeof ($product_rating) > 0) {
+                foreach ($product_rating as $p)
+                {
+                    $p = (object)$p;
+                    $product = new Product_Review_Rating();
+                    $product->transaction_id = $transaction_id;
+                    $product->product_id = $p->product_id;
+                    $product->rating = $p->rating;
+                    $product->review = $p->review;
+                    $product->status = "1";
+
+                    $product->save();
+                }
+            }
+            DB::table('sales_transaction_state')
+            ->where('transaction_id', $transaction_id)
+            ->where('store_id', $store_id)
+            ->update(
+                [ 
+                    'state' => '5'
+                ]
+            );
+            //print_r($product_rating);
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
     }
 }
