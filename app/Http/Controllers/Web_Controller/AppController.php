@@ -15,6 +15,9 @@ use \Exception;
 use \stdClass;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\User;
 
 class AppController extends Controller
 {
@@ -691,6 +694,41 @@ class AppController extends Controller
             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
 
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function transaction_history (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $login_info = $this->get_login_info($jwt);
+            $client = new Client();
+            $res = $client->post($this->base_url.'transaction_history', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $history = json_decode($res->getBody())->result;
+            $collection = collect($history);
+            //$transaction = new LengthAwarePaginator($collection, count($collection), 1, 1, ['path'=>url('transaction_history')]);
+            
+            $page = Input::get('page', 1);
+            $perPage = 5;
+	        
+	        $transaction = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('transaction_history')]);
+
+            return view('pages.transaction_history', 
+                [
+                    'transaction' => $transaction
+                ]
+            )->render();
+
+            //$users = DB::table('user')->paginate(1);
+            //print_r($transaction);
+        }
         catch (Exception $e) {
             echo $e->getMessage();
         }

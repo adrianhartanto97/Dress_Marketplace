@@ -52,3 +52,4 @@ Route::post('my_wishlist', 'API_Controller\ProductController@my_wishlist');
 Route::post('withdraw', 'API_Controller\TransactionController@withdraw');
 Route::post('get_review_rating', 'API_Controller\TransactionController@get_review_rating');
 Route::post('submit_review_rating', 'API_Controller\TransactionController@submit_review_rating');
+Route::post('transaction_history', 'API_Controller\TransactionController@transaction_history');
