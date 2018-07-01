@@ -3,12 +3,22 @@
                 <div class="page-header-inner ">
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
-<!--
-                        <a href="index.html">
-                            <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" /> </a>
--->
+                        <a href="index">
+                            <img src="public/layouts/layout/img/dress.png" alt="logo" class="logo-default" style="width: 200px;line-height: 200px;margin-top: 8px" /> </a>
                         
                     </div>
+
+                     <form class="search-form search-form-expanded" action="search" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search..." name="query">
+                            <span class="input-group-btn">
+                                <a href="javascript:;" class="btn submit">
+                                    <i class="icon-magnifier"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </form>
+                    
                     <!-- END LOGO -->
                     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
 <!--
@@ -19,6 +29,7 @@
                     <!-- END RESPONSIVE MENU TOGGLER -->
                     <!-- BEGIN TOP NAVIGATION MENU -->
                     <div class="top-menu">
+                       
                         <ul class="nav navbar-nav pull-right">
                             <!-- BEGIN NOTIFICATION DROPDOWN -->
                             <!-- DOC: Apply "dropdown-dark" class after "dropdown-extended" to change the dropdown styte -->
@@ -151,7 +162,7 @@
                                             <li>
                                                 <a href="#">
                                                     <span class="photo">
-                                                        <img src="../assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt=""> </span>
+                                                        <img src="assets/layouts/layout/img//img/avatar3.jpg" class="img-circle" alt=""> </span>
                                                     <span class="subject">
                                                         <span class="from"> Lisa Wong </span>
                                                         <span class="time">Just Now </span>

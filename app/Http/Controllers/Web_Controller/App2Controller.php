@@ -219,7 +219,7 @@ class App2Controller extends Controller
         $bank_name = $request->input('bank_name');
         $branch = $request->input('branch');
         $account_number = $request->input('account_number');
-        $name_in_bank_account = $request->input('name_in_bank_account');
+        $name_in_account = $request->input('name_in_account');
         $password =  $request->input('password');
 
         $client = new Client();
@@ -229,9 +229,9 @@ class App2Controller extends Controller
                     'token' => $jwt,
                     'amount' => $amount,
                     'bank_name' => $bank_name,
-                    'branch' => $bank_name,
+                    'branch' => $branch,
                     'account_number' => $account_number,
-                    'name_in_bank_account' => $name_in_bank_account,
+                    'name_in_account' => $name_in_account,
                     'password' => $password
 
                 ]
@@ -255,6 +255,61 @@ class App2Controller extends Controller
         }
 
      } 
+
+      public function favorite_store (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+ 
+         $client = new Client();
+         try {
+             $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                 'form_params' => [
+                     'token' => $jwt
+                 ]
+             ]);
+             $result = json_decode($user_wishlist->getBody());
+ 
+             return view('pages.favorite_store',
+                [
+                  'login_info' => $login_info, 
+                  'result' => $result
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+     }
+
+     public function search (Request $request)
+     {
+        $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+ 
+         $client = new Client();
+         try {
+             $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+                 'form_params' => [
+                     'token' => $jwt
+                 ]
+             ]);
+             $result = json_decode($user_wishlist->getBody());
+ 
+             return view('pages.search',
+                [
+                  'login_info' => $login_info, 
+                  'result' => $result
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+          
+     }
 
     
 

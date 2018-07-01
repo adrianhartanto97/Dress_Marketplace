@@ -77,3 +77,6 @@ Route::get('my_wishlist', 'Web_Controller\App2Controller@my_wishlist');
 Route::get('balance_detail', 'Web_Controller\App2Controller@withdraw');
 Route::post('balance_withdraw', 'Web_Controller\App2Controller@balance_withdraw');
 
+Route::get('favorite_store', 'Web_Controller\App2Controller@favorite_store');
+
+Route::get('search', 'Web_Controller\App2Controller@search');

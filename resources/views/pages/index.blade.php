@@ -39,6 +39,54 @@
                         </div>
                     </div>
                 </div>
+
+                <h1>New Product</h1>
+                <a href="" >Go to all product page</a>
+
+                 <div class="portlet light bordered">
+                    <div class="portlet-body">
+                        <div class="row">
+                            @for($i=0;$i<=3;$i++)
+                            <a href="" target="_blank" style="text-decoration:none;">
+                            <div class="col-xs-6 col-sm-4 col-md-3">
+                                <div class="thumbnail">
+                                    <img src="../dress_marketplace/public/storage/carousel/carousel2.jpg" alt="" style="width: 100%; height: 35%;">
+                                    <div class="caption" style="text-align:center;">
+                                        <h4>a</h4>
+                                        <h3>sdsd</h3>
+                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                         @endfor
+                        </div>
+                    </div>
+                </div>
+
+                <h1>Best Seller</h1>
+                <a href="" >Go to all product page</a>
+
+                 <div class="portlet light bordered">
+                    <div class="portlet-body">
+                        <div class="row">
+                            @for($i=0;$i<=3;$i++)
+                            <a href="" target="_blank" style="text-decoration:none;">
+                            <div class="col-xs-6 col-sm-4 col-md-3">
+                                <div class="thumbnail">
+                                    <img src="../dress_marketplace/public/storage/carousel/carousel3.jpg" alt="" style="width: 100%; height: 35%;">
+                                    <div class="caption" style="text-align:center;">
+                                        <h4>a</h4>
+                                        <h3>sdsd</h3>
+                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                         @endfor
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
     </div>
