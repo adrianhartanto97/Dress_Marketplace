@@ -204,7 +204,7 @@
 
                             @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'partnership')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/seller_panel_partnership')}}" class="nav-link">
                                     <i class="icon-user-following"></i>
                                     <span class="title">Partnership</span>
                                     <span class="@if($active_nav == 'partnership')selected @else arrow @endif"></span>

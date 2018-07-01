@@ -595,4 +595,69 @@ class StoreController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function get_request_partnership (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            $result = [];
+            $transaction = DB::table('view_order_status')
+                            ->where('user_id', $user_id)
+                            ->where('state', '5')
+                            ->get();
+                            
+            foreach ($transaction as $t) {
+                $accept = DB::table('view_order_approve_summary_product')
+                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                            ->where('transaction_id',$t->transaction_id)
+                            ->where('store_id',$t->store_id)
+                            ->where('accept_status','1')
+                            ->get();
+                
+                if (sizeof($accept) > 0) {
+                    $t->product = [];
+                    foreach($accept as $a) {
+                        $product_partnership = DB::table('view_request_partnership')
+                            ->select('*')
+                            ->where('transaction_id',$t->transaction_id)
+                            ->where('store_id',$t->store_id)
+                            ->where('accept_status','1')
+                            ->where('product_id',$a->product_id)
+                            ->where('store_id_partner', $store->store_id)
+                            ->first();
+
+                        $has_partnership = false;
+                        if ($product_partnership && $product_partnership->status == '0')
+                        {
+                            $a->has_partnership = true;
+                            array_push($t->product,$a);
+                        }
+                        else if (!$product_partnership)
+                        {
+                            $a->has_partnership = false;
+                            array_push($t->product,$a);
+                        }
+                        
+                    }
+                    
+                    if (sizeof($t->product) > 0) {
+                        array_push($result, $t);
+                    }
+                }
+            }
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$result],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }

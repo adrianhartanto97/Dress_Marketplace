@@ -435,6 +435,43 @@ class SellerController extends Controller
         //return response()->json(['status' => 'OK'], 200);
     }
 
+    public function partnership (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+
+        if ($store) {
+            $login_info = $this->get_login_info($jwt);
+            $client = new Client();
+            try {
+                $res = $client->post($this->base_url.'get_request_partnership', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $upline_req = json_decode($res->getBody())->result;
+
+                return view('pages.seller_panel_partnership', 
+                    [
+                        'login_info' => $login_info, 
+                        'store_info' => $store,
+                        'active_nav' => 'partnership',
+                        'upline_req' => $upline_req
+                    ]
+                );
+               
+            }
+            catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            
+        }
+        else {
+            return redirect('index');
+        }
+    }
+
     public function test(Request $request) {
         // $size = $request->size;
         // $price = $request->price_range;
