@@ -18,6 +18,8 @@ use App\Store_Supporting_Document;
 use App\Product;
 use App\Product_Size;
 use App\Product_Price;
+use App\Partnership_Request;
+use App\Partnership_Request_Price;
 
 class StoreController extends Controller
 {
@@ -655,6 +657,63 @@ class StoreController extends Controller
         }
         catch(Exception $error)
         {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function submit_request_partnership (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $product_id = $request->product_id;
+            $min_order = $request->min_order;
+            $price = $request->price;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            $product = new Product();
+            $product->store_id = $store->store_id;
+            $product->name = "Partnership_".$product_id."_".$store->store_id;
+            $product->product_type = "0";
+            $product->product_active_status = "1";
+            $product->product_ownership = "1";
+            $product->save();
+
+            $product_id_partner = $product->product_id;
+
+            $partnership = new Partnership_Request();
+            $partnership->product_id = $product_id;
+            $partnership->product_id_partner = $product_id_partner;
+            $partnership->min_order = $min_order;
+            $partnership->status = 0;
+
+            $partnership->save();
+
+            if ($price) {
+                foreach($price as $pr) {
+                    $partnership_price = new Partnership_Request_Price();
+                    $partnership_price->product_id_partner = $product_id_partner;
+                    $partnership_price->qty_min = $pr['qty_min'];
+                    $partnership_price->qty_max = $pr['qty_max'];
+                    $partnership_price->price = $pr['price'];
+
+                    $partnership_price->save();
+                }
+            } 
+            
+            DB::commit();
+            $status = true;
+            $message = "Request Partnership Submitted Successfully";
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
             $status = false;
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
