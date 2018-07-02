@@ -9,8 +9,9 @@
     {{ HTML::style('public/global/plugins/ion.rangeslider/css/ion.rangeSlider.skinFlat.css')}}
     {{ HTML::style('public/global/plugins/nouislider/nouislider.min.css')}}
     {{ HTML::style('public/global/plugins/nouislider/nouislider.pips.css')}}
+    {{ HTML::style('public/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')}}
 
-  
+
     <style>
        a {
            text-decoration:none;
@@ -48,8 +49,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="control-label">Showing 100 products for "Pretty Dress" 
-                                    </label>
+                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for "Pretty Dress"</p>
+
+<!--                                     <h4 class="block">Showing 100 products for "Pretty Dress"</h4>
+ -->
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -73,8 +76,10 @@
                         </div>
                     </div>
                     <div class="portlet-body">
+
+
                         <div class="row">
-                            @for($i=0;$i<=3;$i++)
+                            @for($i=0;$i<=10;$i++)
                             <a href="" target="_blank" style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
@@ -89,10 +94,18 @@
                             </a>
                          @endfor
                         </div>
+
+                        <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
+
                     </div>
+
+                    
+
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 @endsection
@@ -107,14 +120,14 @@
         {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
         {{HTML::script('public/global/plugins/nouislider/wNumb.min.js')}}
         {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
+        {{HTML::script('public/global/plugins/jquery.pulsate.min.js')}}
+        {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
+        {{HTML::script('public/global/plugins/holder.js')}}
+        {{HTML::script('public/pages/scripts/ui-general.min.js')}}
 
-
-
-    <!--END PAGE LEVEL PLUGINS-->
-
-    <!--BEGIN PAGE LEVEL SCRIPTS-->
-    <!--END PAGE LEVEL SCRIPTS-->
-
+  
+      
+       
     <script>
     
         $( document ).ready(function() {

@@ -649,7 +649,6 @@
                                         <div class="form-actions">
                                             <div class="row" style="text-align:center;">
                                                     <button type="submit" class="btn green btn-lg">I have Received</button> 
-                                               
                                             </div>
                                         </div>
                                     </form>

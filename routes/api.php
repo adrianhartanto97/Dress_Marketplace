@@ -54,3 +54,4 @@ Route::post('get_review_rating', 'API_Controller\TransactionController@get_revie
 Route::post('submit_review_rating', 'API_Controller\TransactionController@submit_review_rating');
 Route::post('transaction_history', 'API_Controller\TransactionController@transaction_history');
 Route::post('get_request_partnership', 'API_Controller\StoreController@get_request_partnership');
+

@@ -9,54 +9,62 @@
                 </div>
                 <div class="portlet-body">
                     <div class="form-group">
-                         <div class="col-md-5">
-                            Min Order
-                         </div>
                          <div class="col-md-7">
-                                <input type="number" class="form-control" min="0">
+                            <label class="control-label">Min Order</label>
+                         </div>
+                         <div class="col-md-5">
+                            <input type="number" class="form-control" min="0" value="0">
                          </div>
                     </div>
                      <div class="form-group">
-                         <label class="control-label">Price
-                        </label>
+                        <div class="col-md-12">
+                            <label class="control-label">Price</label>
+                        </div>
                         <div class="col-md-12">
                             <input id="range_26" type="range"  />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Province
-                        </label>
+                        <div class="col-md-12">
+                            <label class="control-label">Province</label>
+
+                        </div>
                         <div class="col-md-12">
                             <select class="form-control" name="province">
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">City
-                        </label>
+                         <div class="col-md-12">
+                            <label class="control-label">City</label>  
+                         </div>
+                        
                         <div class="col-md-12">
                             <select class="form-control" name="city">
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Shipping
-                        </label>
+                        <div class="col-md-12">
+                            <label class="control-label">Shipping</label>
+                        </div>
+                        
                         <div class="col-md-12">
                             <select class="form-control" name="shipping">
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                         <label class="control-label">Rating
-                        </label>
+                            <label class="control-label">Rating</label>
+                        
                         <div class="col-md-12">
                             <input id="range_25" type="range"  />
                         </div>
                     </div>
                      <div class="form-group">
-                        <label class="control-label">
+                            <label class="control-label">
                         </label>
+
                         <div class="col-md-12">
                         </div>
                     </div>
@@ -66,12 +74,12 @@
 
             </div>
              <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn green button-submit"> Apply Filter
-                            </button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn green button-submit"> Apply Filter
+                        </button>
                     </div>
                 </div>
+            </div>
         </div>
     </div>

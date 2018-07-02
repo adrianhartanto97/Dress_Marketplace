@@ -149,11 +149,7 @@
                                     
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12" style="text-align:center; margin-top:20px;">
-                                    <button type="button" class="btn red btn-lg" data-toggle="modal" href="#add_to_bag" @if($login_info->login_status == false) disabled @endif>Add to Bag</button>
-                                </div>
-                            </div>
+                            
 
                             <!--begin modal -->
                             <div class="modal fade bs-modal-sm" id="add_to_bag" tabindex="-1" role="dialog" aria-hidden="true">
@@ -213,14 +209,12 @@
                         <div class="tabbable-custom">
                             <ul class="nav nav-tabs ">
                                 <li class="active">
-                                    <a href="#tab_1" data-toggle="tab"> Details </a>
+                                    <a href="#tab_1" data-toggle="tab"> Products</a>
                                 </li>
                                 <li>
                                     <a href="#tab_2" data-toggle="tab"> Company Profile </a>
                                 </li>
-                                <li>
-                                    <a href="#tab_3" data-toggle="tab"> Review & Rating </a>
-                                </li>
+                                
                             </ul>
                             <div id="info">
                             </div>
@@ -327,36 +321,7 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane" id="tab_3">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h5>Average Rating</h5>
-                                           <div class="my-rating" data-rating="{{$product_detail->product_info->rating}}"></div>
-                                            <h5>Skore : 4</h5>
-                                        </div>
-                                    </div>
-                                    <hr style="background-color: grey; height: 1px; border: 1;">
-                                    
-                                    @for($i=0;$i<=3;$i++)
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                           <div class="col-lg-1 col-md-1 col-xs-1" style="margin-right:-0px;">
-                                                 <img alt="" width="30px" class="img-circle" src="{{asset('/public/storage/profile_image/default.png')}}"  />
-                                           </div>
-                                           <div class="col-lg-11 col-md-11 col-xs-11" >
-                                                 <span class="username"> <b>User</b> <i>2 Jul 2018</i> </span>
-                                                <div class="my-rating" data-rating="4"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                           <div class="col-lg-12 col-md-12 col-xs-12" >
-                                                 Comment
-                                            </div>
-                                            <br><br>
-                                        </div>
-                                    </div>
-                                    @endfor
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -365,7 +330,7 @@
                     <div class = "portlet box grey-salsa">
                         <div class="portlet-title">
                             <div class="caption">
-                                <a href="store_detail/{{$w->product_id}}" >
+                                <a href="{{url('/store_detail')}}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <img alt="" width="100%" class="img-square" src="{{asset('/public/storage').'/'.$product_detail->store_info->photo}}" />
@@ -442,81 +407,5 @@
 
 
 
-    <script>
-     
-
-        $( document ).ready(function() {
-            $(".my-rating").starRating({
-                starSize: 25,
-                readOnly: true,   
-            });
-
-            var tinggi = $('#product_info').height();
-            //alert(tinggi);
-            $('#store_info').height(tinggi-30);
-            console.log({{$product_detail->wishlist_status?"true":"false"}});
-
-           
-           
-        });
-
-        @foreach ($product_detail->product_info->size as $s)
-        $("#touchspin_{{$s->size_id}}").TouchSpin({
-            verticalbuttons: true,
-            verticalupclass: 'glyphicon glyphicon-plus',
-            verticaldownclass: 'glyphicon glyphicon-minus'
-        });
-        @endforeach
-
-        var arr = [];
-        @foreach ($product_detail->product_info->price as $p)
-            arr.push({
-                qty_min: "{{$p->qty_min}}",
-                qty_max : "{{$p->qty_max}}",
-                price : "{{$p->price}}"
-            });
-        @endforeach
-            
-        
-        
-        
-        function hitung()
-        {
-            var total = 0;
-            var min_order = {{$product_detail->product_info->min_order}}
-            $( ".dress_size" ).each(function() {
-                total += parseInt($(this).val());
-            });
-            //alert(total);
-
-            var harga = 0;
-            arr.forEach(function(element) {
-                if(element.qty_max != "max") {
-                    if (total >= parseInt(element.qty_min) && total <= parseInt(element.qty_max)) {
-                        harga = element.price;
-                    }
-                }
-                else if(element.qty_max == "max"){
-                    if (total >= parseInt(element.qty_min)) {
-                        harga = element.price;
-                    }
-                }
-            });
-
-            if (total >= min_order) {
-                $('#btn_bag').prop('disabled', false);
-            }
-            else {
-                $('#btn_bag').prop('disabled', true);
-            }
-
-            var total_harga = total * harga;
-            $('#total_harga').html('Total : IDR ' + total_harga.toLocaleString());
-
-            //alert(harga);
-            
-        }
-       
-        
-    </script>
+   
 @endsection
