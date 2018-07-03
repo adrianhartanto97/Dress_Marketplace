@@ -29,6 +29,7 @@
         {{ HTML::script('public/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}
         {{ HTML::script('public/global/plugins/jquery.blockui.min.js') }}
         {{ HTML::script('public/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}
+        {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
         <!-- END CORE PLUGINS -->
         
         <!-- BEGIN THEME GLOBAL SCRIPTS -->

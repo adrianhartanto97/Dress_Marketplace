@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <form action="#" class="form-horizontal">
+                                        <form class="form-horizontal">
                                             <div style="margin-top:-20px">
                                             </div>
                                             <div class="form-body">
@@ -84,7 +84,7 @@
                                                                                     @if($p->has_partnership)
                                                                                         <h4>Status : Waiting Approval</h4>
                                                                                     @else
-                                                                                        <button class="btn blue">Request Partnership</button>
+                                                                                        <button type="button" class="btn blue" data-toggle="modal" href="#modal_{{$o->order_number}}_{{$p->product_id}}">Request Partnership</button>
                                                                                     @endif
                                                                                 </td>
                                                                             </tr>
@@ -93,6 +93,123 @@
                                                                     </table>
                                                                 </div>
                                                             </div>
+
+                                                            @foreach($o->product as $p)
+                                                            <div class="modal fade in" id="modal_{{$o->order_number}}_{{$p->product_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                <div class="modal-dialog modal-lg">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                                            <h4 class="modal-title">Request Partnership</h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4">
+                                                                                    <div><h4>{{$o->store_name}}</h4></div>
+                                                                                    
+                                                                                        <div class="table-scrollable">
+                                                                                            <table class="table table-striped table-bordered table-advance table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th>
+                                                                                                            <i class="fa fa-cart-plus"></i> Qty </th>
+                                                                                                        <th class="hidden-xs">
+                                                                                                            <i class="fa fa-money"></i> Price </th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                @foreach ($p->price as $pp)
+                                                                                                <tr>
+                                                                                                    <td class="highlight">
+                                                                                                        @if ($pp->qty_max != "max")
+                                                                                                            {{$pp->qty_min}} - {{$pp->qty_max}}
+                                                                                                        @else
+                                                                                                            >= {{$pp->qty_min}}
+                                                                                                        @endif
+                                                                                                    </td>
+                                                                                                    <td class="hidden-xs"> IDR {{$pp->price}} </td>
+                                                                                                </tr>
+                                                                                                @endforeach
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-1">
+                                                                                </div>
+
+                                                                                <div class="col-md-7">
+                                                                                    <h4>Your Request</h4>
+                                                                                    <form class="form-horizontal" action="#" id="form_{{$o->order_number}}_{{$p->product_id}}" method="POST">
+                                                                                        {{ csrf_field() }}
+                                                                                        <input type="hidden" name="product_id" value="{{$p->product_id}}">
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label col-md-5">Min Order
+                                                                                                <span class="required"> * </span>
+                                                                                            </label>
+                                                                                            <div class="col-md-4">
+                                                                                                <input type="text" class="form-control" name="min_order"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label col-md-3">Price Range
+                                                                                                <span class="required"> * </span>
+                                                                                            </label>
+                                                                                            <div class="col-md-12">
+                                                                                                <div id="mt-repeater_{{$o->order_number}}_{{$p->product_id}}">
+                                                                                                    <div data-repeater-list="price_range">
+                                                                                                        <div data-repeater-item class="row">
+                                                                                                            <div class="col-md-3">
+                                                                                                                <label class="control-label">Qty (Min)</label>
+                                                                                                                <input type="text" class="form-control qty_min" name="qty_min"> </div>
+                                                                                                            <!-- <div class="col-md-1">
+                                                                                                                <label class="control-label"> </label>
+                                                                                                                <p class="form-control-static">-</p>
+                                                                                                            </div> -->
+                                                                                                            <div class="col-md-4">
+                                                                                                                <label class="control-label">Qty (Max)</label>
+                                                                                                                <div class="input-group">
+                                                                                                                    <input type="text" class="form-control qty_max" name="qty_max">
+                                                                                                                    <span class="input-group-btn">
+                                                                                                                        <button class="btn blue max_button" type="button">Max</button>
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-3">
+                                                                                                                <label class="control-label">Price</label>
+                                                                                                                <input type="text" class="form-control" name="price"> 
+                                                                                                            </div>
+                                                                                                            <div class="col-md-1">
+                                                                                                                <label class="control-label">&nbsp;</label>
+                                                                                                                <a href="javascript:;" data-repeater-delete="" class="btn btn-danger">
+                                                                                                                    <i class="fa fa-close"></i>
+                                                                                                                </a>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <hr>
+                                                                                                    <a href="javascript:;" data-repeater-create="" class="btn btn-info mt-repeater-add">
+                                                                                                        <i class="fa fa-plus"></i> Add Price Range</a>
+                                                                                                    <br>
+                                                                                                    <br> 
+                                                                                                </div>
+                                                          
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn green" form="form_{{$o->order_number}}_{{$p->product_id}}">Send Confirmation</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                            </div>
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>
@@ -134,7 +251,78 @@
 @endsection
 
 @section('script')
+    <!--BEGIN PAGE LEVEL PLUGINS-->
+    {{HTML::script('public/global/plugins/select2/js/select2.full.min.js')}}
+    {{HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js')}}
+    {{HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
+    {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-select/js/bootstrap-select.min.js')}}
+    <!--END PAGE LEVEL PLUGINS-->
+
+    <!--BEGIN PAGE LEVEL SCRIPTS-->
+    {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }}
+    {{ HTML::script('public/js/seller_panel_product.js') }}
+    <!--END PAGE LEVEL SCRIPTS-->
+
     <script>
-        
+        jQuery(document).ready(function() {
+            // $('.mt-repeater').each(function(){
+            //     $(this).repeater({
+        	// 		show: function () {
+	        //         	$(this).slideDown();
+            //             $('.max_button').click(function() {
+            //                 $(this).parent().parent().find("input").val("max");
+            //             });
+                        
+            //             var current = parseInt($(this).prev().find("input.qty_max").val()) + 1;
+            //             $(this).find("input.qty_min").val(current);
+		    //         },
+
+		    //         hide: function (deleteElement) {
+		    //             if(confirm('Are you sure you want to delete this price range?')) {
+		    //                 $(this).slideUp(deleteElement);
+		    //             }
+		    //         },
+
+		    //         ready: function (setIndexes) {
+
+		    //         }
+
+        	// 	});
+        	// });
+            @foreach($upline_req as $o)
+                @foreach($o->product as $p)
+                     $('#mt-repeater_{{$o->order_number}}_{{$p->product_id}}').repeater({
+                            show: function () {
+                                $(this).slideDown();
+                                $('.max_button').click(function() {
+                                    $(this).parent().parent().find("input").val("max");
+                                });
+                                
+                                var current = parseInt($(this).prev().find("input.qty_max").val()) + 1;
+                                $(this).find("input.qty_min").val(current);
+                            },
+
+                            hide: function (deleteElement) {
+                                if(confirm('Are you sure you want to delete this price range?')) {
+                                    $(this).slideUp(deleteElement);
+                                }
+                            },
+
+                            ready: function (setIndexes) {
+
+                            }
+
+                        });
+                @endforeach
+            @endforeach
+
+            $( "input[name='min_order']" ).on("change paste keyup", function() {
+                min_order = $(this).val();
+                $( "input[name='price_range[0][qty_min]']" ).val(min_order).attr('readonly',true);
+            });
+        });
     </script>
 @endsection

@@ -615,7 +615,7 @@ class StoreController extends Controller
                             
             foreach ($transaction as $t) {
                 $accept = DB::table('view_order_approve_summary_product')
-                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                            ->select(DB::raw('product_id, product_name, product_photo'))
                             ->where('transaction_id',$t->transaction_id)
                             ->where('store_id',$t->store_id)
                             ->where('accept_status','1')
@@ -632,6 +632,14 @@ class StoreController extends Controller
                             ->where('product_id',$a->product_id)
                             ->where('store_id_partner', $store->store_id)
                             ->first();
+                        
+                        $price = DB::table('product_price')
+                            ->select('*')
+                            ->where("product_id" , $a->product_id)
+                            ->get();
+                
+                        $a->price = $price;
+                        
 
                         $has_partnership = false;
                         if ($product_partnership && $product_partnership->status == '0')
