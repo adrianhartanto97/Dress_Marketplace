@@ -50,9 +50,6 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <p id="dynamic_pager_content2" class="well">Showing 100 products for "Pretty Dress"</p>
-
-<!--                                     <h4 class="block">Showing 100 products for "Pretty Dress"</h4>
- -->
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -98,9 +95,6 @@
                         <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
 
                     </div>
-
-                    
-
                 </div>
             </div>
         </div>

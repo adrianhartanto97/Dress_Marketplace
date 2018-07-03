@@ -365,7 +365,8 @@
                     <div class = "portlet box grey-salsa">
                         <div class="portlet-title">
                             <div class="caption">
-                                <a href="store_detail/{{$w->product_id}}" >
+
+                                <a href="../store_detail/{{$product_detail->product_info->product_id}}" target="_blank" style="text-decoration:none;">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <img alt="" width="100%" class="img-square" src="{{asset('/public/storage').'/'.$product_detail->store_info->photo}}" />
