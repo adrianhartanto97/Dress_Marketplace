@@ -425,8 +425,9 @@ class SellerController extends Controller
 
             $body = json_decode($res->getBody());
             
-            print_r($body);
+            //print_r($body);
             //return response()->json(['status' => $body->status, 'message' => $body->message], 200);
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
 
         catch (Exception $e) {
@@ -470,6 +471,41 @@ class SellerController extends Controller
         else {
             return redirect('index');
         }
+    }
+
+    public function submit_request_partnership(Request $request)
+    {
+        try {
+            $client = new Client();
+            $jwt = $request->cookie('jwt');
+            $product_id = $request->product_id;
+            $min_order = $request->min_order;
+            $price = $request->price_range;
+
+            $res = $client->post($this->base_url.'submit_request_partnership', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'product_id' => $product_id,
+                    'min_order' => $min_order,
+                    'price' => $price
+                ]
+            ]);
+            $product_info = json_decode($res->getBody());
+            
+            //return redirect('index');
+            //var_dump($product_info);
+
+            $status = $product_info->status;
+            $message = $product_info->message;           
+        }
+
+        catch (Exception $e)
+        {
+            $status = false;
+            $message = $e->getMessage();
+        }
+
+        return Redirect::back()->with('status', $status)->with('message', $message);
     }
 
     public function test(Request $request) {

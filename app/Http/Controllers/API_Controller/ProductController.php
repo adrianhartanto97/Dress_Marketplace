@@ -173,6 +173,7 @@ class ProductController extends Controller
             $wishlist = DB::table('wishlist as a')
                         ->join('view_product as b', 'a.product_id', '=', 'b.product_id')
                         ->select('a.created_at as wishlist_created_at ', 'b.*')
+                        ->where('a.user_id',$user_id)
                         ->get();
             $status = true;
 

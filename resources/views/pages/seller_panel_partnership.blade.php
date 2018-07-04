@@ -28,6 +28,17 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1_1">
+                            @if (session()->has('status') && session()->get('status') == false)
+                                <div class="alert alert-danger">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @elseif(session()->has('status') && session()->get('status') == true)
+                                <div class="alert alert-success">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @endif
                             @foreach($upline_req as $o)
                                 <div class="portlet box green">
                                     <div class="portlet-title">
@@ -38,7 +49,7 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <form class="form-horizontal">
+                                        <div class="form-horizontal">
                                             <div style="margin-top:-20px">
                                             </div>
                                             <div class="form-body">
@@ -140,7 +151,7 @@
 
                                                                                 <div class="col-md-7">
                                                                                     <h4>Your Request</h4>
-                                                                                    <form class="form-horizontal" action="#" id="form_{{$o->order_number}}_{{$p->product_id}}" method="POST">
+                                                                                    <form class="form-horizontal" action="{{ action('Web_Controller\SellerController@submit_request_partnership') }}" id="form_{{$o->order_number}}_{{$p->product_id}}" method="POST">
                                                                                         {{ csrf_field() }}
                                                                                         <input type="hidden" name="product_id" value="{{$p->product_id}}">
                                                                                         <div class="form-group">
@@ -214,7 +225,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        <!-- --></div>
                                     </div>
                                 </div>
                             @endforeach
