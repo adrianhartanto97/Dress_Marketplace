@@ -354,5 +354,60 @@ class App2Controller extends Controller
             print_r($product_detail->message);
     }
 
+  
+
+   private function check_user_store ($jwt) {
+        $store = null;
+
+        try {
+            $client = new Client();
+            $response = $client->post($this->base_url.'get_user_store', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $body = json_decode($response->getBody());
+            
+            if ($body->have_store == true) {
+                $store = $body->store;
+            }
+        }
+        catch(Exception $e) {
+
+        }
+             
+        return $store;
+    }
+
+     public function request_for_quotation (Request $request) {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+        $dress_attributes = null;
+        try {
+            $client = new Client();
+            $res = $client->post($this->base_url.'get_dress_attributes', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $dress_attributes = json_decode($res->getBody());
+        }
+        catch(Exception $e) {
+
+        }
+
+        if ($store) {
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'products', 'dress_attributes' => $dress_attributes]);
+            
+        }
+        else {
+            return redirect('index');
+        }
+    }
+
+
      
 }
