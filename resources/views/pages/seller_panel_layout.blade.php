@@ -195,7 +195,7 @@
 
                             @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'rfq')active @else @endif">
-                                <a href="{{url('/request_for_quotation')}}" class="nav-link">
+                                <a href="{{url('/seller_panel_request_for_quotation')}}" class="nav-link">
                                     <i class="icon-notebook"></i>
                                     <span class="title">Request for Quotation</span>
                                     <span class="@if($active_nav == 'rfq')selected @else arrow @endif"></span>

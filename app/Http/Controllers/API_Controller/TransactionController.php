@@ -760,7 +760,7 @@ class TransactionController extends Controller
 
                     DB::commit();
                     $status = true;
-                    $message = "Submitted Successfully";
+                    $message = "Withdraw Successfully";
                 }
             }  
         }
