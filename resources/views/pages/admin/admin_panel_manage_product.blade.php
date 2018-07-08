@@ -4,7 +4,7 @@
     <div class="tabbable-custom">
         <ul class="nav nav-tabs ">
             <li class="active">
-                <a href="#tab_1" data-toggle="tab"> Pending Product </a>
+                <a href="#tab_1" data-toggle="tab"> Pending Product</a>
             </li>
             <li>
                 <a href="#tab_2" data-toggle="tab"> Product List </a>

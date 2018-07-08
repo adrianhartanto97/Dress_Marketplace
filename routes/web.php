@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('admin/verify_payment', 'Web_Controller\AdminController@verify_payment');
     Route::post('admin/accept_payment', 'Web_Controller\AdminController@accept_payment');
     Route::post('admin/reject_payment', 'Web_Controller\AdminController@reject_payment');
+    Route::get('admin/manage_ffa_psnn', 'Web_Controller\AdminController@manage_ffa_psnn');
+
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');

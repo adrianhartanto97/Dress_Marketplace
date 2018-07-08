@@ -304,4 +304,34 @@ class AdminController extends Controller
 
         return response()->json(['status' => $status, 'message' => $message], 200);
     }
+
+    
+
+     public function manage_ffa_psnn (Request $request)
+    {
+        $pending_product = DB::table('view_product')
+                            ->select('*')
+                            ->where("product_type" , "0")
+                            ->where("product_active_status" , "0")
+                            ->where("product_ownership" , "0")
+                            ->get();
+
+        foreach ($pending_product as $p) {
+            $price = DB::table('product_price')
+                    ->select('*')
+                    ->where("product_id" , $p->product_id)
+                    ->get();
+
+            $size =  DB::table('product_size')
+                    ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
+                    ->select('product_size.size_id', 'product_size_attribute.size_name')
+                    ->where("product_id" , $p->product_id)
+                    ->get();
+            $p->price = $price;
+            $p->size = $size;
+        }
+
+        return view('pages.admin.admin_panel_manage_ffa_psnn',['active_nav' => "algo", 'pending_product' => $pending_product]);
+        //print_r($pending_product);
+    }
 }

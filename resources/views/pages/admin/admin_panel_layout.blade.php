@@ -143,12 +143,12 @@
                                 </a>
                             </li>
                             <li class="nav-item @if($active_nav == 'algo')active @else @endif">
-                                <a href="index.html" class="nav-link">
+                                <a href="{{url('/admin/manage_ffa_psnn')}}" class="nav-link">
                                     <i class="icon-settings"></i>
                                     <span class="title">FFA - PSNN Algorithm</span>
                                     <span class="@if($active_nav == 'algo')selected @else arrow @endif"></span>
                                 </a>
-                            </li>\
+                            </li>
                         </ul>
                         <!-- END SIDEBAR MENU -->
                         <!-- END SIDEBAR MENU -->
