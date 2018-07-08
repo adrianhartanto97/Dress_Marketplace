@@ -249,7 +249,154 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_2_1">
-                            c
+                            @foreach($downline_req as $o)
+                                <div class="portlet box green">
+                                    <div class="portlet-title">
+                                        <div class="row" style="margin-top:10px;">
+                                            <div class="col-md-6">
+                                                {{$o->store_name_partner}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="panel-group accordion" id="accordion_{{$o->store_id_partner}}">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion_{{$o->store_id_partner}}" href="#collapse_{{$o->store_id_partner}}_1"> Products </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse_{{$o->store_id_partner}}_1" class="panel-collapse in">
+                                                    <div class="panel-body">
+                                                        <div class="table-scrollable">
+                                                            <table class="table table-striped table-bordered table-advance table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="text-align:center;">
+                                                                            Item </th>
+                                                                        <th class="hidden-xs" style="text-align:center;">
+                                                                            </th>
+                                                                        <th class="hidden-xs" style="text-align:center;">
+                                                                            </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($o->product as $p)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img src="{{asset('/public/storage/').'/'.$p->photo}}" width="80px" style="margin: 0 auto;">
+                                                                            <span style="margin-left:20px;"></span><b>{{$p->product_name}}</b>
+                                                                        </td>
+                                                                        <td style="text-align:center;vertical-align:middle;">
+                                                                            <button type="button" class="btn blue" data-toggle="modal" href="#modal_{{$p->product_id_partner}}">View Details</button>
+                                                                            
+                                                                        </td>
+                                                                        <td style="text-align:center;vertical-align:middle;">
+                                                                            <a href="javascript:;" class="btn btn-icon-only blue" onclick="accept({{$p->partnership_id}})">
+                                                                                <i class="fa fa-check"></i>
+                                                                            </a>
+                                                                            <a href="javascript:;" class="btn btn-icon-only red" onclick="reject({{$p->partnership_id}})">
+                                                                                <i class="fa fa-times"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @foreach ($o->product as $p)
+                                    <div class="modal fade in" id="modal_{{$p->product_id_partner}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">Request Partnership</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <div><h4>{{$p->store_name}}</h4></div>
+                                                            <div class="table-scrollable">
+                                                                <table class="table table-striped table-bordered table-advance table-hover">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                <i class="fa fa-cart-plus"></i> Qty </th>
+                                                                            <th class="hidden-xs">
+                                                                                <i class="fa fa-money"></i> Price </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach ($p->price as $pp)
+                                                                    <tr>
+                                                                        <td class="highlight">
+                                                                            @if ($pp->qty_max != "max")
+                                                                                {{$pp->qty_min}} - {{$pp->qty_max}}
+                                                                            @else
+                                                                                >= {{$pp->qty_min}}
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="hidden-xs"> IDR {{$pp->price}} </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-2">
+                                                        </div>
+
+                                                        <div class="col-md-5">
+                                                            <div><h4>{{$p->store_name_partner}}</h4></div>
+                                                            <!-- <div>Min Order : {{$p->min_order}}</div> -->
+                                                            <div class="table-scrollable">
+                                                                <table class="table table-striped table-bordered table-advance table-hover">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                <i class="fa fa-cart-plus"></i> Qty </th>
+                                                                            <th class="hidden-xs">
+                                                                                <i class="fa fa-money"></i> Price </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach ($p->request_price as $pp)
+                                                                    <tr>
+                                                                        <td class="highlight">
+                                                                            @if ($pp->qty_max != "max")
+                                                                                {{$pp->qty_min}} - {{$pp->qty_max}}
+                                                                            @else
+                                                                                >= {{$pp->qty_min}}
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="hidden-xs"> IDR {{$pp->price}} </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                @endforeach
+                            @endforeach
                         </div>
                         <div class="tab-pane" id="tab_2_2">
                             d
@@ -335,5 +482,57 @@
                 $( "input[name='price_range[0][qty_min]']" ).val(min_order).attr('readonly',true);
             });
         });
+
+        function accept(partnership_id)
+        {
+            App.blockUI({
+                boxed: true
+            });
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/accept_partnership",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data : {
+                    partnership_id : partnership_id
+                },
+                async: true,
+                success : function(response) {
+                    App.unblockUI();
+                    location.reload();
+                },
+                error: function() {
+                    App.unblockUI();
+                    alert('Error occured');
+                }
+            });
+        }
+
+        function reject(partnership_id)
+        {
+            App.blockUI({
+                boxed: true
+            });
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/reject_partnership",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data : {
+                    partnership_id : partnership_id
+                },
+                async: true,
+                success : function(response) {
+                    App.unblockUI();
+                    location.reload();
+                },
+                error: function() {
+                    App.unblockUI();
+                    alert('Error occured');
+                }
+            });
+        }
     </script>
 @endsection

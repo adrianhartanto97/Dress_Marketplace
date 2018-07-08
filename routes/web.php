@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth.custom'], function () {
     Route::get('transaction_history', 'Web_Controller\AppController@transaction_history');
     Route::get('seller_panel_partnership', 'Web_Controller\SellerController@partnership');
     Route::post('submit_request_partnership', 'Web_Controller\SellerController@submit_request_partnership');
+    Route::post('accept_partnership', 'Web_Controller\SellerController@accept_partnership');
+    Route::post('reject_partnership', 'Web_Controller\SellerController@reject_partnership');
 });
 Route::get('login_page', 'Web_Controller\UserController@login_page');
 Route::post('login', 'Web_Controller\UserController@login');

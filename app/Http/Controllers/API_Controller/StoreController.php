@@ -727,4 +727,115 @@ class StoreController extends Controller
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
     }
+
+    public function upline_get_request_partnership (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            $result = [];
+            $transaction = DB::table('view_partnership_approval')
+                            ->select(DB::raw('DISTINCT store_id_partner, store_name_partner'))
+                            ->where('store_id', $store->store_id)
+                            ->where('status', '0')
+                            ->get();
+            
+            foreach ($transaction as $t) {
+                $product = DB::table('view_partnership_approval')
+                            ->select('*')
+                            ->where('store_id', $store->store_id)
+                            ->where('status', '0')
+                            ->where('store_id_partner',$t->store_id_partner)
+                            ->get();
+                foreach ($product as $p)
+                {
+                    $price = DB::table('product_price')
+                            ->select('*')
+                            ->where('product_id', $p->product_id)
+                            ->get();
+                    $request_price = DB::table('partnership_request_price')
+                                    ->select('*')
+                                    ->where('product_id_partner', $p->product_id_partner)
+                                    ->get();
+                    
+                    $p->price = $price;
+                    $p->request_price = $request_price;
+                }
+                
+                $t->product = $product;
+            }
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$transaction],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function accept_partnership (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $partnership_id = $request->partnership_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            DB::table('partnership_request')
+                    ->where('partnership_id', $partnership_id)
+                    ->update(['status' => "1"]);
+            
+            DB::commit();
+            $status = true;
+            $message = "Partnership Accepted";
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function reject_partnership (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $partnership_id = $request->partnership_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+
+            DB::table('partnership_request')
+                    ->where('partnership_id', $partnership_id)
+                    ->update(['status' => "2"]);
+            
+            DB::commit();
+            $status = true;
+            $message = "Partnership Rejected";
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }

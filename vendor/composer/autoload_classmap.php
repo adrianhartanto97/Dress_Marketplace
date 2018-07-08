@@ -37,6 +37,8 @@ return array(
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Http\\Middleware\\admin_auth' => $baseDir . '/app/Http/Middleware/admin_auth.php',
     'App\\Http\\Middleware\\auth' => $baseDir . '/app/Http/Middleware/auth.php',
+    'App\\Partnership_Request' => $baseDir . '/app/Partnership_Request.php',
+    'App\\Partnership_Request_Price' => $baseDir . '/app/Partnership_Request_Price.php',
     'App\\Product' => $baseDir . '/app/Product.php',
     'App\\Product_Price' => $baseDir . '/app/Product_Price.php',
     'App\\Product_Review_Rating' => $baseDir . '/app/Product_Review_Rating.php',

@@ -453,12 +453,21 @@ class SellerController extends Controller
 
                 $upline_req = json_decode($res->getBody())->result;
 
+                $res = $client->post($this->base_url.'upline_get_request_partnership', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $downline_req = json_decode($res->getBody())->result;
+
                 return view('pages.seller_panel_partnership', 
                     [
                         'login_info' => $login_info, 
                         'store_info' => $store,
                         'active_nav' => 'partnership',
-                        'upline_req' => $upline_req
+                        'upline_req' => $upline_req,
+                        'downline_req' => $downline_req
                     ]
                 );
                
@@ -506,6 +515,58 @@ class SellerController extends Controller
         }
 
         return Redirect::back()->with('status', $status)->with('message', $message);
+    }
+
+    public function accept_partnership (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $partnership_id = $request->partnership_id;
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'accept_partnership', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'partnership_id' => $partnership_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            print_r($body);
+            //return response()->json(['status' => $body->status, 'message' => $body->message], 200);
+            //return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function reject_partnership (Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $partnership_id = $request->partnership_id;
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'reject_partnership', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'partnership_id' => $partnership_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+            
+            print_r($body);
+            //return response()->json(['status' => $body->status, 'message' => $body->message], 200);
+            //return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function test(Request $request) {

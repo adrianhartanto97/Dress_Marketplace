@@ -55,3 +55,6 @@ Route::post('submit_review_rating', 'API_Controller\TransactionController@submit
 Route::post('transaction_history', 'API_Controller\TransactionController@transaction_history');
 Route::post('get_request_partnership', 'API_Controller\StoreController@get_request_partnership');
 Route::post('submit_request_partnership', 'API_Controller\StoreController@submit_request_partnership');
+Route::post('upline_get_request_partnership', 'API_Controller\StoreController@upline_get_request_partnership');
+Route::post('accept_partnership', 'API_Controller\StoreController@accept_partnership');
+Route::post('reject_partnership', 'API_Controller\StoreController@reject_partnership');
