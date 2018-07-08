@@ -461,13 +461,31 @@ class SellerController extends Controller
 
                 $downline_req = json_decode($res->getBody())->result;
 
+                $res = $client->post($this->base_url.'upline_partner_list', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $upline_list = json_decode($res->getBody())->result;
+
+                $res = $client->post($this->base_url.'downline_partner_list', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+
+                $downline_list = json_decode($res->getBody())->result;
+
                 return view('pages.seller_panel_partnership', 
                     [
                         'login_info' => $login_info, 
                         'store_info' => $store,
                         'active_nav' => 'partnership',
                         'upline_req' => $upline_req,
-                        'downline_req' => $downline_req
+                        'downline_req' => $downline_req,
+                        'upline_list' => $upline_list,
+                        'downline_list' => $downline_list
                     ]
                 );
                
