@@ -133,7 +133,7 @@
                                                    
                                                     <div class="form-actions">
                                                         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn red">Login</button>
+                                                        <button type="submit" class="btn red">Submit</button>
                                                          
                                                     </div>
                                                                     

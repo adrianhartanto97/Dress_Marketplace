@@ -36,11 +36,11 @@
                         @endif
                        
                          
-                        <div class="portlet light bordered">
+                       <!--  <div class="portlet light bordered">
                             <div class="row" style="text-align:center;">
                                 <h1>Favorite Store</h1>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="portlet light bordered">
                             <div class="portlet-body">
                                 <div class="row">

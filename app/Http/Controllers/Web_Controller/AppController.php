@@ -101,7 +101,9 @@ class AppController extends Controller
 
         $login_info = $this->get_login_info($jwt);
 
-        return view('pages.index', ['login_info' => $login_info]);
+        return view('pages.index', [                    
+            'active_nav' => "",
+            'login_info' => $login_info]);
     }
 
     public function open_store_page(Request $request) 
@@ -570,6 +572,7 @@ class AppController extends Controller
 
             return view('pages.purchase', 
                 [
+                     'active_nav' => "purchase",
                     'login_info' => $login_info, 
                     'purchase_payment' => $purchase_payment,
                     'bank' => $bank,

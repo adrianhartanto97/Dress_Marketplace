@@ -173,8 +173,9 @@ class App2Controller extends Controller
  
              return view('pages.wishlist',
                 [
-                  'login_info' => $login_info, 
-                  'result' => $result
+                    'active_nav' => "wishlist",
+                    'login_info' => $login_info, 
+                    'result' => $result
                 ]
             );
          }
@@ -203,6 +204,7 @@ class App2Controller extends Controller
 
             return view('pages.balance_detail',
                [
+                'active_nav' => "balance_detail",
                  'login_info' => $login_info
                ]
            );
@@ -273,6 +275,7 @@ class App2Controller extends Controller
  
              return view('pages.favorite_store',
                 [
+                  'active_nav' => "favorite_store",
                   'login_info' => $login_info, 
                   'result' => $result
                 ]
@@ -400,7 +403,7 @@ class App2Controller extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'products', 'dress_attributes' => $dress_attributes]);
+            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'dress_attributes' => $dress_attributes]);
             
         }
         else {

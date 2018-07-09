@@ -1,3 +1,5 @@
+   
+
 @if($login_info->login_status == true)
     <div class="col-xs-12 col-sm-3 col-md-2">
         <div class="row">
@@ -11,7 +13,7 @@
 
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="{{url('/balance_detail')}}" class="list-group-item" style="font-size:16px;">
+                        <a href="{{url('/balance_detail')}}" class="list-group-item @if($active_nav == 'balance_detail')abu @else @endif" style="font-size:16px;">
                             <i class="fa fa-money"></i>
                             IDR {{ number_format($login_info->user_info->balance,0,",",".") }}
                         </a>
@@ -47,8 +49,8 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="{{url('/purchase')}}" class="list-group-item"> Purchase </a>
-                        <a href="{{url('/request_for_quotation')}}" class="list-group-item"> Request for Quotation </a>                  
+                        <a href="{{url('/purchase')}}" class="list-group-item  @if($active_nav == 'purchase')abu @else @endif"> Purchase </a>
+                        <a href="{{url('/request_for_quotation')}}" class="list-group-item  @if($active_nav == 'rfq')abu @else @endif"> Request for Quotation </a>                  
                     </div>
                 </div>
             </div>
@@ -63,9 +65,9 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row list-group">
-                        <a href="{{url('/my_wishlist')}}" class="list-group-item"> Wishlist </a>
-                        <a href="{{url('/favorite_store')}}" class="list-group-item"> Favorite Store </a>  
-                        <a href="javascript:;" class="list-group-item"> Settings </a>                 
+                        <a href="{{url('/my_wishlist')}}" class="list-group-item @if($active_nav == 'wishlist')abu @else @endif"> Wishlist </a>
+                        <a href="{{url('/favorite_store')}}" class="list-group-item @if($active_nav == 'favorite_store')abu @else @endif"> Favorite Store </a>  
+                        <a href="javascript:;" class="list-group-item @if($active_nav == 'settings')abu @else @endif"> Settings </a>                 
                     </div>
                 </div>
             </div>

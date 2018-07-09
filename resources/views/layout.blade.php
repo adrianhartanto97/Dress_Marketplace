@@ -13,6 +13,7 @@
         <!-- BEGIN THEME GLOBAL STYLES -->
         {{ HTML::style('public/global/css/components.min.css') }}
         {{ HTML::style('public/global/css/plugins.min.css') }}
+
         <!-- END THEME GLOBAL STYLES -->
         
         <!-- BEGIN THEME LAYOUT STYLES -->
@@ -40,6 +41,11 @@
         {{ HTML::script('public/layouts/layout/scripts/demo.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-sidebar.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-nav.min.js') }}
+
+         {{ HTML::style('public/css/sidebar.css') }}
+       
+
+
         <!-- END THEME LAYOUT SCRIPTS -->
 
         <!-- BEGIN PAGE LEVEL PLUGINS -->
@@ -54,6 +60,8 @@
                 @yield('content')
             </div>
         </div>
+      
+
         @yield('script')
     </body>
 </html>

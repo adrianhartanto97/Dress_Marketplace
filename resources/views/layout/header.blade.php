@@ -101,12 +101,19 @@
                             <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-bag"></i>
+                                    @if($login_info->user_cart_info->total_qty != 0)
                                     <span class="badge badge-default"> {{$login_info->user_cart_info->total_qty}} </span>
+                                    @endif
                                 </a>
                                 <ul class="dropdown-menu extended tasks">
                                     <li class="external">
                                         <h3>
-                                            <span class="bold">{{$login_info->user_cart_info->total_qty}} items</span> in shopping bag</h3>
+                                             @if($login_info->user_cart_info->total_qty != 0)
+                                            <span class="bold">{{$login_info->user_cart_info->total_qty}} items</span> in shopping bag
+                                            @else
+                                                shopping bag is empty
+                                            @endif
+                                        </h3>
                                         
                                         @if ($login_info->user_cart_info->total_qty != 0)
                                             <a href="{{url('/view_shopping_bag')}}">view all</a>
