@@ -684,15 +684,39 @@ class StoreController extends Controller
 
             $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
 
+            $upline = DB::table('product')->where('product_id',$product_id)->first();
+            $upline_size = DB::table('product_size')->where('product_id',$product_id)->get();
+
             $product = new Product();
             $product->store_id = $store->store_id;
-            $product->name = "Partnership_".$product_id."_".$store->store_id;
+            $product->name = $upline->name." (Partnership)";
+            $product->min_order = $min_order;
+            $product->weight = $upline->weight;
+            $product->description = $upline->description;
+            $product->photo = $upline->photo;
+            $product->style_id = $upline->style_id;
+            $product->season_id = $upline->season_id;
+            $product->neckline_id = $upline->neckline_id;
+            $product->sleevelength_id = $upline->sleevelength_id;
+            $product->waiseline_id = $upline->waiseline_id;
+            $product->material_id = $upline->material_id;
+            $product->fabrictype_id = $upline->fabrictype_id;
+            $product->decoration_id = $upline->decoration_id;
+            $product->patterntype_id = $upline->patterntype_id;
             $product->product_type = "0";
-            $product->product_active_status = "1";
+            $product->product_active_status = "0";
             $product->product_ownership = "1";
             $product->save();
 
             $product_id_partner = $product->product_id;
+
+            foreach($upline_size as $sz) {
+                $product_size = new Product_Size();
+                $product_size->product_id = $product_id_partner;
+                $product_size->size_id = $sz->size_id;
+
+                $product_size->save();
+            }
 
             $partnership = new Partnership_Request();
             $partnership->product_id = $product_id;
@@ -791,10 +815,33 @@ class StoreController extends Controller
 
             $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
 
+            $product_id_partner = DB::table('partnership_request')
+                                    ->where('partnership_id', $partnership_id)->first()->product_id_partner;
+
             DB::table('partnership_request')
                     ->where('partnership_id', $partnership_id)
                     ->update(['status' => "1"]);
+
+            DB::table('product')
+                ->where('product_id', $product_id_partner)
+                ->update(['product_active_status' => "1"]);
+
+            $price = DB::table('partnership_request_price')
+                    ->where('product_id_partner', $product_id_partner)
+                    ->get();
             
+            foreach($price as $p)
+            {
+                DB::table('product_price')->insert([
+                    [
+                        'product_id' => $product_id_partner, 
+                        'qty_min' => $p->qty_min,
+                        'qty_max' => $p->qty_max,
+                        'price' => $p->price
+                    ]
+                ]);
+            }
+
             DB::commit();
             $status = true;
             $message = "Partnership Accepted";
@@ -821,9 +868,16 @@ class StoreController extends Controller
 
             $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
 
+            $product_id_partner = DB::table('partnership_request')
+                                    ->where('partnership_id', $partnership_id)->first()->product_id_partner;
+
             DB::table('partnership_request')
                     ->where('partnership_id', $partnership_id)
                     ->update(['status' => "2"]);
+
+            DB::table('product')
+                    ->where('product_id', $product_id_partner)
+                    ->update(['product_active_status' => "2"]);
             
             DB::commit();
             $status = true;
