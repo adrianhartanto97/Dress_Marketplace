@@ -37,7 +37,7 @@
                             </div>
                             <div class="row" style ="margin-top:20px;">
                                 <div class="my-rating" data-rating="{{$product_detail->product_info->rating}}"></div>
-                                ({{$product_detail->product_info->rating}})
+                                ({{round($product_detail->product_info->rating,2)}})
                             </div>
                             <div class="row">
                                 <h3>{{$product_detail->product_info->sold}} Sold</h3>
@@ -111,42 +111,74 @@
                                     </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="portlet box green" style="margin-top:10px;">
-                                        <div class="portlet-title">
-                                            <div class="caption" style="font-size:14px;">
-                                                Need below the min order ? <br>Check our partnership store
+                                    <div class="row">
+                                        @if(sizeof($product_detail->product_info->downline_partner) > 0)
+                                        <div class="portlet box green" style="margin-top:10px;">
+                                            <div class="portlet-title">
+                                                <div class="caption" style="font-size:14px;">
+                                                    Need below the min order ? <br>Check our partnership store
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd"> 
+                                                    <ul class="list-group">
+                                                        @foreach($product_detail->product_info->downline_partner as $p)
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <img class="img-responsive" src="{{asset('/public/storage').'/'.$p->store_photo_partner}}" alt="64x64" width="150%">
+                                                                </div>
+                                                                <div class="col-md-8" style="margin-left:-10px;">
+                                                                    <p>{{$p->store_name_partner}}</p>
+                                                                    <a href="{{url('/product_detail')}}/{{$p->product_id_partner}}" type="button" class="btn blue-hoki btn-outline btn-xs">Go to Product Page</a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        @endforeach
+                                                        <!-- <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <img class="img-responsive" src="{{asset('/public/storage').'/Product/photo/21_photo.jpg'}}" alt="64x64" width="150%">
+                                                                </div>
+                                                                <div class="col-md-8" style="margin-left:-10px;">
+                                                                    <p>Store name</p>
+                                                                    <button type="button" class="btn blue-hoki btn-outline btn-xs">Go to Product Page</button>
+                                                                </div>
+                                                            </div>
+                                                        </li> -->
+                                                    </ul>
+                                                </div>   
                                             </div>
                                         </div>
-                                        <div class="portlet-body">
-                                            <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd"> 
+                                        @endif
+                                    </div>
+
+                                    @if($product_detail->product_info->is_partnership)
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="portlet box green" style="margin-top:10px;">
+                                            <div class="portlet-title">
+                                                <div class="caption" style="font-size:14px;">
+                                                    This Product is Affiliate to :
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
                                                 <ul class="list-group">
                                                     <li class="list-group-item">
                                                         <div class="row">
                                                             <div class="col-md-4">
-                                                                <img class="img-responsive" src="{{asset('/public/storage').'/Product/photo/21_photo.jpg'}}" alt="64x64" width="150%">
+                                                                <img class="img-responsive" src="{{asset('/public/storage').'/'.$product_detail->product_info->upline_partner->store_photo_upline}}" alt="64x64" width="150%">
                                                             </div>
                                                             <div class="col-md-8" style="margin-left:-10px;">
-                                                                <p>Store name</p>
-                                                                <button type="button" class="btn blue-hoki btn-outline btn-xs">Go to Product Page</button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <img class="img-responsive" src="{{asset('/public/storage').'/Product/photo/21_photo.jpg'}}" alt="64x64" width="150%">
-                                                            </div>
-                                                            <div class="col-md-8" style="margin-left:-10px;">
-                                                                <p>Store name</p>
-                                                                <button type="button" class="btn blue-hoki btn-outline btn-xs">Go to Product Page</button>
+                                                                <p>{{$product_detail->product_info->upline_partner->store_name_upline}}</p>
+                                                                <a href="{{url('/product_detail')}}/{{$product_detail->product_info->upline_partner->upline_product_id}}" type="button" class="btn blue-hoki btn-outline btn-xs">Go to Product Page</a>
                                                             </div>
                                                         </div>
                                                     </li>
                                                 </ul>
-                                            </div>   
+                                            </div>
                                         </div>
                                     </div>
-                                    
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
@@ -332,30 +364,30 @@
                                         <div class="col-md-12">
                                             <h5>Average Rating</h5>
                                            <div class="my-rating" data-rating="{{$product_detail->product_info->rating}}"></div>
-                                            <h5>Skore : 4</h5>
+                                            <h5>Score : {{round($product_detail->product_info->rating,2)}}</h5>
                                         </div>
                                     </div>
                                     <hr style="background-color: grey; height: 1px; border: 1;">
                                     
-                                    @for($i=0;$i<=3;$i++)
-                                    <div class="row">
+                                    @foreach($product_detail->product_info->review_rating as $r)
+                                    <div class="row" style="margin-bottom:10px;">
                                         <div class="col-md-12">
                                            <div class="col-lg-1 col-md-1 col-xs-1" style="margin-right:-0px;">
-                                                 <img alt="" width="30px" class="img-circle" src="{{asset('/public/storage/profile_image/default.png')}}"  />
+                                                 <img alt="" width="30px" class="img-circle" src="{{asset('/public/storage/').'/'.$r->avatar}}"  />
                                            </div>
                                            <div class="col-lg-11 col-md-11 col-xs-11" >
-                                                 <span class="username"> <b>User</b> <i>2 Jul 2018</i> </span>
-                                                <div class="my-rating" data-rating="4"></div>
+                                                 <span class="username"> <b>{{$r->full_name}}</b> <i>{{$r->created_at}}</i> </span>
+                                                <div class="my-rating" data-rating="{{$r->rating}}"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                            <div class="col-lg-12 col-md-12 col-xs-12" >
-                                                 Comment
+                                                {{$r->review}}
                                             </div>
                                             <br><br>
                                         </div>
                                     </div>
-                                    @endfor
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -389,7 +421,7 @@
                             <div class="row">
                                 <div class="col-md-6" style="text-align:center">
                                     <p>
-                                        <span style="font-size:20px;">{{$product_detail->store_info->sold}}</span>
+                                        <span style="font-size:20px;">{{$product_detail->store_info->sold_product}}</span>
                                         <br>
                                         Sold Products
                                     </p>

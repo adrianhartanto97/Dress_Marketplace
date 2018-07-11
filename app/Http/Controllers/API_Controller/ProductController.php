@@ -53,8 +53,8 @@ class ProductController extends Controller
                     $wishlist_status = false;
 
                     //
-                    $product->rating = 0.0;
-                    $product->sold = 0;
+                    $product->rating = $product->average_rating;
+                    // $product->sold = 0;
                     //
                     
                     $size =  DB::table('product_size')
@@ -71,13 +71,40 @@ class ProductController extends Controller
                     
                     $product->price = $price;
 
+                    $downline_partner = DB::table('view_downline_partner')
+                                        ->select('*')
+                                        ->where("product_id" , $product_id)
+                                        ->get();
+                    $product->downline_partner = $downline_partner;
+
+                    if ($product->product_ownership == '1')
+                    {
+                        $product->is_partnership = true;
+                        $upline = DB::table('view_upline_partner')
+                                    ->select('*')
+                                    ->where("product_id_partner" , $product_id)
+                                    ->first();
+                        $product->upline_partner = $upline;
+                    }
+                    else {
+                        $product->is_partnership = false;
+                    }
+
+                    $review_rating = DB::table('view_product_review_rating')
+                                    ->select('*')
+                                    ->where("product_id" , $product_id)
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+
+                    $product->review_rating = $review_rating;
+
                     $store = DB::table('view_store_active')
                             ->where("store_id" , $store_id)
                             ->first();
 
                     //
-                    $store->sold = 0;
-                    $store->transaction = 0;
+                    // $store->sold = 0;
+                    // $store->transaction = 0;
 
                     $courier = DB::table('view_store_courier')
                                 ->select('*')

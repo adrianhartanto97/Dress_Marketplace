@@ -73,7 +73,7 @@
                                     <div class="row">
                                         <div class="col-md-6" style="text-align:center;border-right: 2px solid black;">
                                             <p>
-                                                <span style="font-size:20px;">{{$product_detail->store_info->sold}}</span>
+                                                <span style="font-size:20px;">{{$product_detail->store_info->sold_product}}</span>
                                                 <br>
                                                 Sold Products
                                             </p>
