@@ -336,25 +336,24 @@ class App2Controller extends Controller
     //         print_r($store_detail->message);
     // }
 
-    public function store_detail(Request $request, $product_id)
+    public function store_detail(Request $request, $store_id)
     {
         $client = new Client();
         $jwt = $request->cookie('jwt');
 
         $login_info = $this->get_login_info($jwt);
 
-        $product_detail_api = $client->post($this->base_url.'get_product_detail', [
+        $store_detail_api = $client->post($this->base_url.'get_store_detail', [
             'form_params' => [
-                'product_id' => $product_id,
-                'token' => $jwt
+                'store_id' => $store_id,
             ]
         ]);
-        $product_detail = json_decode($product_detail_api->getBody());
+        $store_detail = json_decode($store_detail_api->getBody());
 
-        if ($product_detail->status)
-            return view('pages.store_detail', ['login_info' => $login_info, 'product_detail' => $product_detail]);
+        if ($store_detail->status)
+            return view('pages.store_detail', ['login_info' => $login_info, 'store_detail' => $store_detail]);
         else 
-            print_r($product_detail->message);
+            print_r($store_detail->message);
     }
 
   

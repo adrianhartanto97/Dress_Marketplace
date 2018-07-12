@@ -35,52 +35,57 @@
                     
                    
                     <div class="row" style="margin-top:50px;">
-                            <div class="col-md-8  porlet box grey-salsa" style="border:2px solid black;height: 32%;background-image:url('asset/storage/Product/photo/1_photo.jpg')">
-                             <div class="row" >
-                                <div class="col-md-4">
-                                    <img alt="" width="100%" class="img-square" src="{{asset('/public/storage').'/'.$product_detail->store_info->photo}}" />
-                                </div>
-                                <div class="col-md-4">
-                                    <h3>{{$product_detail->store_info->name}}</h3>
-                                    <h4>{{$product_detail->store_info->city_name}}</h4>
-                                    
+                            <div class="col-md-8  porlet box grey-salsa" style="border:2px solid black;height: 32%;background-image: url('{{asset('/public/storage').'/'.$store_detail->result->banner}}');height: 350px;">
+                                 <div class="row" >
+                                    <div class="col-md-6" style="margin-top: 20%;margin-left: 7%">
+                                        <div class="col-md-6">
+                                            <img alt="" width="150px" height="150px" class="img-square" src="{{asset('/public/storage').'/'.$store_detail->result->photo}}" style="position: absolute;" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h3><b>{{$store_detail->result->name}}</b></h3>
+                                            <h4><b>{{$store_detail->result->city_name}}</b></h4>
+                                            
 
-                                    @if($product_detail->wishlist_status=="true")
-                                        <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_wishlist') }}"  id="form3">
-                                            {{ csrf_field() }}
-                                            <div class="form-body">
-                                                <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
-                                            </div>
-                                        </form>
-                                        <button  type="submit" class="btn blue" form="form3" width="200px"  @if($login_info->login_status == false) disabled @endif>Remove from Favorite</button>                                
-                                    @else
-                                        <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
-                                            {{ csrf_field() }}
-                                            <div class="form-body">
-                                                <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
-                                            </div>
-                                        </form>
-                                        <button  type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false) disabled @endif>Add to Favorite </button>
-                                     @endif
-                                </div>
-                                <div class="col-md-4">
-                                    
+                                            @if($store_detail->status=="true")
+                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_wishlist') }}"  id="form3">
+                                                    {{ csrf_field() }}
+                                                    <div class="form-body">
+                                                        <input type="hidden" name="store_id" value="{{$store_detail->result->store_id}}">
+                                                    </div>
+                                                </form>
+                                                <button  type="submit" class="btn blue" form="form3" width="200px"  @if($login_info->login_status == false) disabled @endif>Remove from Favorite</button>                                
+                                            @else
+                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
+                                                    {{ csrf_field() }}
+                                                    <div class="form-body">
+                                                        <input type="hidden" name="store_id" value="{{$store_detail->result->store_id}}">
+                                                    </div>
+                                                </form>
+                                                <button  type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false) disabled @endif>Add to Favorite </button>
+                                             @endif
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        
+                                    </div>
+                                   
+                                        
                                 </div>
                             </div>
-                            </div>
-                            <div class="col-md-4" style="border:2px solid black;height:32%;">
+                            <div class="col-md-4" style="border:2px solid black;height:350px;">
                                 <div class="col-md-12" style="margin-top: 50px">
                                     <div class="row">
                                         <div class="col-md-6" style="text-align:center;border-right: 2px solid black;">
                                             <p>
-                                                <span style="font-size:20px;">{{$product_detail->store_info->sold_product}}</span>
+                                                <span style="font-size:20px;">{{$store_detail->result->sold_product}}</span>
                                                 <br>
                                                 Sold Products
                                             </p>
                                         </div>
                                         <div class="col-md-6" style="text-align:center">
                                             <p>
-                                                <span style="font-size:20px;">{{$product_detail->store_info->transaction}}</span>
+                                                <span style="font-size:20px;">{{$store_detail->result->transaction}}</span>
                                                 <br>
                                                 Total Transaction
                                             </p>
@@ -88,7 +93,7 @@
                                     </div>
                                    <div class="row" style ="margin-top:20px;">
                                         <div class="col-md-12" style="text-align:center">
-                                            <div class="my-rating" data-rating="{{$product_detail->product_info->rating}}"></div>
+                                            <div class="my-rating" data-rating="{{$store_detail->result->rating}}"></div>
                                         </div> <br>
                                     </div>  
                                 </div>
@@ -159,20 +164,16 @@
                                             <div class="portlet light bordered">
                                                 <div class="portlet-body">
                                                     <div class="row">
+                                                        
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <p id="dynamic_pager_content2" class="well">Showing 100 products for "Pretty Dress"</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                             <div class="col-md-7">
+                                                             <div class="col-md-6">
                                                                 
                                                             </div>
-                                                             <div class="col-md-4">
-                                                                <div class="col-md-3">
+                                                             <div class="col-md-6">
+                                                                <div class="col-md-4">
                                                                      Sort By
                                                                 </div>
-                                                                <div class="col-md-9">
+                                                                <div class="col-md-8">
                                                                      <select class="form-control" name="sort_by">
                                                                         <option value="recommended">recommended</option>
                                                                         <option value="Newest">Newest</option>
@@ -188,20 +189,19 @@
 
 
                                                     <div class="row">
-                                                        @for($i=0;$i<=10;$i++)
+                                                    @foreach ($store_detail->result->product as $s)
                                                         <a href="" target="_blank" style="text-decoration:none;">
                                                         <div class="col-xs-6 col-sm-4 col-md-3">
                                                             <div class="thumbnail">
-                                                                <img src="../dress_marketplace/public/storage/carousel/carousel2.jpg" alt="" style="width: 100%; height: 20%;">
+                                                                <img src="{{asset('/public/storage').'/'.$s->photo}}" alt="" style="width: 100%; height: 20%;">
                                                                 <div class="caption" style="text-align:center;">
-                                                                    <h4>a</h4>
-                                                                    <h3>sdsd</h3>
-                                                                    <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                                                    <h4>{{$s->product_name}}</h4>
+                                                                    <p><a href="$" target="_blank" class="my-rating satu" data-rating="{{$s->average_rating}}"></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         </a>
-                                                     @endfor
+                                                     @endforeach
                                                     </div>
 
                                                     <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
@@ -220,43 +220,43 @@
                                                     <tbody>
                                                         <tr>
                                                             <td class="highlight">Store Name</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->name}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->name}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Established Year</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->established_year}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->established_year}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Province</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->province_name}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->province_name}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">City</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->city_name}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->city_name}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Business Type</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->business_type}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->business_type}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Description</td>
                                                             <td class="hidden-xs">
                                                                 
-                                                                    {{$product_detail->store_info->description}}
+                                                                    {{$store_detail->result->description}}
                                                                 
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Contact Person Name</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->contact_person_name}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->contact_person_name}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Contact Person Job Title</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->contact_person_job_title}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->contact_person_job_title}}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="highlight">Contact Person Phone Number</td>
-                                                            <td class="hidden-xs">{{$product_detail->store_info->contact_person_phone_number}}</td>
+                                                            <td class="hidden-xs">{{$store_detail->result->contact_person_phone_number}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -8,7 +8,7 @@
                         
                     </div>
 
-                     <form class="search-form search-form-expanded" action="search" method="GET">
+                     <form class="search-form search-form-expanded" action="{{url('/search')}}"" method="GET">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search..." name="query">
                             <span class="input-group-btn">
