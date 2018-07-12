@@ -61,3 +61,5 @@ Route::post('reject_partnership', 'API_Controller\StoreController@reject_partner
 Route::post('upline_partner_list', 'API_Controller\StoreController@upline_partner_list');
 Route::post('downline_partner_list', 'API_Controller\StoreController@downline_partner_list');
 Route::post('get_store_detail', 'API_Controller\StoreController@get_store_detail');
+Route::post('add_rfq_request', 'API_Controller\TransactionController@add_rfq_request');
+Route::post('view_active_rfq_request', 'API_Controller\TransactionController@view_active_rfq_request');

@@ -24,6 +24,7 @@ use App\Sales_Transaction_Payment;
 use App\Withdraw;
 use App\Store_Rating;
 use App\Product_Review_Rating;
+use App\RFQ_Request;
 
 class TransactionController extends Controller
 {
@@ -935,6 +936,85 @@ class TransactionController extends Controller
             }
             $status = true;
             return response()->json(['status'=>$status,'result'=>$transaction],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function add_rfq_request (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $rfq = new RFQ_Request();
+            $rfq->user_id = $user_id;
+            $rfq->item_name = $request->item_name;
+            $rfq->description = $request->description;
+            $rfq->qty = $request->qty;
+            $rfq->request_expired = $request->request_expired;
+            $rfq->budget_unit_min = $request->budget_unit_min;
+            $rfq->budget_unit_max = $request->budget_unit_max;
+            $rfq->status = "0";
+            $rfq->save();
+
+            $rfq_request_id = $rfq->rfq_request_id;
+
+            $photo = $request->file('photo');
+            if ($photo) {
+                $photo_path = $photo->storeAs('rfq/request', $rfq_request_id."_photo.".$photo->getClientOriginalExtension() , 'public');
+                
+                DB::table('rfq_request_files')->insert([
+                    'rfq_request_id' => $rfq_request_id, 
+                    'file_path' => $photo_path
+                ]
+                );
+            }
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function view_active_rfq_request (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $rfq = DB::table('rfq_request')
+                    ->select('*')
+                    ->where('user_id',$user_id)
+                    ->where('status',"0")
+                    ->where('request_expired','>',DB::raw('now()'))
+                    ->get();
+
+            foreach ($rfq as $r) {
+                $photo = DB::table('rfq_request_files')
+                        ->select('file_path')
+                        ->where('rfq_request_id',$r->rfq_request_id)
+                        ->first();
+                $r->photo = $photo;
+            }
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$rfq],200);
         }
         catch(Exception $error)
         {
