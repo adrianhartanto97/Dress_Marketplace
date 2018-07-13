@@ -9,7 +9,9 @@
         {{ HTML::style('public/global/plugins/bootstrap/css/bootstrap.min.css') }}
         {{ HTML::style('public/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}
         <!-- END GLOBAL MANDATORY STYLES -->
-        
+         <!-- BEGIN PAGE LEVEL PLUGINS -->
+       <!--  -->
+
         <!-- BEGIN THEME GLOBAL STYLES -->
         {{ HTML::style('public/global/css/components.min.css') }}
         {{ HTML::style('public/global/css/plugins.min.css') }}

@@ -175,31 +175,31 @@
                                         <table class="table table-striped table-bordered table-hover" id="sample_2">
                                             <thead>
                                                 <tr>
-                                                    <th>Date</th>
-                                                    <th>Transaction</th>
-                                                    <th>Debit</th>
-                                                    <th>Credit</th>
-                                                    <th>Balance</th>
-                                                    <th>Note</th>
+                                                    <th class="center">Date</th>
+                                                    <th class="center">Transaction</th>
+                                                    <th class="center">Debit</th>
+                                                    <th class="center">Credit</th>
+                                                    <th class="center">Balance</th>
+                                                    <th class="center">Note</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="center">
                                                 <tr>
-                                                    <td> Trident </td>
-                                                    <td> Internet Explorer 4.0 </td>
-                                                    <td> Win 95+ </td>
-                                                    <td> 4 </td>
-                                                    <td> X </td>
-                                                    <td> X </td>
+                                                    <td> 12 Juli 2018 </td>
+                                                    <td> Isi Ulang </td>
+                                                    <td> Rp 11.000.000</td>
+                                                    <td> -</td>
+                                                    <td> Rp 11.000.000</td>
+                                                    <td> Berhasil </td>
 
                                                 </tr>
                                                 <tr>
-                                                    <td> Trident </td>
-                                                    <td> Internet Explorer 5.0 </td>
-                                                    <td> Win 95+ </td>
-                                                    <td> 5 </td>
-                                                    <td> X </td>
-                                                    <td> C </td>
+                                                    <td> 13 Juli 2018 </td>
+                                                    <td> Tarik Tunai </td>
+                                                    <td>  -</td>
+                                                    <td> Rp 1.000.000</td>
+                                                    <td> Rp 10.000.000</td>
+                                                    <td> Berhasil </td>
                                                 </tr>
                                                
                                                

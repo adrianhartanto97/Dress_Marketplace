@@ -88,4 +88,10 @@ Route::get('favorite_store', 'Web_Controller\App2Controller@favorite_store');
 Route::get('search', 'Web_Controller\App2Controller@search');
 Route::get('store_detail/{store_id}', 'Web_Controller\App2Controller@store_detail');
 Route::get('request_for_quotation', 'Web_Controller\App2Controller@request_for_quotation');
+Route::post('request_for_quotation', 'Web_Controller\App2Controller@add_rfq');
+
 Route::get('seller_panel_request_for_quotation', 'Web_Controller\App2Controller@seller_panel_request_for_quotation');
+
+Route::post('add_to_favorite', 'Web_Controller\App2Controller@add_to_favorite');
+Route::post('delete_from_favorite', 'Web_Controller\App2Controller@delete_from_favorite');
+Route::get('my_favorite', 'Web_Controller\App2Controller@my_favorite');

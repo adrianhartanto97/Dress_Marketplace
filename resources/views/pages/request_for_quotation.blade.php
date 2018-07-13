@@ -8,6 +8,14 @@
 
       {{ HTML::style('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css') }}
     {{ HTML::style('public/global/plugins/bootstrap-select/css/bootstrap-select.css') }}
+     {{ HTML::style('public/global/plugins/clockface/css/clockface.css') }}
+
+   
+    {{ HTML::style('public/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}
+
+
+
+
    
     <style>
        a {
@@ -43,7 +51,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
                                 <div class="form">
-                                <form class="form-horizontal" action="{{ action('Web_Controller\SellerController@add_product') }}" id="submit_form" method="POST" enctype="multipart/form-data">
+                                <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@add_rfq') }}" id="submit_form" method="POST" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     @if (session()->has('status') && session()->get('status') == false)
                                         <div class="alert alert-danger">
@@ -65,7 +73,7 @@
                                                         <span class="required"> * </span>
                                                     </label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control" name="name"/>
+                                                        <input type="text" class="form-control" name="item_name"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -84,27 +92,36 @@
                                                         <input type="text" class="form-control" name="qty"/>
                                                     </div>
                                                 </div>
-                                                
+                                               
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3">Date Expired
                                                         <span class="required"> * </span>
                                                     </label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control" name="date"/>
+                                                       <div class="input-group date form_datetime bs-datetime">
+                                                            <input class="form-control" size="16" type="text" value="{{now()}}" name="request_expired" data-date-format="yyyy-mm HH:mm:ss" readonly>
+                                                            <div class="input-group-addon">
+                                                                <button class="btn date-set" type="button" style="padding: 9px;">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
-                                              
+                                               
+                                                
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3">Budget per Unit
                                                         <span class="required"> * </span>
                                                     </label>
                                                     <div class="col-md-3">
-                                                        <input type="text" class="form-control" name="min" placeholder="min" />
+                                                        <input type="text" class="form-control" name="budget_unit_min" placeholder="min" />
                                                     </div>
                                                     <div class="col-md-1">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input type="text" class="form-control" name="max" placeholder="max" />
+                                                        <input type="text" class="form-control" name="budget_unit_max" placeholder="max" />
                                                     </div>
                                                     
                                                 </div>
@@ -122,7 +139,12 @@
                                                                 <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                             </div>
                                                         </div>
+
+
                                                     </div>
+
+                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -156,9 +178,25 @@
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
-    {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }}
-    {{ HTML::script('public/js/seller_panel_product.js') }}
-    <!--END PAGE LEVEL SCRIPTS-->
+  <!--   {{HTML::script('public/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}} -->
+    {{HTML::script('public/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}
+    
+
+        <!-- END PAGE LEVEL PLUGINS -->
+<!--     {{ HTML::script('public/global/plugins/moment.min.js') }}
+ -->   <!--  {{ HTML::script('public/pages/scripts/components-date-time-pickers.min.js') }}
+    {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }} -->
+    {{ HTML::script('public/js/rfq.js') }}
+    <!-- {{ HTML::script('public/global/scripts/components-date-time-pickers.min.js') }} -->
+
+    <script>
+         $('.datepicker').datepicker({
+            format : 'DD/MM/YYYY HH:mm',
+            startDate: '-3d'
+        });
+    </script>
 @endsection
 
 

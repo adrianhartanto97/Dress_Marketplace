@@ -63,3 +63,7 @@ Route::post('downline_partner_list', 'API_Controller\StoreController@downline_pa
 Route::post('get_store_detail', 'API_Controller\StoreController@get_store_detail');
 Route::post('add_rfq_request', 'API_Controller\TransactionController@add_rfq_request');
 Route::post('view_active_rfq_request', 'API_Controller\TransactionController@view_active_rfq_request');
+
+Route::post('add_to_favorite', 'API_Controller\ProductController@add_to_favorite');
+Route::post('delete_from_favorite', 'API_Controller\ProductController@delete_from_favorite');
+Route::post('my_favorite', 'API_Controller\ProductController@my_favorite');

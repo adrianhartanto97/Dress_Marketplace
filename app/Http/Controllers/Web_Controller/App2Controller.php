@@ -382,6 +382,7 @@ class App2Controller extends Controller
         return $store;
     }
 
+
      public function request_for_quotation (Request $request) {
         $jwt = $request->cookie('jwt');
         $store = $this->check_user_store($jwt);
@@ -408,6 +409,72 @@ class App2Controller extends Controller
         else {
             return redirect('index');
         }
+    }
+
+ public function add_rfq (Request $request)
+    {
+        try {
+            $client = new Client();
+            $jwt = $request->cookie('jwt');
+            $photo_file = Input::file('photo');
+            $multipart = [
+                [
+                    'name'     => 'token',
+                    'contents' => $jwt
+                ],
+                [
+                    'name'     => 'item_name',
+                    'contents' => $request->item_name
+                ],
+                [
+                    'name'     => 'description',
+                    'contents' => $request->description
+                ],
+                [
+                    'name'     => 'qty',
+                    'contents' => $request->qty
+                ],
+                [
+                    'name'     => 'request_expired',
+                    'contents' => $request->request_expired
+                ],
+                [
+                    'name'     => 'budget_unit_min',
+                    'contents' => $request->budget_unit_min
+                ],
+                [
+                    'name'     => 'budget_unit_max',
+                    'contents' => $request->budget_unit_max
+                ],
+                [
+                    'name'     => 'photo',
+                    'contents' => fopen( $photo_file->getRealPath(), 'r'),
+                    'filename' => 'photo.'.$photo_file->getClientOriginalExtension()
+                ],
+                
+               
+            ];
+           
+            $product = $client->post($this->base_url.'add_rfq_request', [
+                'multipart' => $multipart
+            ]);
+            $product_info = json_decode($product->getBody());
+            
+          
+
+            $status = $product_info->status;
+            $message = $product_info->message;
+            
+        }
+
+        catch (Exception $e)
+        {
+            //var_dump($e->getMessage());
+            $status = false;
+            $message = $e->getMessage();
+        }
+
+        return Redirect::back()->with('status', $status)->with('message', $message);
     }
 
      public function seller_panel_request_for_quotation (Request $request) {

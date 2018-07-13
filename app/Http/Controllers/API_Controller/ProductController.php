@@ -17,6 +17,7 @@ use App\Product;
 use App\Product_Size;
 use App\Product_Price;
 use App\Wishlist;
+use App\Favorite_Store;
 
 class ProductController extends Controller
 {
@@ -210,6 +211,85 @@ class ProductController extends Controller
             $status = false;
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function add_to_favorite (Request $request)
+    {
+        try {
+            $store_id = $request->store_id;
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            DB::beginTransaction();
+            $favorite = new Favorite_Store();
+            $favorite->user_id = $user_id;
+            $favorite->store_id = $store_id;
+            
+            $favorite->save();
+            DB::commit();
+            $status = true;
+            $message = "Favorite Store Successfully";
+        }
+        catch (Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function delete_from_favorite (Request $request)
+    {
+        try {
+            $store_id = $request->store_id;
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            DB::beginTransaction();
+            DB::table('favorite_store')
+            ->where("user_id" , $user_id)
+            ->where("store_id" , $store_id)
+            ->delete();
+            
+            DB::commit();
+            $status = true;
+            $message = "Remove Favorite Store Successfully";
+        }
+        catch (Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function my_favorite(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $favorite = DB::table('favorite_store as a')
+                        ->join('view_store_active as b', 'a.store_id', '=', 'b.store_id')
+                        ->select('a.created_at as favorite_created_at ', 'b.*', 'b.rating as rating')
+                        ->where('a.user_id',$user_id)
+                        ->get();
+            $status = true;
+
+            return response()->json(['status'=>$status,'result'=>$favorite],200);
+        }
+        catch(Exception $error) {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$favorite],200);
         }
     }
 }
