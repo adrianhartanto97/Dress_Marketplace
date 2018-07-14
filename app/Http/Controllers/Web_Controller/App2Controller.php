@@ -15,6 +15,8 @@ use \Exception;
 use \stdClass;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class App2Controller extends Controller
 {
@@ -389,13 +391,13 @@ class App2Controller extends Controller
         $dress_attributes = null;
         try {
             $client = new Client();
-            $res = $client->post($this->base_url.'get_dress_attributes', [
+            $res = $client->post($this->base_url.'view_active_rfq_request', [
                 'form_params' => [
                     'token' => $jwt
                 ]
             ]);
 
-            $dress_attributes = json_decode($res->getBody());
+            $active_rfq = json_decode($res->getBody())->result;
         }
         catch(Exception $e) {
 
@@ -403,7 +405,7 @@ class App2Controller extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'dress_attributes' => $dress_attributes]);
+            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'active_rfq' => $active_rfq]);
             
         }
         else {
@@ -480,16 +482,16 @@ class App2Controller extends Controller
      public function seller_panel_request_for_quotation (Request $request) {
         $jwt = $request->cookie('jwt');
         $store = $this->check_user_store($jwt);
-        $dress_attributes = null;
+
         try {
             $client = new Client();
-            $res = $client->post($this->base_url.'get_dress_attributes', [
-                'form_params' => [
-                    'token' => $jwt
-                ]
-            ]);
+            // $res = $client->post($this->base_url.'seller_get_rfq_request', [
+            //     'form_params' => [
+            //         'token' => $jwt
+            //     ]
+            // ]);
 
-            $dress_attributes = json_decode($res->getBody());
+            // $rfq = json_decode($res->getBody())->result;
         }
         catch(Exception $e) {
 
@@ -497,7 +499,7 @@ class App2Controller extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'dress_attributes' => $dress_attributes]);
+            return view('pages.seller_panel_request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq']);
             
         }
         else {
@@ -505,7 +507,88 @@ class App2Controller extends Controller
         }
     }
 
+    public function get_rfq_request_list (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $store = $this->check_user_store($jwt);
+        try {
+            $client = new Client();
+            $res = $client->post($this->base_url.'seller_get_rfq_request', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
 
+            $rfq_res = json_decode($res->getBody())->result;
+            $collection = collect($rfq_res);
+            $page = Input::get('page', 1);
+            $perPage = 5;
 
-     
+            $rfq = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('rfq_request_list')]);
+        }
+        catch(Exception $e) {
+            echo "a";
+        }
+
+        if ($store) {
+            return view('pages.seller_panel_rfq_request_list', ['rfq' => $rfq])->render();
+        }
+        else {
+            echo "b";
+        }
+    }
+
+    public function add_rfq_offer (Request $request)
+    {
+        try {
+            $client = new Client();
+            $jwt = $request->cookie('jwt');
+            $photo_file = Input::file('photo');
+            $multipart = [
+                [
+                    'name'     => 'token',
+                    'contents' => $jwt
+                ],
+                [
+                    'name'     => 'rfq_request_id',
+                    'contents' => $request->rfq_request_id
+                ],
+                [
+                    'name'     => 'description',
+                    'contents' => $request->description
+                ],
+                [
+                    'name'     => 'price_unit',
+                    'contents' => $request->price_unit
+                ],
+                [
+                    'name'     => 'photo',
+                    'contents' => fopen( $photo_file->getRealPath(), 'r'),
+                    'filename' => 'photo.'.$photo_file->getClientOriginalExtension()
+                ],
+                
+               
+            ];
+           
+            $rfq = $client->post($this->base_url.'add_rfq_offer', [
+                'multipart' => $multipart
+            ]);
+            $rfq_info = json_decode($rfq->getBody());
+            
+          
+
+            $status = $rfq_info->status;
+            $message = $rfq_info->message;
+            
+        }
+
+        catch (Exception $e)
+        {
+            //var_dump($e->getMessage());
+            $status = false;
+            $message = $e->getMessage();
+        }
+
+        return Redirect::back()->with('status', $status)->with('message', $message);
+    }
 }

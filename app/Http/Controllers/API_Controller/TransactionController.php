@@ -1011,6 +1011,19 @@ class TransactionController extends Controller
                         ->where('rfq_request_id',$r->rfq_request_id)
                         ->first();
                 $r->photo = $photo;
+
+                $offer = DB::table('view_rfq_offer')
+                            ->select('*')
+                            ->where('rfq_request_id',$r->rfq_request_id)
+                            ->get();
+                foreach ($offer as $o) {
+                    $offer_photo = DB::table('rfq_offer_files')
+                                    ->select('file_path')
+                                    ->where('rfq_offer_id',$o->rfq_offer_id)
+                                    ->first();
+                    $o->photo = $offer_photo;
+                }
+                $r->offer = $offer;
             }
             
             $status = true;

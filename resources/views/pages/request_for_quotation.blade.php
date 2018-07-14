@@ -159,7 +159,180 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab_2">
-                                tes
+                            @foreach($active_rfq as $r)
+                                <div class="portlet box green">
+                                    <div class="portlet-title">
+                                        <div class="row" style="margin-top:10px;">
+                                            <div class="col-md-6">
+                                                {{$r->rfq_request_id}}
+                                            </div>
+                                            <div class="col-md-6" style="text-align:right">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="panel-group accordion" id="accordion_rfq_{{$r->rfq_request_id}}">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion_rfq_{{$r->rfq_request_id}}" href="#collapse_rfq_{{$r->rfq_request_id}}_1"> {{$r->item_name}} </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse_rfq_{{$r->rfq_request_id}}_1" class="panel-collapse in">
+                                                    <div class="panel-body">
+                                                        <div class="form-horizontal">
+                                                            <div style="margin-top:-10px">
+                                                            </div>
+                                                            <div class="form-body">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Description :</label>
+                                                                    <div class="col-md-7">
+                                                                        <p class="form-control-static">{{$r->description}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Qty :</label>
+                                                                    <div class="col-md-7">
+                                                                        <p class="form-control-static">{{$r->qty}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Date Expired :</label>
+                                                                    <div class="col-md-7">
+                                                                        <p class="form-control-static">{{$r->request_expired}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Budget per Unit :</label>
+                                                                    <div class="col-md-7">
+                                                                        <p class="form-control-static">IDR {{number_format($r->budget_unit_min)}} - IDR {{number_format($r->budget_unit_max)}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Photo :</label>
+                                                                    <div class="col-md-3">
+                                                                        <a href="{{asset('/public/storage/').'/'.$r->photo->file_path}}" class="fancybox-button" data-rel="fancybox-button" style="margin: 0 auto;">
+                                                                            <img class="img-responsive" src="{{asset('/public/storage/').'/'.$r->photo->file_path}}" width="90%" style="margin: 0 auto;">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group accordion" id="accordion_rfq_offer_{{$r->rfq_request_id}}">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle accordion-toggle-styled" data-toggle="collapse" data-parent="#accordion_rfq_offer_{{$r->rfq_request_id}}" href="#collapse_rfq_offer_{{$r->rfq_request_id}}_1"> Offers </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse_rfq_offer_{{$r->rfq_request_id}}_1" class="panel-collapse in">
+                                                    @if(sizeof($r->offer) > 0)
+                                                    <div class="table-scrollable">
+                                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="text-align:center;">
+                                                                        Store </th>
+                                                                    <th class="hidden-xs" style="text-align:center;">
+                                                                        Price </th>
+                                                                    <th class="hidden-xs" style="text-align:center;"> </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($r->offer as $o)
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="display:inline-block;">
+                                                                            <img src="{{asset('/public/storage/').'/'.$o->store_photo}}" width="80px" style="margin: 0 auto;">
+                                                                        </div>
+                                                                        <div style="margin-left:50px;display:inline-block;">
+                                                                            <div class="row"><b>{{$o->store_name}}</b></div>
+                                                                            <div class="row">{{$o->city_name}}</div>
+                                                                        </div>
+                                                                        
+                                                                    </td>
+                                                                    <td style="text-align:center;vertical-align:middle;">
+                                                                        <div class="row">
+                                                                            @ IDR {{number_format($o->price_unit)}}
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            Total : IDR {{number_format($o->total_price)}}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="text-align:center;vertical-align:middle;">
+                                                                        <button class="btn green" data-toggle="modal" href="#modal_{{$o->rfq_offer_id}}">View Details</button>
+                                                                        <button class="btn blue">Accept</button>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @foreach ($r->offer as $o)
+                                    <div class="modal fade in" id="modal_{{$o->rfq_offer_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">{{$o->store_name}}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-horizontal">
+                                                        <div style="margin-top:-10px">
+                                                        </div>
+                                                        <div class="form-body">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3">Description :</label>
+                                                                <div class="col-md-7">
+                                                                    <p class="form-control-static">{{$o->description}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3">Price per Unit :</label>
+                                                                <div class="col-md-7">
+                                                                    <p class="form-control-static">{{$o->price_unit}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3">Total Price :</label>
+                                                                <div class="col-md-7">
+                                                                    <p class="form-control-static">{{$o->total_price}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3">Photo :</label>
+                                                                <div class="col-md-3">
+                                                                    <a href="{{asset('/public/storage/').'/'.$o->photo->file_path}}" target="_blank">
+                                                                        <img class="img-responsive" src="{{asset('/public/storage/').'/'.$o->photo->file_path}}" width="90%" style="margin: 0 auto;">
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                @endforeach
+                            @endforeach
                             </div>
                         </div>
                     </div>
@@ -175,6 +348,7 @@
     {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
     {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
     {{HTML::script('public/global/plugins/bootstrap-select/js/bootstrap-select.min.js')}}
+    {{HTML::script('public/global/plugins/fancybox/source/jquery.fancybox.pack.js')}}
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->

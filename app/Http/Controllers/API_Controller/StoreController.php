@@ -20,6 +20,7 @@ use App\Product_Size;
 use App\Product_Price;
 use App\Partnership_Request;
 use App\Partnership_Request_Price;
+use App\RFQ_Offer;
 
 class StoreController extends Controller
 {
@@ -1034,5 +1035,92 @@ class StoreController extends Controller
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
+    }
+
+    public function get_rfq_request(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+            $store_id = $store->store_id;
+
+            $rfq = DB::table('rfq_request as a')
+                    ->select('b.email', 'b.full_name','a.*')
+                    ->join('user as b', 'a.user_id', '=', 'b.user_id')
+                    ->where('a.user_id','<>', $user_id)
+                    ->where('status',"0")
+                    ->where('request_expired','>',DB::raw('now()'))
+                    ->whereNotExists(function($query)  use ($store_id)
+                    {
+                        $query->select(DB::raw(1))
+                            ->from('rfq_offer')
+                            ->whereRaw('rfq_offer.rfq_request_id = a.rfq_request_id')
+                            ->whereRaw('rfq_offer.store_id = '.$store_id);
+                    })
+                    ->get();
+
+            foreach ($rfq as $r) {
+                $photo = DB::table('rfq_request_files')
+                        ->select('file_path')
+                        ->where('rfq_request_id',$r->rfq_request_id)
+                        ->first();
+                $r->photo = $photo;
+            }
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$rfq],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function add_rfq_offer (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+            $store_id = $store->store_id;
+
+            $rfq = new RFQ_Offer();
+            $rfq->rfq_request_id = $request->rfq_request_id;
+            $rfq->store_id = $store_id;
+            $rfq->description = $request->description;
+            $rfq->price_unit = $request->price_unit;
+            $rfq->save();
+
+            $rfq_offer_id = $rfq->rfq_offer_id;
+
+            $photo = $request->file('photo');
+            if ($photo) {
+                $photo_path = $photo->storeAs('rfq/offer', $rfq_offer_id."_photo.".$photo->getClientOriginalExtension() , 'public');
+                
+                DB::table('rfq_offer_files')->insert([
+                    'rfq_offer_id' => $rfq_offer_id, 
+                    'file_path' => $photo_path
+                ]
+                );
+            }
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
     }
 }

@@ -2,20 +2,22 @@
 
 @section('css')
     {{ HTML::style('public/global/plugins/icheck/skins/all.css') }}
+    {{ HTML::style('public/global/plugins/fancybox/source/jquery.fancybox.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css') }}
 @endsection
 
 @section('content')
-        @if (session()->has('status') && session()->get('status') == false)
-            <div class="alert alert-danger">
-                <button class="close" data-close="alert"></button>
-                <span>{{ session('message')}}</span>
-            </div>
-        @elseif(session()->has('status') && session()->get('status') == true)
-            <div class="alert alert-success">
-                <button class="close" data-close="alert"></button>
-                <span>{{ session('message')}}</span>
-            </div>
-        @endif
+    @if (session()->has('status') && session()->get('status') == false)
+        <div class="alert alert-danger">
+            <button class="close" data-close="alert"></button>
+            <span>{{ session('message')}}</span>
+        </div>
+    @elseif(session()->has('status') && session()->get('status') == true)
+        <div class="alert alert-success">
+            <button class="close" data-close="alert"></button>
+            <span>{{ session('message')}}</span>
+        </div>
+    @endif
     <div class="tabbable-custom">
         <ul class="nav nav-tabs ">
             <li class="active">
@@ -26,8 +28,9 @@
             </li>
         </ul>
         <div class="tab-content">
-           <div class="tab-pane active" id="tab_1">
-           
+            <div class="tab-pane active" id="tab_1">
+                <div id="rfq_request_container">
+                </div>
             </div>
             <div class="tab-pane" id="tab_2">
            
@@ -38,6 +41,8 @@
 @section('script')
     <!--BEGIN PAGE LEVEL PLUGINS-->
     {{HTML::script('public/global/plugins/icheck/icheck.min.js')}}
+    {{HTML::script('public/global/plugins/fancybox/source/jquery.fancybox.pack.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
@@ -55,6 +60,21 @@
             });
         });
 
-       
+       $( document ).ready(function() {
+            App.blockUI({
+                boxed: true
+            });
+            $.ajax({
+                url: "http://localhost/dress_marketplace/rfq_request_list",
+                data : {
+                    
+                },
+                dataType: 'html',
+                success: function(html) {
+                    $('#rfq_request_container').html(html);
+                    App.unblockUI();
+                }
+            });
+        });
     </script>
 @endsection

@@ -95,3 +95,6 @@ Route::get('seller_panel_request_for_quotation', 'Web_Controller\App2Controller@
 Route::post('add_to_favorite', 'Web_Controller\App2Controller@add_to_favorite');
 Route::post('delete_from_favorite', 'Web_Controller\App2Controller@delete_from_favorite');
 Route::get('my_favorite', 'Web_Controller\App2Controller@my_favorite');
+
+Route::get('rfq_request_list', 'Web_Controller\App2Controller@get_rfq_request_list');
+Route::post('add_rfq_offer', 'Web_Controller\App2Controller@add_rfq_offer');
