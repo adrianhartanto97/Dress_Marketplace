@@ -259,6 +259,56 @@ class App2Controller extends Controller
         }
 
      } 
+      public function add_to_favorite(Request $request){
+        $store_id= $request->store_id;
+        $jwt = $request->cookie('jwt');
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'add_to_favorite', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'store_id' => $store_id,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+     }
+
+     
+ 
+     public function delete_from_favorite (Request $request)
+     {
+         $store_id= $request->store_id;
+         $jwt = $request->cookie('jwt');
+ 
+         $client = new Client();
+         try {
+             $res = $client->post($this->base_url.'delete_from_favorite', [
+                 'form_params' => [
+                     'token' => $jwt,
+                     'store_id' => $store_id
+                 ]
+             ]);
+ 
+             $body = json_decode($res->getBody());
+ 
+             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+         }
+ 
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }
+     }
 
       public function favorite_store (Request $request)
      {
@@ -268,7 +318,7 @@ class App2Controller extends Controller
  
          $client = new Client();
          try {
-             $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+             $user_wishlist = $client->post($this->base_url.'my_favorite', [
                  'form_params' => [
                      'token' => $jwt
                  ]
@@ -287,6 +337,8 @@ class App2Controller extends Controller
              echo $e->getMessage();
          }  
      }
+
+      
 
      public function search (Request $request)
      {
@@ -345,9 +397,10 @@ class App2Controller extends Controller
 
         $login_info = $this->get_login_info($jwt);
 
-        $store_detail_api = $client->post($this->base_url.'get_store_detail', [
+        $store_detail_api = $client->post($this->base_url.'get_user_store_detail', [
             'form_params' => [
                 'store_id' => $store_id,
+                'token' => $jwt
             ]
         ]);
         $store_detail = json_decode($store_detail_api->getBody());

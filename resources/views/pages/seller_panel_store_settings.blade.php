@@ -404,6 +404,13 @@
 @endsection
 
 @section('script')
+{{HTML::script('public/global/plugins/select2/js/select2.full.min.js')}}
+    {{HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js')}}
+    {{HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
+    {{HTML::script('public/global/plugins/icheck/icheck.min.js')}}
+     {{ HTML::script('public/js/store_setting.js') }}
     <script>
         document.getElementById('business_type').value="{{$store_info->business_type}}";
         document.getElementById('province').value="{{$store_info->province}}";

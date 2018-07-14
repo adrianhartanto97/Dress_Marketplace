@@ -1123,4 +1123,74 @@ class StoreController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function get_user_store_detail(Request $request)
+    {
+        $stat = true;
+        try {
+            $jwt = $request->token;
+            $user_id = null;
+
+            if ($jwt) {
+                $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+                $user_id = $decoded->data->user_id;
+            }
+        }
+        catch(Exception $e) {
+            $stat = false;
+        }
+            
+        try {
+            $store_id = $request->store_id;
+            $store = DB::table('view_store_active')
+                    ->select('*')
+                    ->where('store_id',$store_id)
+                    ->first();
+
+            if($store == null){
+                 return response()->json(['status'=>false, 'message'=>"Store Doesn't exist"],200);
+            }
+            else{
+                $favorite_status = false;
+
+                $courier_service = DB::table('store_courier_service as a')
+                                ->join('master_courier as b', 'a.courier_id', '=', 'b.courier_id')
+                                ->select(DB::raw('a.courier_id,b.courier_name,b.alias_name,b.logo'))
+                                ->where('a.store_id',$store_id)
+                                ->get();
+
+                $store->courier_service =$courier_service;
+                $product = DB::table('view_product')
+                            ->select(DB::raw('product_id,product_name,photo,store_name,average_rating'))
+                            ->where('store_id',$store_id)
+                            ->where('product_type','0')
+                            ->where('product_active_status','1')
+                            ->get();
+                $store->product = $product;
+                
+                if ($stat) {
+                    $count = DB::table('favorite_store')
+                            ->select('*')
+                            ->where("user_id" , $user_id)
+                            ->where("store_id" , $store_id)
+                            ->count();
+                    if ($count > 0) {
+                        $favorite_status = true;
+                    }
+                }
+
+                $status = true;
+                return response()->json(['status'=>$status,'result'=>$store,'favorite_status'=>$favorite_status],200);
+                
+            }
+
+            
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }

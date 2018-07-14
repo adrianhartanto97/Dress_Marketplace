@@ -20,21 +20,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @if (session()->has('status') && session()->get('status') == false)
-                        <div class="alert alert-danger">
-                            <button class="close" data-close="alert"></button>
-                            <span>{{ session('message')}}</span>
-                        </div>
-                    @elseif (session()->has('status') && session()->get('status') == true)
-                        <div class="alert alert-success">
-                            <button class="close" data-close="alert"></button>
-                            <span>{{ session('message')}}</span>
-                        </div>
-                    @endif
-
-                    
-                   
-                    <div class="row" style="margin-top:50px;">
+                    <div class="row" >
+                             @if (session()->has('status') && session()->get('status') == false)
+                                <div class="alert alert-danger">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @elseif (session()->has('status') && session()->get('status') == true)
+                                <div class="alert alert-success">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{ session('message')}}</span>
+                                </div>
+                            @endif
                             <div class="col-md-8  porlet box grey-salsa" style="border:2px solid black;height: 32%;background-image: url('{{asset('/public/storage').'/'.$store_detail->result->banner}}');height: 350px;">
                                  <div class="row" >
                                     <div class="col-md-6" style="margin-top: 20%;margin-left: 7%">
@@ -46,8 +43,8 @@
                                             <h4><b>{{$store_detail->result->city_name}}</b></h4>
                                             
 
-                                            @if($store_detail->status=="true")
-                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_wishlist') }}"  id="form3">
+                                            @if($store_detail->favorite_status=="true")
+                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@delete_from_favorite') }}"  id="form3">
                                                     {{ csrf_field() }}
                                                     <div class="form-body">
                                                         <input type="hidden" name="store_id" value="{{$store_detail->result->store_id}}">
@@ -55,7 +52,7 @@
                                                 </form>
                                                 <button  type="submit" class="btn blue" form="form3" width="200px"  @if($login_info->login_status == false) disabled @endif>Remove from Favorite</button>                                
                                             @else
-                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_wishlist') }}"  id="form2">
+                                                <form method="POST" action="{{ action('Web_Controller\App2Controller@add_to_favorite') }}"  id="form2">
                                                     {{ csrf_field() }}
                                                     <div class="form-body">
                                                         <input type="hidden" name="store_id" value="{{$store_detail->result->store_id}}">
@@ -297,9 +294,6 @@
     <!--BEGIN PAGE LEVEL SCRIPTS-->
     <!--END PAGE LEVEL SCRIPTS-->
     <script>
-       
-    
-
         $( document ).ready(function() {
             $(".my-rating").starRating({
                 starSize: 25,

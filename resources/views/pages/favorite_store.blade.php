@@ -45,14 +45,13 @@
                             <div class="portlet-body">
                                 <div class="row">
                                     @foreach ($result->result as $w)
-                                    <a href="product_detail/{{$w->product_id}}" target="_blank" style="text-decoration:none;">
+                                    <a href="store_detail/{{$w->store_id}}" target="_blank" style="text-decoration:none;">
                                     <div class="col-xs-12 col-sm-3 col-md-3">
                                         <div class="thumbnail">
                                             <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 300px;">
                                             <div class="caption" style="text-align:center;">
-                                                <h4>{{$w->product_name}}</h4>
-                                                <h3>{{$w->store_name}}</h3>
-                                                <p><a href="product_detail/{{$w->product_id}}" target="_blank" class="my-rating satu" data-rating="{{$w->rating}}"></a></p>
+                                                <h4>{{$w->name}}</h4>
+                                                <p><a href="store_detail/{{$w->store_id}}" target="_blank" class="my-rating satu" data-rating="{{$w->rating}}"></a></p>
                                             </div>
                                         </div>
                                     </div>
