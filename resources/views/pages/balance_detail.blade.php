@@ -160,9 +160,9 @@
                         <div class="form-group">
                             <div class="col-md-2">
                                 <select name="gender" class="form-control" value="" id="History">
-                                    <option value="May">This Month</option>
-                                    <option value="June">Last Month</option>
-                                    <option value="July">2 Months Ago</option>
+                                    <option value="2018-07">July 2018</option>
+                                    <option value="2018-06">June 2018</option>
+                                    <option value="2018-05">May 2018</option>
                                 </select>                                    
                             </div>
                             <div class="col-md-10">
@@ -184,7 +184,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="center">
-                                                <tr>
+                                                <!-- <tr>
                                                     <td> 12 Juli 2018 </td>
                                                     <td> Isi Ulang </td>
                                                     <td> Rp 11.000.000</td>
@@ -200,9 +200,18 @@
                                                     <td> Rp 1.000.000</td>
                                                     <td> Rp 10.000.000</td>
                                                     <td> Berhasil </td>
+                                                </tr> -->
+                                                @foreach ($financial_history as $h)
+                                                <tr>
+                                                    <td> {{$h->date}}</td>
+                                                    <td> {{$h->transaction}} </td>
+                                                    <td> IDR {{number_format($h->debit)}}</td>
+                                                    <td> IDR {{number_format($h->credit)}} </td>
+                                                    <td> IDR {{number_format($h->balance)}}</td>
+                                                    <td> {{$h->note}}</td>
+
                                                 </tr>
-                                               
-                                               
+                                               @endforeach
                                             </tbody>
                                         </table>
                                     </div>

@@ -70,3 +70,6 @@ Route::post('delete_from_favorite', 'API_Controller\ProductController@delete_fro
 Route::post('my_favorite', 'API_Controller\ProductController@my_favorite');
 Route::post('get_user_store_detail', 'API_Controller\StoreController@get_user_store_detail');
 Route::post('accept_rfq_offer', 'API_Controller\TransactionController@accept_rfq_offer');
+Route::post('close_rfq_request', 'API_Controller\TransactionController@close_rfq_request');
+Route::post('rfq_request_history', 'API_Controller\TransactionController@rfq_request_history');
+Route::post('financial_history', 'API_Controller\TransactionController@financial_history');

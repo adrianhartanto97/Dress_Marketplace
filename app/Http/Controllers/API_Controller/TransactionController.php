@@ -357,11 +357,11 @@ class TransactionController extends Controller
                 ->where('user_id', $user_id)
                 ->update(['balance' => DB::raw("balance - ".$request->use_point)]);
 
-                
-            DB::table('cart')
-            ->where([
-                'user_id' =>$user_id
-            ])->delete();
+
+            // DB::table('cart')
+            // ->where([
+            //     'user_id' =>$user_id
+            // ])->delete();
 
             DB::commit();
             $status = true;
@@ -1122,5 +1122,167 @@ class TransactionController extends Controller
         }
 
         return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function close_rfq_request (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $rfq_request_id = $request->rfq_request_id;
+
+            $rfq_request  = RFQ_Request::find($rfq_request_id);
+            $rfq_request->status = "2";
+            $rfq_request->save();
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function rfq_request_history (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $rfq = DB::table('view_rfq_request_history')
+                    ->select('*')
+                    ->where('user_id',$user_id)
+                    ->get();
+
+            foreach ($rfq as $r) {
+                $photo = DB::table('rfq_request_files')
+                        ->select('file_path')
+                        ->where('rfq_request_id',$r->rfq_request_id)
+                        ->first();
+                $r->photo = $photo;
+
+                
+                $offer = DB::table('view_rfq_offer')
+                            ->select('*')
+                            ->where('rfq_request_id',$r->rfq_request_id)
+                            ->get();
+                foreach ($offer as $o) {
+                    $offer_photo = DB::table('rfq_offer_files')
+                                    ->select('file_path')
+                                    ->where('rfq_offer_id',$o->rfq_offer_id)
+                                    ->first();
+                    $o->photo = $offer_photo;
+                }
+                $r->offer = $offer;
+                
+
+                if ($r->status == '1') {
+                    $acc = DB::table('view_rfq_offer')
+                            ->select('*')
+                            ->where('rfq_offer_id',$r->accept_rfq_offer_id)
+                            ->first();
+                    $acc_photo = DB::table('rfq_offer_files')
+                                ->select('file_path')
+                                ->where('rfq_offer_id',$r->accept_rfq_offer_id)
+                                ->first();
+                    $acc->photo = $acc_photo;
+                    $r->accepted_offer = $acc;
+                }
+            }
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$rfq],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function financial_history(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $year = $request->year;
+            $month = $request->month; 
+
+            $beginning_balance_table = DB::table('view_financial_history')
+                                        ->where('user_id',$user_id)
+                                        ->where('transaction_date', '<', $year.'-'.$month.-'01')
+                                        ->orderBy('transaction_date', 'ASC')
+                                        ->orderBy('priority', 'ASC')
+                                        ->get();
+            $r = 0;
+
+            if (sizeof($beginning_balance_table) > 0) {
+                foreach($beginning_balance_table as $b) {
+                    if($b->transaction_status == "DB") {
+                        $r += (int)$b->amount;
+                    }
+                    else {
+                        $r -= (int)$b->amount;
+                    }
+                }
+            }
+
+            $result = [];
+            $beginning_balance = new stdClass();
+            $beginning_balance->date = $year.'-'.$month.-'01';
+            $beginning_balance->transaction = "BEGINNING BALANCE";
+            $beginning_balance->debit = $r;
+            $beginning_balance->credit = 0;
+            $beginning_balance->balance = $r;
+            $beginning_balance->note = '';
+            array_push($result, $beginning_balance);
+            $next_month = (int)$month + 1;
+
+            $transaction = DB::table('view_financial_history')
+                            ->where('user_id',$user_id)
+                            ->where('transaction_date', '>=', $year.'-'.$month.-'01')
+                            ->where('transaction_date', '<', $year.'-'.$next_month.-'01')
+                            ->orderBy('transaction_date', 'ASC')
+                            ->orderBy('priority', 'ASC')
+                            ->get();
+            
+            foreach($transaction as $t) {
+                $tr = new stdClass();
+                $tr->date = $t->transaction_date;
+                $tr->transaction = $t->transaction_code." (".$t->transaction_number.")";
+                if ($t->transaction_status=="DB") {
+                    $tr->debit = $t->amount;
+                    $tr->credit = 0;
+                    $tr->balance = ($r += (int)$t->amount);
+                }
+                else {
+                    $tr->debit = 0;
+                    $tr->credit = $t->amount;
+                    $tr->balance = ($r -= (int)$t->amount);
+                }
+                $tr->note = $t->note;
+                array_push($result, $tr);
+            }
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$result],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
     }
 }

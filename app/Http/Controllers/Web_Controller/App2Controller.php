@@ -196,18 +196,20 @@ class App2Controller extends Controller
 
         $client = new Client();
         try {
-            $req = $client->post($this->base_url.'withdraw', [
+            $req = $client->post($this->base_url.'financial_history', [
                 'form_params' => [
-                    'token' => $jwt
-                   
+                    'token' => $jwt,
+                    'year' => '2018',
+                    'month' => '07'
                 ]
             ]);
-            $body = json_decode($req->getBody());
+            $res = json_decode($req->getBody())->result;
 
             return view('pages.balance_detail',
                [
                 'active_nav' => "balance_detail",
-                 'login_info' => $login_info
+                 'login_info' => $login_info,
+                 'financial_history' => $res
                ]
            );
         }
@@ -451,6 +453,14 @@ class App2Controller extends Controller
             ]);
 
             $active_rfq = json_decode($res->getBody())->result;
+
+            $res = $client->post($this->base_url.'rfq_request_history', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $rfq_history = json_decode($res->getBody())->result;
         }
         catch(Exception $e) {
 
@@ -458,7 +468,7 @@ class App2Controller extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'active_rfq' => $active_rfq]);
+            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'active_rfq' => $active_rfq, 'rfq_history' => $rfq_history]);
             
         }
         else {
@@ -651,6 +661,6 @@ class App2Controller extends Controller
 
     public function accept_rfq_offer (Request $request)
     {
-        
+
     }
 }
