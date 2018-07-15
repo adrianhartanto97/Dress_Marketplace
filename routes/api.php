@@ -69,3 +69,4 @@ Route::post('add_to_favorite', 'API_Controller\ProductController@add_to_favorite
 Route::post('delete_from_favorite', 'API_Controller\ProductController@delete_from_favorite');
 Route::post('my_favorite', 'API_Controller\ProductController@my_favorite');
 Route::post('get_user_store_detail', 'API_Controller\StoreController@get_user_store_detail');
+Route::post('accept_rfq_offer', 'API_Controller\TransactionController@accept_rfq_offer');

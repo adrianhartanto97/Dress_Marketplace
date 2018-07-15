@@ -615,6 +615,10 @@ class App2Controller extends Controller
                     'contents' => $request->price_unit
                 ],
                 [
+                    'name'     => 'weight_unit',
+                    'contents' => $request->weight_unit
+                ],
+                [
                     'name'     => 'photo',
                     'contents' => fopen( $photo_file->getRealPath(), 'r'),
                     'filename' => 'photo.'.$photo_file->getClientOriginalExtension()
@@ -643,5 +647,10 @@ class App2Controller extends Controller
         }
 
         return Redirect::back()->with('status', $status)->with('message', $message);
+    }
+
+    public function accept_rfq_offer (Request $request)
+    {
+        
     }
 }

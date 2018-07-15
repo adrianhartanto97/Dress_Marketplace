@@ -1095,6 +1095,7 @@ class StoreController extends Controller
             $rfq->store_id = $store_id;
             $rfq->description = $request->description;
             $rfq->price_unit = $request->price_unit;
+            $rfq->weight_unit = $request->weight_unit;
             $rfq->save();
 
             $rfq_offer_id = $rfq->rfq_offer_id;

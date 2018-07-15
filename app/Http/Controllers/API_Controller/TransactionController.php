@@ -357,6 +357,12 @@ class TransactionController extends Controller
                 ->where('user_id', $user_id)
                 ->update(['balance' => DB::raw("balance - ".$request->use_point)]);
 
+                
+            DB::table('cart')
+            ->where([
+                'user_id' =>$user_id
+            ])->delete();
+
             DB::commit();
             $status = true;
             $message = "Checkout Successfully";
@@ -1035,5 +1041,86 @@ class TransactionController extends Controller
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
+    }
+
+    public function accept_rfq_offer (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $rfq_offer_id = $request->rfq_offer_id;
+
+            $offer = DB::table('view_rfq_offer')
+                    ->select('*')
+                    ->where('rfq_offer_id',$rfq_offer_id )
+                    ->first();
+            $offer_photo = DB::table('rfq_offer_files')
+                            ->select('*')
+                            ->where('rfq_offer_id',$rfq_offer_id )
+                            ->first()->file_path;
+            
+            $product = new Product();
+            $product->store_id = $offer->store_id;
+            $product->name = "RFQ Product";
+            $product->min_order = $offer->qty;
+            $product->weight = $offer->weight_unit;
+            $product->description = "RFQ Offer ID ".$offer->rfq_offer_id;
+            $product->photo = $offer_photo;
+            $product->style_id = 0;
+            $product->season_id = 0;
+            $product->neckline_id = 0;
+            $product->sleevelength_id = 0;
+            $product->waiseline_id = 0;
+            $product->material_id = 0;
+            $product->fabrictype_id = 0;
+            $product->decoration_id = 0;
+            $product->patterntype_id = 0;
+            $product->product_type = "1";
+            $product->product_active_status = "1";
+            $product->product_ownership = "0";
+            $product->save();
+
+            $product_id = $product->product_id;
+
+            $product_size = new Product_Size();
+            $product_size->product_id = $product_id;
+            $product_size->size_id = 5;
+            $product_size->save();
+
+            $product_price = new Product_Price();
+            $product_price->product_id = $product_id;
+            $product_price->qty_min = $offer->qty;
+            $product_price->qty_max = "max";
+            $product_price->price = $offer->price_unit;
+
+            $product_price->save();
+
+            $cart = new Cart();
+            $cart->user_id = $user_id;
+            $cart->product_id = $product_id;
+            $cart->product_size_id = 5;
+            $cart->product_qty = $offer->qty;
+
+            $cart->save();
+
+            $rfq_request  = RFQ_Request::find($offer->rfq_request_id);
+            $rfq_request->status = "1";
+            $rfq_request->accept_rfq_offer_id = $rfq_offer_id;
+            $rfq_request->save();
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
     }
 }

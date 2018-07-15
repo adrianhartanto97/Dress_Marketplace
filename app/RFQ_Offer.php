@@ -12,7 +12,8 @@ class RFQ_Offer extends Model
         'rfq_request_id',
         'store_id',
         'description',
-        'price_unit'
+        'price_unit',
+        'weight_unit'
     ];
     protected $primaryKey = 'rfq_offer_id';
 }

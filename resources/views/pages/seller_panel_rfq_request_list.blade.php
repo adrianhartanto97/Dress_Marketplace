@@ -81,6 +81,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3">Weight per Unit (gr):</label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="weight_unit"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3">Upload Image <span class="required"> * </span></label>
                         <div class="col-md-7">
                             <div class="fileinput fileinput-new" data-provides="fileinput">

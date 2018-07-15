@@ -301,6 +301,12 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
+                                                                <label class="control-label col-md-3">Weight per Unit :</label>
+                                                                <div class="col-md-7">
+                                                                    <p class="form-control-static">{{$o->weight_unit}} gr</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label class="control-label col-md-3">Price per Unit :</label>
                                                                 <div class="col-md-7">
                                                                     <p class="form-control-static">{{$o->price_unit}}</p>
