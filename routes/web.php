@@ -98,3 +98,10 @@ Route::get('my_favorite', 'Web_Controller\App2Controller@my_favorite');
 
 Route::get('rfq_request_list', 'Web_Controller\App2Controller@get_rfq_request_list');
 Route::post('add_rfq_offer', 'Web_Controller\App2Controller@add_rfq_offer');
+Route::post('accept_rfq_offer', 'Web_Controller\App2Controller@accept_rfq_offer');
+Route::post('close_rfq_request', 'Web_Controller\App2Controller@close_rfq_request');
+
+Route::post('financial_history', 'Web_Controller\App2Controller@financial_history');
+Route::post('balance_detail', 'Web_Controller\App2Controller@withdraw');
+
+

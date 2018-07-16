@@ -56,7 +56,7 @@
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col-md-12" style="text-align:center;">
-                                                <form method="post" action="{{ action('Web_Controller\App2Controller@balance_withdraw') }}" class="form-horizontal" id="form1" enctype="multipart/form-data">
+                                                <form method="post" action="{{ action('Web_Controller\App2Controller@balance_withdraw') }}" class="form-horizontal" id="withdraw" enctype="multipart/form-data">
                                                     {{ csrf_field() }}
                                                     @if (session()->has('withdraw_status') && session()->get('withdraw_status') == false)
                                                         <div class="alert alert-danger">
@@ -69,6 +69,7 @@
                                                                 $('#password').closest('.form-group').addClass('has-error');
                                                                 $('#password').focus();
                                                                 $('#withdraw1').modal('show');
+                                                               
 
                                                             });
                                                              
@@ -87,7 +88,7 @@
                                                             <span class="required"> * </span>
                                                         </label>
                                                         <div class="col-md-7">
-                                                            <input type="text" class="form-control form-control-solid placeholder-no-fix" name="amount" placeholder="withdraw_amount" value="{{ old('amount') }}" />
+                                                            <input type="text" class="form-control form-control-solid placeholder-no-fix" name="amount" placeholder="withdraw_amount" value="{{ old('amount')}}" min="0" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -133,12 +134,9 @@
                                                    
                                                     <div class="form-actions">
                                                         <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn red">Submit</button>
-                                                         
+                                                        <button type="submit" class="btn red" form="withdraw">Submit</button>
                                                     </div>
-                                                                    
                                                 </form>
-
                                             </div>
                                         </div>
                                     </div>
@@ -155,19 +153,33 @@
                                 <h2>Transaction History</h2>
                             </div>
                         </div>
-                       
-                       
+                      
+              
                         <div class="form-group">
-                            <div class="col-md-2">
-                                <select name="gender" class="form-control" value="" id="History">
-                                    <option value="2018-07">July 2018</option>
-                                    <option value="2018-06">June 2018</option>
-                                    <option value="2018-05">May 2018</option>
-                                </select>                                    
+                             <form method="POST" action="{{ action('Web_Controller\App2Controller@withdraw')}}"  id="History">
+                                {{ csrf_field() }}
+                                <div class="col-md-2">
+                                    <select name="date" class="form-control" value="" onclick="getWaktu()">
+                                        <option value="2018-08">Agustus 2018</option>
+                                        <option value="2018-07">July 2018</option>
+                                        <option value="2018-06">June 2018</option>
+                                        <option value="2018-05">May 2018</option>
+                                    </select>  
+                                    <input type="text" name="year"  value="" hidden=""> 
+                                    <input type="text" name="month" value="" hidden="">        
+
+                                </div>
+                                
+                            </form>
+                             <div class="form-actions">
+                                <div class="col-md-10">
+                                    <button  type="submit" class="btn blue" form="History">Show History</button>
+                                   <br><br>
+                                </div>
                             </div>
-                            <div class="col-md-10">
-                                <button type="button" class="btn blue" data-toggle="modal" href="" >Show History</button><br><br>
-                            </div>
+
+                            
+                           
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
@@ -249,11 +261,13 @@
         {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
         {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
         {{HTML::script('public/global/plugins/bootstrap-select/js/bootstrap-select.min.js')}}
+
         <!--END PAGE LEVEL PLUGINS-->
 
         <!--BEGIN PAGE LEVEL SCRIPTS-->
         {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }}
         {{ HTML::script('public/js/withdraw.js') }}
+
 
         <script>
             $(document).ready(function()
@@ -263,5 +277,23 @@
                     $('#radio1003').attr('checked', 'checked');
                 });
             })
+            function getWaktu()
+            {
+                 var objfrm = document.getElementById("History");
+                 var idx_opsi = objfrm.date.selectedIndex;
+                 var date= objfrm.date.options[idx_opsi].value;
+
+                var year="";
+                var month="";
+                for(var i=0 ; i<=3;i++){
+                    year+=date[i];
+                }
+                for(var i=5 ; i<=6;i++){
+                    month+=date[i];
+                }
+                 objfrm.year.value= year;
+                objfrm.month.value= month;
+            }
         </script>
+
 @endsection

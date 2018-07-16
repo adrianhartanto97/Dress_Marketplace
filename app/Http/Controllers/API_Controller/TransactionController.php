@@ -1240,7 +1240,7 @@ class TransactionController extends Controller
 
             $result = [];
             $beginning_balance = new stdClass();
-            $beginning_balance->date = $year.'-'.$month.-'01';
+            $beginning_balance->date = $year.'-'.$month.'-'.'01 00:00:00';
             $beginning_balance->transaction = "BEGINNING BALANCE";
             $beginning_balance->debit = $r;
             $beginning_balance->credit = 0;

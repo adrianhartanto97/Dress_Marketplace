@@ -191,16 +191,19 @@ class App2Controller extends Controller
      public function withdraw (Request $request){
         $jwt = $request->cookie('jwt');
         $login_info = $this->get_login_info($jwt);
-
+        $year= $request->year;
+        $month = $request->month;
+        
+        if($year=="") $year = "2018";
+        if($month=="") $month="08";
        
-
         $client = new Client();
         try {
             $req = $client->post($this->base_url.'financial_history', [
                 'form_params' => [
                     'token' => $jwt,
-                    'year' => '2018',
-                    'month' => '07'
+                    'year' => $year,
+                    'month' => $month
                 ]
             ]);
             $res = json_decode($req->getBody())->result;
@@ -261,7 +264,8 @@ class App2Controller extends Controller
         }
 
      } 
-      public function add_to_favorite(Request $request){
+
+     public function add_to_favorite(Request $request){
         $store_id= $request->store_id;
         $jwt = $request->cookie('jwt');
 
@@ -661,6 +665,86 @@ class App2Controller extends Controller
 
     public function accept_rfq_offer (Request $request)
     {
+        $rfq_offer_id= $request->rfq_offer_id;
+        $jwt = $request->cookie('jwt');
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'accept_rfq_offer', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'rfq_offer_id' => $rfq_offer_id,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
 
     }
+
+     public function close_rfq_request (Request $request)
+    {
+        $rfq_request_id= $request->rfq_request_id;
+        $jwt = $request->cookie('jwt');
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'close_rfq_request', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'rfq_request_id' => $rfq_request_id,
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
+
+    public function financial_history(Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $year= $request->year;
+        $month = $request->month;
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'financial_history', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'year' => $year,
+                    'month' => $month
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('result', $body->result);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
+
+
 }

@@ -139,12 +139,7 @@
                                                                 <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                             </div>
                                                         </div>
-
-
                                                     </div>
-
-                                                    
-
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +178,15 @@
                                                     <div class="panel-body">
                                                         <div class="row">
                                                             <div class="col-md-offset-9 col-md-3" style="text-align:right;">
-                                                                <button class="btn red">Close Request</button>
+
+                                                                 <form method="POST" action="{{ action('Web_Controller\App2Controller@close_rfq_request') }}"  id="form_rfq_req">
+                                                                    {{ csrf_field() }}
+                                                                    <div class="form-body">
+                                                                        <input type="hidden" name="rfq_request_id" value="{{$r->rfq_request_id}}">
+                                                                    </div>
+                                                                </form>
+                                                                <button  type="submit" class="btn red" form="form_rfq_req">Close Request</button>   
+
                                                             </div>
                                                         </div>
                                                         <div class="form-horizontal">
@@ -272,7 +275,15 @@
                                                                     </td>
                                                                     <td style="text-align:center;vertical-align:middle;">
                                                                         <button class="btn green" data-toggle="modal" href="#modal_{{$o->rfq_offer_id}}">View Details</button>
-                                                                        <button class="btn blue">Accept</button>
+                                                                         <button  type="submit" class="btn blue" form="form_accept">Accept</button> 
+                                                                        <form method="POST" action="{{ action('Web_Controller\App2Controller@accept_rfq_offer') }}"  id="form_accept">
+                                                                            {{ csrf_field() }}
+                                                                            <div class="form-body">
+                                                                                <input type="hidden" name="rfq_offer_id" value="{{$o->rfq_offer_id}}">
+                                                                            </div>
+                                                                        </form>
+                                                                       
+
                                                                     </td>
                                                                 </tr>
                                                                 @endforeach
