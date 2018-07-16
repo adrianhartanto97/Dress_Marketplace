@@ -73,3 +73,4 @@ Route::post('accept_rfq_offer', 'API_Controller\TransactionController@accept_rfq
 Route::post('close_rfq_request', 'API_Controller\TransactionController@close_rfq_request');
 Route::post('rfq_request_history', 'API_Controller\TransactionController@rfq_request_history');
 Route::post('financial_history', 'API_Controller\TransactionController@financial_history');
+Route::post('rfq_offer_history', 'API_Controller\StoreController@rfq_offer_history');

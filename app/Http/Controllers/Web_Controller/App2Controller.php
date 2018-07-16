@@ -552,13 +552,13 @@ class App2Controller extends Controller
 
         try {
             $client = new Client();
-            // $res = $client->post($this->base_url.'seller_get_rfq_request', [
-            //     'form_params' => [
-            //         'token' => $jwt
-            //     ]
-            // ]);
+            $res = $client->post($this->base_url.'rfq_offer_history', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
 
-            // $rfq = json_decode($res->getBody())->result;
+            $rfq_offer_history = json_decode($res->getBody())->result;
         }
         catch(Exception $e) {
 
@@ -566,7 +566,7 @@ class App2Controller extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq']);
+            return view('pages.seller_panel_request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq' , 'rfq_offer_history' => $rfq_offer_history]);
             
         }
         else {
@@ -743,8 +743,5 @@ class App2Controller extends Controller
             echo $e->getMessage();
         }
     }
-
-
-
 
 }

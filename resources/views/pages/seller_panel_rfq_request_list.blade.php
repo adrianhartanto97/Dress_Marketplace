@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3">Weight per Unit (gr):</label>
+                        <label class="control-label col-md-3">Weight per Unit (gr) :</label>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="weight_unit"/>
                         </div>

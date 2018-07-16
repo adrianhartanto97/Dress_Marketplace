@@ -1194,4 +1194,43 @@ class StoreController extends Controller
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
     }
+
+    public function rfq_offer_history(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+            $store_id = $store->store_id;
+
+            $rfq = DB::table('view_rfq_offer_history')
+                    ->select('*')
+                    ->where('store_id',$store_id)
+                    ->get();
+
+            foreach ($rfq as $r) {
+                $request_photo = DB::table('rfq_request_files')
+                        ->select('file_path')
+                        ->where('rfq_request_id',$r->rfq_request_id)
+                        ->first();
+                $r->request_photo = $request_photo;
+
+                $offer_photo = DB::table('rfq_offer_files')
+                        ->select('file_path')
+                        ->where('rfq_offer_id',$r->rfq_offer_id)
+                        ->first();
+                $r->offer_photo = $offer_photo;
+            }
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$rfq],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 }
