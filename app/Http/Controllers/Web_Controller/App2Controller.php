@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 class App2Controller extends Controller
 {
@@ -193,10 +194,17 @@ class App2Controller extends Controller
         $login_info = $this->get_login_info($jwt);
         $year= $request->year;
         $month = $request->month;
-        
-        if($year=="") $year = "2018";
-        if($month=="") $month="08";
-       
+
+        $dt = Carbon::today();
+        if($year=="") $year = $dt->year;
+        if($month=="") {
+            if($month<10){
+                $month="0".$dt->month;
+            }
+            else{
+                $month=$dt->month;
+            }
+       }
         $client = new Client();
         try {
             $req = $client->post($this->base_url.'financial_history', [
@@ -374,27 +382,7 @@ class App2Controller extends Controller
           
      }
 
-     //PAS SELESAI API LANJUTKAN
-    // public function store_detail (Request $request,$store_id)
-    // {
-    //     $client = new Client();
-    //     $jwt = $request->cookie('jwt');
-
-    //     $login_info = $this->get_login_info($jwt);
-
-    //     $store_detail_api = $client->post($this->base_url.'get_store_detail', [
-    //         'form_params' => [
-    //             'store_id' => $store_id,
-    //             'token' => $jwt
-    //         ]
-    //     ]);
-    //     $store_detail = json_decode($store_detail_api->getBody());
-
-    //     if ($store_detail->status)
-    //         return view('pages.store_detail', ['login_info' => $login_info, 'store_detail' => $store_detail]);
-    //     else 
-    //         print_r($store_detail->message);
-    // }
+ 
 
     public function store_detail(Request $request, $store_id)
     {
@@ -446,7 +434,6 @@ class App2Controller extends Controller
 
      public function request_for_quotation (Request $request) {
         $jwt = $request->cookie('jwt');
-        $store = $this->check_user_store($jwt);
         $dress_attributes = null;
         try {
             $client = new Client();
@@ -469,18 +456,15 @@ class App2Controller extends Controller
         catch(Exception $e) {
 
         }
+        $login_info = $this->get_login_info($jwt);
 
-        if ($store) {
-            $login_info = $this->get_login_info($jwt);
-            return view('pages.request_for_quotation', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'rfq', 'active_rfq' => $active_rfq, 'rfq_history' => $rfq_history]);
+
+        return view('pages.request_for_quotation', ['login_info' => $login_info, 'active_nav' => 'rfq', 'active_rfq' => $active_rfq, 'rfq_history' => $rfq_history]);
             
-        }
-        else {
-            return redirect('index');
-        }
+      
     }
 
- public function add_rfq (Request $request)
+    public function add_rfq (Request $request)
     {
         try {
             $client = new Client();

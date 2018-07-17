@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {    
-    $( "#form1" ).validate({
+    $( "#withdraw" ).validate({
         errorElement: 'span', //default input error message container
         errorClass: 'help-block help-block-error', // default input error message class
         focusInvalid: false, // do not focus the last invalid input
@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
             amount: {
                 required: true,
                 number  : true,
-                min : 50000
+                min : 10000
             },
             bank_name: {
                 required: true
@@ -45,47 +45,6 @@ jQuery(document).ready(function() {
                 .closest('.form-group').removeClass('has-error'); // set success class to the control group
         },
     });
-
-    var input_year = $("input[name='year']");
-    var input_month = $("input[name='month']");
-
-
-    var date = $("select[name='date']").val();
-    var year="";
-    var month="";
-    for(var i=0 ; i<=3;i++){
-        year+=date[i];
-    }
-    for(var i=5 ; i<=6;i++){
-        month+=date[i];
-    }
-
-      date.change(function() {
-        $.ajax({
-            type:"POST",
-            url : "http://localhost/dress_marketplace/api/financial_history",
-            async: false,
-             data: {
-                token : jwt,
-                year: year,
-                month:month
-            },
-            success : function(response) {
-                input_year.val() = year;
-                input_month.val() = month;
-
-               
-            },
-            error: function() {
-                alert('Error occured');
-            }
-        });
-    });
-
-    
-
-    App.unblockUI();
-    
 });
 
 

@@ -47,20 +47,20 @@
                  <div class="portlet light bordered">
                     <div class="portlet-body">
                         <div class="row">
-                            @for($i=0;$i<=3;$i++)
+                           @foreach ($all_product->new_product->product_info as $w)
                             <a href="" target="_blank" style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
-                                    <img src="../dress_marketplace/public/storage/carousel/carousel2.jpg" alt="" style="width: 100%; height: 35%;">
+                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
                                     <div class="caption" style="text-align:center;">
-                                        <h4>a</h4>
-                                        <h3>sdsd</h3>
-                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                        <h4>{{$w->product_name}}</h4>
+                                        <h3>{{$w->store_name}}</h3>
+                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="{{$w->average_rating}}"></a></p>
                                     </div>
                                 </div>
                             </div>
                             </a>
-                         @endfor
+                         @endforeach
                         </div>
                     </div>
                 </div>
@@ -71,20 +71,20 @@
                  <div class="portlet light bordered">
                     <div class="portlet-body">
                         <div class="row">
-                            @for($i=0;$i<=3;$i++)
+                           @foreach ($all_product->best_product->product_info as $w)
                             <a href="" target="_blank" style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
-                                    <img src="../dress_marketplace/public/storage/carousel/carousel3.jpg" alt="" style="width: 100%; height: 35%;">
+                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
                                     <div class="caption" style="text-align:center;">
-                                        <h4>a</h4>
-                                        <h3>sdsd</h3>
+                                        <h4>{{$w->product_name}}</h4>
+                                        <h3>{{$w->store_name}}</h3>
                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
                                     </div>
                                 </div>
                             </div>
                             </a>
-                         @endfor
+                         @endforeach
                         </div>
                     </div>
                 </div>

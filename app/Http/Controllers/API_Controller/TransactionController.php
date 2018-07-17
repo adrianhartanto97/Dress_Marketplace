@@ -738,6 +738,7 @@ class TransactionController extends Controller
                 $status = false;
                 $message = "Insufficient balance";
             }
+           
             else {
                 $password_dbase = DB::table('user')->where('user_id',$user_id)->first()->password;
 

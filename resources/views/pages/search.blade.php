@@ -25,7 +25,91 @@
     <div class="page-content">
 
         <div class="row" style="padding:0px 10px;">
-             @include('layout.filter_sidebar',['login_info' => $login_info])
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="row">
+                    <div class="portlet box blue-hoki">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                Search
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                 <div class="col-md-7">
+                                    <label class="control-label">Min Order</label>
+                                 </div>
+                                 <div class="col-md-5">
+                                    <input type="number" class="form-control" min="0" value="0">
+                                 </div>
+                            </div>
+                             <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Price</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input id="range_26" type="range"  />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Province</label>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <select class="form-control" name="province">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                 <div class="col-md-12">
+                                    <label class="control-label">City</label>  
+                                 </div>
+                                
+                                <div class="col-md-12">
+                                    <select class="form-control" name="city">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Shipping</label>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <select class="form-control" name="shipping" >
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                    <label class="control-label">Rating</label>
+                                
+                                <div class="col-md-12">
+                                    <input id="range_25" type="range"  />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                    <label class="control-label">
+                                </label>
+
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+
+                    </div>
+                     <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn green button-submit"> Apply Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-xs-12 col-sm-9 col-md-10" >
                 <div class="tab-content">
@@ -49,7 +133,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for "Pretty Dress"</p>
+                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for</p>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -118,7 +202,7 @@
         {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
-
+        {{HTML::script('public/js/search.js')}}
   
       
        

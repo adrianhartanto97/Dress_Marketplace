@@ -74,3 +74,9 @@ Route::post('close_rfq_request', 'API_Controller\TransactionController@close_rfq
 Route::post('rfq_request_history', 'API_Controller\TransactionController@rfq_request_history');
 Route::post('financial_history', 'API_Controller\TransactionController@financial_history');
 Route::post('rfq_offer_history', 'API_Controller\StoreController@rfq_offer_history');
+Route::post('get_new_product_detail', 'API_Controller\ProductController@get_new_product_detail');
+Route::post('best_seller_product_detail', 'API_Controller\ProductController@best_seller_product_detail');
+Route::post('search', 'API_Controller\ProductController@search');
+Route::post('advance_search', 'API_Controller\ProductController@advance_search');
+Route::post('get_all_product_detail', 'API_Controller\ProductController@get_all_product_detail');
+

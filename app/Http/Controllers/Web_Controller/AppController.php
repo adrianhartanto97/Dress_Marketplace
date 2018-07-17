@@ -100,9 +100,11 @@ class AppController extends Controller
         $jwt = $request->cookie('jwt');
 
         $login_info = $this->get_login_info($jwt);
+        $product_info = $this->get_all_product();
 
         return view('pages.index', [                    
             'active_nav' => "",
+            'all_product' => $product_info,
             'login_info' => $login_info]);
     }
 
@@ -289,6 +291,57 @@ class AppController extends Controller
         else 
             print_r($product_detail->message);
     }
+
+    public function get_all_product()
+    {
+        $product_status = true;
+        $new_product = new stdClass();
+        $best_product = new stdClass();
+        $client = new Client();
+
+      
+        try{
+           $new_product_api = $client->post($this->base_url.'get_new_product_detail');
+        $new_product_detail = json_decode($new_product_api->getBody());
+        }
+        catch (Exception $e) {
+            $product_status = false;
+        }
+
+        try{
+           $best_product_api = $client->post($this->base_url.'best_seller_product_detail');
+        $best_product= json_decode($best_product_api->getBody());
+        }
+        catch (Exception $e) {
+            $product_status = false;
+        }
+
+        $result = new stdClass();
+        $result->product_status = $product_status;
+        $result->new_product = $new_product_detail;
+        $result->best_product = $best_product;
+
+        return $result;
+
+    }
+
+     public function best_seller_product_detail()
+    {
+        $client = new Client();
+        $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+
+        $product_detail_api = $client->post($this->base_url.'best_seller_product_detail');
+        $product_detail = json_decode($product_detail_api->getBody());
+
+        if ($product_detail->status)
+            return view('pages.product_detail', ['login_info' => $login_info, 'product_detail' => $product_detail]);
+        else 
+            print_r($product_detail->message);
+    }
+
+
 
     public function add_to_bag (Request $request)
     {

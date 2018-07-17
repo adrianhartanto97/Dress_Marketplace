@@ -292,4 +292,110 @@ class ProductController extends Controller
             return response()->json(['status'=>$status,'message'=>$favorite],200);
         }
     }
+
+    public function get_new_product_detail(Request $request)
+    {
+        $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy('created_at', 'desc')
+                    ->limit(4)
+                    ->get();
+
+        if ($product == null)
+        {
+            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+        }
+        else {
+            return response()->json(['status'=>true, 'product_info'=>$product],200);
+            
+        }
+    }
+
+    public function best_seller_product_detail(Request $request)
+    {
+        $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy("sold")
+                    ->limit(4)
+                    ->get();
+
+        if ($product == null)
+        {
+            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+        }
+        else {
+            return response()->json(['status'=>true, 'product_info'=>$product],200);
+            
+        }
+    }
+
+    public static function search(Request $request)
+    {
+
+        $product_name = $request->product_name;
+        $min_order =$request->min_order;
+        $price_min=$request->price_min;
+        $price_max=$request->price_max;
+        $rating_min=$request->rating_min;
+        $rating_max=$request->rating_max;
+        $province=$request->province;
+        $city=$request->city;
+        $shipping=$request->shipping;
+        $sort_by=$request->sort_by;
+        
+        $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where('product_name', 'like', '%' .$product_name. '%')
+                    ->get();
+        if ($product == null)
+        {
+            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+        }
+        else {
+            return response()->json(['status'=>true, 'product_info'=>$product],200);
+            
+        }
+
+    }
+
+     public static function advance_search(Request $request)
+    {
+
+        $product_name = $request->product_name;
+        $min_order =$request->min_order;
+        $price_min=$request->price_min;
+        $price_max=$request->price_max;
+        $rating_min=$request->rating_min;
+        $rating_max=$request->rating_max;
+        $province=$request->province;
+        $city=$request->city;
+        $shipping=$request->shipping;
+        $sort_by=$request->sort_by;
+        
+        $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where('product_name', 'like', '%' .$product_name. '%')
+                    ->where('min_order', '>=', $min_order)
+                    ->where('average_rating', '>=', $rating_min)
+                    ->where('average_rating', '<=', $rating_max)
+                    ->where('province', '=', $province)
+                    ->where('city', '=', $city)
+                    ->where('shipping', '=', $shipping)
+                    ->get();
+
+        if ($product == null)
+        {
+            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+        }
+        else {
+            return response()->json(['status'=>true, 'product_info'=>$product],200);
+            
+        }
+
+    }
+
 }

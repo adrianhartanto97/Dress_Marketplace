@@ -43,6 +43,7 @@
         {{ HTML::script('public/layouts/layout/scripts/demo.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-sidebar.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-nav.min.js') }}
+        {{ HTML::script('public/js/search.js') }}
 
          {{ HTML::style('public/css/sidebar.css') }}
        

@@ -67,7 +67,6 @@
                                     <div class="form-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <input type="hidden" class="form-control" name="store_id" value="{{$store_info->store_id}}"/>
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3">Item's Name
                                                         <span class="required"> * </span>
