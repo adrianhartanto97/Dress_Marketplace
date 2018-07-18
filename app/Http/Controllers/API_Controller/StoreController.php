@@ -21,6 +21,7 @@ use App\Product_Price;
 use App\Partnership_Request;
 use App\Partnership_Request_Price;
 use App\RFQ_Offer;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class StoreController extends Controller
 {
@@ -1167,6 +1168,8 @@ class StoreController extends Controller
                             ->where('product_type','0')
                             ->where('product_active_status','1')
                             ->get();
+                            // ->paginate(10);
+
                 $store->product = $product;
                 
                 if ($stat) {

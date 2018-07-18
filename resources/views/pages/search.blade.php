@@ -133,7 +133,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for</p>
+                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for </p>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -160,20 +160,20 @@
 
 
                         <div class="row">
-                            @for($i=0;$i<=10;$i++)
+                             @foreach ($result->product_info as $w)
                             <a href="" target="_blank" style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
                                     <img src="../dress_marketplace/public/storage/carousel/carousel2.jpg" alt="" style="width: 100%; height: 35%;">
                                     <div class="caption" style="text-align:center;">
-                                        <h4>a</h4>
+                                        <h4>{{$w->product_name}}</h4>
                                         <h3>sdsd</h3>
                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
                                     </div>
                                 </div>
                             </div>
                             </a>
-                         @endfor
+                             @endforeach
                         </div>
 
                         <p id="dynamic_pager_demo2" style="text-align: center;"> </p>

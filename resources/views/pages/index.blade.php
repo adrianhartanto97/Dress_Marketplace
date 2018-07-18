@@ -1,5 +1,9 @@
 @extends('layout')
 
+@section('css')
+    {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
+
+@endsection
    
 @section('content')
 <div class="page-content-wrapper">
@@ -55,6 +59,8 @@
                                     <div class="caption" style="text-align:center;">
                                         <h4>{{$w->product_name}}</h4>
                                         <h3>{{$w->store_name}}</h3>
+                                        <h3>IDR {{$w->max_price}}</h3>
+
                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="{{$w->average_rating}}"></a></p>
                                     </div>
                                 </div>
@@ -79,7 +85,9 @@
                                     <div class="caption" style="text-align:center;">
                                         <h4>{{$w->product_name}}</h4>
                                         <h3>{{$w->store_name}}</h3>
-                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                        <h3>IDR {{$w->max_price}}</h3>
+
+                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
                                     </div>
                                 </div>
                             </div>
@@ -92,4 +100,25 @@
             </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+
+
+    <!--BEGIN PAGE LEVEL PLUGINS-->
+    {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
+      
+       
+    <script>
+    
+        $( document ).ready(function() {
+            $(".my-rating").starRating({
+                starSize: 25,
+                readOnly: true,   
+            });
+        });
+
+       
+
+    </script>
 @endsection

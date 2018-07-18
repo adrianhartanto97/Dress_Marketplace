@@ -199,12 +199,14 @@
                                                         </div>
                                                         </a>
                                                      @endforeach
+
                                                     </div>
-
-                                                    <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
-
+                                                  
                                                 </div>
                                             </div>
+
+
+
                                         </div>
                                     </div>
                                 </div>

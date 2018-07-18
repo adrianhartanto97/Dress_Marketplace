@@ -7,12 +7,25 @@
                             <img  src="{{asset('public/layouts/layout/img/dress.png')}}" alt="logo" class="logo-default" style="width: 200px;line-height: 200px;margin-top: 8px" /></a>
                         
                     </div>
-
+<!-- 
                      <form class="search-form search-form-expanded" action="{{url('/search')}}"" method="GET">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search..." name="query" value="">
-                            <span class="input-group-btn">
-                                <a href="javascript:;" class="btn submit">
+                              <form method="post" action="{{ action('Web_Controller\App2Controller@search') }}"  id="search" enctype="multipart/form-data">
+                                <input type="text" class="form-control" placeholder="Search..." name="product_name" value="">
+                                     <span class="input-group-btn">
+                                        <a href="javascript:;" class="btn submit" form="search">
+                                            <i class="icon-magnifier"></i>
+                                        </a>
+                                    </span>
+                            </form>
+                        </div>
+                    </form> -->
+
+                    <form class="search-form search-form-expanded" action="{{ action('Web_Controller\App2Controller@search') }}"" method="post" id="search" enctype="multipart/form-data">
+                        <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..." name="product_name" value="">
+                             <span class="input-group-btn">
+                                <a href="javascript:;" class="btn submit" form="search">
                                     <i class="icon-magnifier"></i>
                                 </a>
                             </span>

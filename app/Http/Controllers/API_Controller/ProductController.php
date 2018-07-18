@@ -295,7 +295,7 @@ class ProductController extends Controller
 
     public function get_new_product_detail(Request $request)
     {
-        $product = DB::table('view_product')
+        $product = DB::table('view_product_detail_first_price')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->orderBy('created_at', 'desc')
@@ -314,10 +314,10 @@ class ProductController extends Controller
 
     public function best_seller_product_detail(Request $request)
     {
-        $product = DB::table('view_product')
+        $product = DB::table('view_product_detail_first_price')
                     ->select('*')
                     ->where("product_active_status" , "1")
-                    ->orderBy("sold")
+                    ->orderBy('sold')
                     ->limit(4)
                     ->get();
 
@@ -355,7 +355,7 @@ class ProductController extends Controller
             return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
         }
         else {
-            return response()->json(['status'=>true, 'product_info'=>$product],200);
+            return response()->json(['status'=>true, 'product_info'=>$product, 'query'=>$product_name],200);
             
         }
 
@@ -375,7 +375,25 @@ class ProductController extends Controller
         $shipping=$request->shipping;
         $sort_by=$request->sort_by;
         
-        $product = DB::table('view_product')
+       
+        if($sort_by = "Recommended"){
+                    $product = DB::table('view_product_detail_first_price')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where('product_name', 'like', '%' .$product_name. '%')
+                    ->where('min_order', '>=', $min_order)
+                    ->where('average_rating', '>=', $rating_min)
+                    ->where('average_rating', '<=', $rating_max)
+                     ->where('average_rating', '>=', $rating_min)
+                    ->where('average_rating', '<=', $rating_max)
+                    ->where('province', '=', $province)
+                    ->where('city', '=', $city)
+                    ->where('shipping', '=', $shipping)
+                    ->orderBy('recommendation', 'desc')
+                    ->get();
+        }
+        else if($sort_by = "Newest"){
+                    $product = DB::table('view_product')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->where('product_name', 'like', '%' .$product_name. '%')
@@ -385,7 +403,23 @@ class ProductController extends Controller
                     ->where('province', '=', $province)
                     ->where('city', '=', $city)
                     ->where('shipping', '=', $shipping)
+                    ->orderBy('created_at', 'desc')
                     ->get();
+        }
+        else{
+                    $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where('product_name', 'like', '%' .$product_name. '%')
+                    ->where('min_order', '>=', $min_order)
+                    ->where('average_rating', '>=', $rating_min)
+                    ->where('average_rating', '<=', $rating_max)
+                    ->where('province', '=', $province)
+                    ->where('city', '=', $city)
+                    ->where('shipping', '=', $shipping)
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+        }
 
         if ($product == null)
         {

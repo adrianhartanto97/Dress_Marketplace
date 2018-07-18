@@ -356,23 +356,55 @@ class App2Controller extends Controller
 
      public function search (Request $request)
      {
-        $jwt = $request->cookie('jwt');
+         $jwt = $request->cookie('jwt');
  
          $login_info = $this->get_login_info($jwt);
  
+         $product_name = $request->product_name;
          $client = new Client();
          try {
-             $user_wishlist = $client->post($this->base_url.'my_wishlist', [
+             $search = $client->post($this->base_url.'search', [
                  'form_params' => [
-                     'token' => $jwt
+                     'product_name' => $product_name
                  ]
              ]);
-             $result = json_decode($user_wishlist->getBody());
+             $result = json_decode($search->getBody());
  
              return view('pages.search',
                 [
-                  'login_info' => $login_info, 
-                  'result' => $result
+                  'login_info' => $login_info,    
+                  'result' => $result,
+
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+          
+     }
+
+     public function get_search_item (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+ 
+         $product_name = $request->product_name;
+         $client = new Client();
+         try {
+             $search = $client->post($this->base_url.'search', [
+                 'form_params' => [
+                     'product_name' => $product_name
+                 ]
+             ]);
+             $result = json_decode($search->getBody());
+ 
+             return view('pages.search',
+                [
+                  'login_info' => $login_info,    
+                  'result' => $result,
+                  
                 ]
             );
          }
@@ -400,7 +432,7 @@ class App2Controller extends Controller
         $store_detail = json_decode($store_detail_api->getBody());
 
         if ($store_detail->status)
-            return view('pages.store_detail', ['login_info' => $login_info, 'store_detail' => $store_detail]);
+            return view('pages.store_detail', ['login_info' => $login_info, 'store_detail' => $store_detail,'store_detail_api'=>$store_detail_api]);
         else 
             print_r($store_detail->message);
     }

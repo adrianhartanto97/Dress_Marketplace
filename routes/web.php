@@ -86,6 +86,8 @@ Route::post('balance_withdraw', 'Web_Controller\App2Controller@balance_withdraw'
 Route::get('favorite_store', 'Web_Controller\App2Controller@favorite_store');
 
 Route::get('search', 'Web_Controller\App2Controller@search');
+Route::post('search', 'Web_Controller\App2Controller@search_item');
+
 Route::get('store_detail/{store_id}', 'Web_Controller\App2Controller@store_detail');
 Route::get('request_for_quotation', 'Web_Controller\App2Controller@request_for_quotation');
 Route::post('request_for_quotation', 'Web_Controller\App2Controller@add_rfq');
