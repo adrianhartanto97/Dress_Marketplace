@@ -38,7 +38,7 @@
             <div class="tab-pane active" id="tab_1">
                 <div class="portlet box">
                     <div class="portlet-body">
-                        <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST">
+                        <div class="form-horizontal">
                              {{ csrf_field() }}
                             @if (session()->has('status') && session()->get('status') == false)
                                 <div class="alert alert-danger">
@@ -59,7 +59,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="n_firefly"/>
+                                            <input type="text" class="form-control" name="n_firefly_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -67,7 +67,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="maks_epoch"/>
+                                            <input type="text" class="form-control" name="maks_epoch_ffa_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -75,7 +75,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="base_beta"/>
+                                            <input type="text" class="form-control" name="base_beta_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -83,7 +83,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="gamma"/>
+                                            <input type="text" class="form-control" name="gamma_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -91,7 +91,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="aplha"/>
+                                            <input type="text" class="form-control" name="alpha_training"/>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="maks_epoch_psnn"/>
+                                            <input type="text" class="form-control" name="maks_epoch_psnn_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -111,7 +111,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="summing_units"/>
+                                            <input type="text" class="form-control" name="summing_units_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -119,7 +119,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="learning_rate"/>
+                                            <input type="text" class="form-control" name="learning_rate_training"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -127,17 +127,19 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="Momentum"/>
+                                            <input type="text" class="form-control" name="momentum_training"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br><br>
+                            <div id="training_result_container">
+                            </div>
                             <div class="form-actions" style="text-align:center;">
-                                <button type="submit" class="btn blue">
+                                <button class="btn blue" id="btn_submit_training">
                                      Start Training</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -453,7 +455,7 @@
                     <div class="portlet-body">
                          <h2 style="text-align: center;"> Testing Result</h2><br>
 
-                        <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST">
+                        <!-- <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST"> -->
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="portlet-body">
@@ -495,7 +497,7 @@
                                     </div>
                                 </div>
                             </div> 
-                        </form>
+                        
                     </div>
                 </div>   
             </div>
@@ -547,5 +549,37 @@
                 }
             });
         }
+
+        $(document).ready(function() {
+            $('#btn_submit_training').click(function() {
+                App.blockUI({
+                    boxed: true
+                });
+                $.ajax({
+                    type:"POST",
+                    url: "http://localhost/dress_marketplace/admin/submit_training",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data : {
+                        n_firefly : $('input[name="n_firefly_training"]').val(),
+                        maks_epoch_ffa : $('input[name="maks_epoch_ffa_training"]').val(),
+                        base_beta : $('input[name="base_beta_training"]').val(),
+                        gamma : $('input[name="gamma_training"]').val(),
+                        alpha : $('input[name="alpha_training"]').val(),
+                        maks_epoch_psnn: $('input[name="maks_epoch_psnn_training"]').val(),
+                        summing_units : $('input[name="summing_units_training"]').val(),
+                        learning_rate : $('input[name="learning_rate_training"]').val(),
+                        momentum : $('input[name="momentum_training"]').val()
+                    },
+
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#training_result_container').html(html);
+                        App.unblockUI();
+                    }
+                });
+            });   
+        });
     </script>
 @endsection

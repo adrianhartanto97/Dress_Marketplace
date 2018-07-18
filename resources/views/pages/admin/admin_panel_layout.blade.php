@@ -32,7 +32,7 @@
         <!-- END CORE PLUGINS -->
         
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
-        {{ HTML::script('public/global/scripts/app.min.js') }}
+        {{ HTML::script('public/global/scripts/app.js') }}
         <!-- END THEME GLOBAL SCRIPTS -->
         
         <!-- BEGIN THEME LAYOUT SCRIPTS -->

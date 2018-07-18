@@ -334,4 +334,247 @@ class AdminController extends Controller
         return view('pages.admin.admin_panel_manage_ffa_psnn',['active_nav' => "algo", 'pending_product' => $pending_product]);
         //print_r($pending_product);
     }
+
+    private function sigmoid_bipolar($x) {
+        // return (exp($x) - exp(-1*$x)) / (exp($x) + exp(-1*$x));
+        return (1 - exp(-1*$x)) / (1 + exp(-1*$x));
+    }
+
+    public function submit_training(Request $request)
+    {
+        $jumlah_firefly = $request->n_firefly;
+        $maks_epoch_ffa = $request->maks_epoch_ffa;
+        $B0 = $request->base_beta;
+        $g = $request->gamma;
+        $a = $request->alpha;
+        $maks_epoch_psnn = $request->maks_epoch_psnn;
+        $J_sum = $request->summing_units;
+        $LR = $request->learning_rate;
+        $momentum = $request->momentum;
+        
+        $result = $this->algoritma_FFA_PSNN($jumlah_firefly, $maks_epoch_ffa, $B0, $g, $a, $maks_epoch_psnn, $J_sum, $LR, $momentum);
+        
+        return view('pages.admin.training_result',['result' => $result]);
+    }
+
+    public function algoritma_FFA_PSNN($jumlah_firefly, $maks_epoch_ffa, $B0, $g, $a, $maks_epoch_psnn, $J_sum, $LR, $momentum ) {
+        set_time_limit(86400);
+        $data_raw = DB::table('data_training')->get();
+
+        $intensitas_terbaik = -1;
+        $indeks_terbaik = -1;
+        $rmse_terbaik = 1;
+        $true_counter_terbaik = 0;
+
+        //inisialisasi parameter
+        $total_data = 474;
+        $string = "";
+        $n = 12;
+        //$J_sum = 3;
+        //$maks_epoch_ffa = 2;
+        //$maks_epoch_psnn = 5;
+        //$LR = 0.05;
+        //$jumlah_firefly = 3;
+        //$B0 = 0.4; //base beta (koefisien ketertarikan awal untuk setiap kunang-kunang)
+        //$g = 0.5; //gamma (koefisien penarik / pengundang kunang-kunang lain)
+        //$a = 0.1; //alpha
+        //$momentum = 0.5;
+
+        srand(8); 
+
+        //inisialisasi dataset
+        $data = array();
+        for ($i = 0 ; $i<$total_data;$i++) {
+            $data[$i] = array();
+            $data[$i][0] = 1;
+            $data[$i][1] = $this->sigmoid_bipolar($data_raw[$i]->style);
+            $data[$i][2] = $this->sigmoid_bipolar($data_raw[$i]->price);
+            $data[$i][3] = $this->sigmoid_bipolar($data_raw[$i]->rating);
+            $data[$i][4] = $this->sigmoid_bipolar($data_raw[$i]->size);
+            $data[$i][5] = $this->sigmoid_bipolar($data_raw[$i]->season);
+            $data[$i][6] = $this->sigmoid_bipolar($data_raw[$i]->neck_line);
+            $data[$i][7] = $this->sigmoid_bipolar($data_raw[$i]->sleeve_length);
+            $data[$i][8] = $this->sigmoid_bipolar($data_raw[$i]->waist_line);
+            $data[$i][9] = $this->sigmoid_bipolar($data_raw[$i]->material);
+            $data[$i][10] = $this->sigmoid_bipolar($data_raw[$i]->fabric_type);
+            $data[$i][11] = $this->sigmoid_bipolar($data_raw[$i]->decoration);
+            $data[$i][12] = $this->sigmoid_bipolar($data_raw[$i]->pattern_type);
+            $data[$i][13] = ($data_raw[$i]->recommendation);
+            $data[$i][14] = $data_raw[$i]->dress_id;            
+        }
+
+        $daftar_firefly = array();
+        //inisialisasi firefly
+        for ($i = 0; $i < $jumlah_firefly; $i++) {
+            $daftar_firefly[$i] = new stdClass();
+            //init random weight
+            $w = array();
+            for ($k = 0; $k <= $n; $k++) {
+                $w[$k] = array();
+                $w_temp[$k] = array();
+                for ($j = 1; $j <= $J_sum; $j++) {
+                    $w[$k][$j] = rand (-1*100, 1*100) / 100;
+                }
+            }
+            $daftar_firefly[$i]->w = $w;
+            $daftar_firefly[$i]->intensitas = 0;
+        }
+
+        //hitung intensitas masing-masing firefly
+        for ($i = 0; $i < $jumlah_firefly; $i++) {
+            $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n, $momentum);
+            
+            if ($daftar_firefly[$i]->intensitas > $intensitas_terbaik) {
+                $intensitas_terbaik = $daftar_firefly[$i]->intensitas;
+                $indeks_terbaik = $i;
+            }
+        }
+
+        for ($e = 0; $e < $maks_epoch_ffa; $e++) {
+            for ($i = 0; $i < $jumlah_firefly; $i++) { 
+                for ($j = 0; $j < $jumlah_firefly; $j++) {
+                    if ($daftar_firefly[$i]->intensitas < $daftar_firefly[$j]->intensitas) {
+                        $r = 0.0;
+                        for ($kk = 0; $kk <= $n; $kk++) {
+                            for ($jj = 1; $jj <= $J_sum; $jj++) {
+                                $r += ($daftar_firefly[$i]->w[$kk][$jj] - $daftar_firefly[$j]->w[$kk][$jj]) * ($daftar_firefly[$i]->w[$kk][$jj] - $daftar_firefly[$j]->w[$kk][$jj]);
+                            }
+                        }
+                        $r = sqrt($r);
+
+                        $beta = $B0 * exp((-1*$g) * $r * $r);
+
+                        for ($kk = 0; $kk <= $n; $kk++) {
+                            for ($jj = 1; $jj <= $J_sum; $jj++) {
+                                $daftar_firefly[$i]->w[$kk][$jj] += $beta * ($daftar_firefly[$j]->w[$kk][$jj] - $daftar_firefly[$i]->w[$kk][$jj]);
+                                $random = rand(0,100)/100;
+                                $daftar_firefly[$i]->w[$kk][$jj] += $a * ($random - 0.5);
+
+                                if ($daftar_firefly[$i]->w[$kk][$jj] > 1) {$daftar_firefly[$i]->w[$kk][$jj] = 1;}
+                                if ($daftar_firefly[$i]->w[$kk][$jj] < -1) {$daftar_firefly[$i]->w[$kk][$jj] = -1;}
+                            }
+                        }
+
+                        $daftar_firefly[$i] = $this->komputasi_psnn($data, $total_data, $daftar_firefly[$i], $maks_epoch_psnn, $J_sum, $LR, $n, $momentum);
+                        
+                        if ($daftar_firefly[$i]->intensitas > $intensitas_terbaik) {
+                            $intensitas_terbaik = $daftar_firefly[$i]->intensitas;
+                            $indeks_terbaik = $i;
+                            $rmse_terbaik = $daftar_firefly[$i]->rmse;
+                            $true_counter_terbaik = $daftar_firefly[$i]->true_counter;
+                        }
+                    }
+                }
+            }
+        }
+
+        $result = new stdClass();
+        $result->intensitas_terbaik = $intensitas_terbaik;
+        $result->indeks_terbaik = $indeks_terbaik;
+        $result->rmse_terbaik = $rmse_terbaik;
+        $result->true_counter_terbaik = $true_counter_terbaik;
+
+        return $result;
+    }
+
+    private function komputasi_psnn($data, $total_data, $firefly, $maks_epoch_psnn, $J_sum, $LR, $n, $momentum)
+    {   
+        $w_temp = array();
+        $RMSE_terbaik = 1000000;
+        $true_counter_terbaik = -1;
+        $weight_terbaik = array();
+
+        for ($e = 0; $e < $maks_epoch_psnn; $e++) {        
+            for ($p = 0; $p < $total_data; $p++) {
+                $h = array();
+                $pi = 1;
+                for ($j = 1; $j <= $J_sum; $j++) {
+                    $h[$j] = 0;
+                    for ($k = 0; $k <= $n; $k++) {
+                        $h[$j] += ($firefly->w[$k][$j] * $data[$p][$k]);
+                    }
+                    $pi *= $h[$j];                 
+                }
+
+                //aktivasi sigmoid
+                $ex = round(exp(-1*$pi), 10);
+                $y = round(1 / (1.0 + $ex) , 10);
+
+                if ($y == 0) {
+                    $y=0.000000000000000000001;
+                }
+
+                for ($k = 0; $k <= $n; $k++) {
+                    for ($l = 1; $l <= $J_sum; $l++) {
+                        $delta = $LR * ($data[$p][13] - $y) * ((1.0-$y) * $y) * $data[$p][$k];
+                        $hj = 0;
+                        $pi_h = 1;
+
+                        // for ($b = 0; $b <= $n; $b++) {
+                        //     $hj += ($firefly->w[$b][$l] * $data[$p][$b]);
+                        // }
+                        $pi_h = $pi / $h[$l];
+                        $delta = round($delta*$pi_h, 10);
+
+                        $w_temp[$k][$l] = round($firefly->w[$k][$l] + ($delta * $momentum), 10);
+                        if ($w_temp[$k][$l] > 1) {$w_temp[$k][$l] = 1;}
+                        if ($w_temp[$k][$l] < -1) {$w_temp[$k][$l] = -1;}
+                        //$string = $string." k : ".$k." , l : ".$l. " , delta : ".$w_temp[$k][$l]."<br>";
+                        //$string = $string. "delta : ".$w_temp[$k][$l]."<br>";
+                    }
+                }
+                
+                for ($k = 0; $k <= $n; $k++) {
+                    for ($j = 1; $j <= $J_sum; $j++) {
+                        $firefly->w[$k][$j] = $w_temp[$k][$j];                
+                    }
+                }
+
+                //hitung RMSE
+                $nilai_kesalahan = 0;
+                $y_temp = array();
+                $true_counter=0;
+                for ($pp = 0; $pp < $total_data; $pp++) {
+                    $h = array();
+                    $pi = 1;
+                    for ($jj = 1; $jj <= $J_sum; $jj++) {
+                        $h[$jj] = 0;
+                        for ($kk = 0; $kk <= $n; $kk++) {
+                            $h[$jj] += ($firefly->w[$kk][$jj] * $data[$pp][$kk]);
+                        }
+                        $pi *= $h[$jj];                 
+                    }
+                    //aktivasi sigmoid
+                    $ex = round(exp(-1*$pi), 10);
+                    $y = round(1 / (1.0 + $ex) , 10);
+
+                    if ($y == 0) {
+                        $y=0.000000000000000000001;
+                    }
+                    $y_temp[$pp] = $y;
+                    if (round($y) == $data[$pp][13]) {
+                        $true_counter++ ;
+                    }
+
+                    // if (round($y) <> $data[$pp][13] ) {
+                    //     $nilai_kesalahan += (round($y) - $data[$pp][13]) * (round($y) - $data[$pp][13]);
+                    // }
+                    $nilai_kesalahan += ($y - $data[$pp][13]) * ($y - $data[$pp][13]);
+                }
+                $RMSE = sqrt($nilai_kesalahan/$total_data);
+
+                if ($RMSE < $RMSE_terbaik) {
+                    $RMSE_terbaik = $RMSE;
+                    $true_counter_terbaik = $true_counter;
+                    $weight_terbaik = $firefly->w;
+                }                
+            }
+        }
+
+        $firefly->intensitas = 1/$RMSE_terbaik;
+        $firefly->w = $weight_terbaik;
+        $firefly->true_counter = $true_counter_terbaik;
+        $firefly->rmse = $RMSE_terbaik;
+        return $firefly;
+    }
 }
