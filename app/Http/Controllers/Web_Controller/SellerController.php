@@ -127,24 +127,45 @@ class SellerController extends Controller
     public function seller_panel_product (Request $request) {
         $jwt = $request->cookie('jwt');
         $store = $this->check_user_store($jwt);
+        $User_store = $this->check_user_store($jwt);
+        $store_id = $User_store->store_id;
+
         $dress_attributes = null;
         try {
             $client = new Client();
             $res = $client->post($this->base_url.'get_dress_attributes', [
                 'form_params' => [
-                    'token' => $jwt
+                    'token' => $jwt,
                 ]
             ]);
 
             $dress_attributes = json_decode($res->getBody());
+            $res = $client->post($this->base_url.'get_user_store_detail', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'store_id'=>$store_id,
+                ]
+            ]);
+            $product = json_decode($res->getBody());
+
+            
+
         }
         catch(Exception $e) {
 
         }
-
+       
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_product', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'products', 'dress_attributes' => $dress_attributes]);
+           
+            return view('pages.seller_panel_product', 
+                [
+                    'login_info' => $login_info,
+                    'store_info' => $store, 
+                    'active_nav' => 'products', 
+                    'dress_attributes' => $dress_attributes, 
+                    'products' => $product
+            ]);
             
         }
         else {

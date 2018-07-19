@@ -22,6 +22,7 @@
                     </form> -->
 
                     <form class="search-form search-form-expanded" action="{{ action('Web_Controller\App2Controller@search') }}"" method="post" id="search" enctype="multipart/form-data">
+                        {{ csrf_field() }}
                         <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search..." name="product_name" value="">
                              <span class="input-group-btn">

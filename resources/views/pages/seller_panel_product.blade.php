@@ -3,6 +3,13 @@
 @section('css')
     {{ HTML::style('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css') }}
     {{ HTML::style('public/global/plugins/bootstrap-select/css/bootstrap-select.css') }}
+
+     {{ HTML::style('public/global/plugins/fancybox/source/jquery.fancybox.css') }}
+    {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css') }}
+    {{ HTML::style('public/css/iconeffects.css')}}
+   
+
 @endsection
 
 @section('content')
@@ -270,11 +277,34 @@
                 </form>
                 </div>
             </div>
+
             <div class="tab-pane" id="tab_2">
-                tes
+                <div class="tab-content">
+                    <div class="portlet-body">
+                        <div class="row">
+                           @foreach ($products->result->product as $w)
+                                 <a href="product_detail/{{$w->product_id}}" target="_blank" style="text-decoration:none;">
+                                <div class="col-xs-12 col-sm-3 col-md-3">
+                                    <div class="thumbnail">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 300px;">
+                                        <div class="caption" style="text-align:center;">
+                                            <h4>{{$w->product_name}}</h4>
+                                            <h3>{{$w->store_name}}</h3>
+                                            <p><a href="product_detail/{{$w->product_id}}" target="_blank" class="my-rating satu" data-rating="{{$w->average_rating}}"></a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            @endforeach
+                        
+                        </div>
+                    </div>
+                </div> 
+            
             </div>
-        </div>
+            
     </div>
+</div>
 @endsection
 
 @section('script')
@@ -286,6 +316,24 @@
     {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
     {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
     {{HTML::script('public/global/plugins/bootstrap-select/js/bootstrap-select.min.js')}}
+ {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
+  
+
+    <!--END PAGE LEVEL PLUGINS-->
+
+    <!--BEGIN PAGE LEVEL SCRIPTS-->
+    <!--END PAGE LEVEL SCRIPTS-->
+
+    <script>
+    
+        $( document ).ready(function() {
+            $(".my-rating").starRating({
+                starSize: 25,
+                readOnly: true,   
+            });
+        });
+
+    </script>
     <!--END PAGE LEVEL PLUGINS-->
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->

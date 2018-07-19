@@ -46,13 +46,13 @@
                 </div>
 
                 <h1>New Product</h1>
-                <a href="" >Go to all product page</a>
+                <a href="{{url('/search')}}" >Go to all product page</a>
 
                  <div class="portlet light bordered">
                     <div class="portlet-body">
                         <div class="row">
                            @foreach ($all_product->new_product->product_info as $w)
-                            <a href="" target="_blank" style="text-decoration:none;">
+                            <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
                                     <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
@@ -72,13 +72,12 @@
                 </div>
 
                 <h1>Best Seller</h1>
-                <a href="" >Go to all product page</a>
 
                  <div class="portlet light bordered">
                     <div class="portlet-body">
                         <div class="row">
                            @foreach ($all_product->best_product->product_info as $w)
-                            <a href="" target="_blank" style="text-decoration:none;">
+                            <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
                                     <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">

@@ -17,6 +17,7 @@ Route::group(['middleware' => 'auth.custom'], function () {
     Route::get('seller_panel', 'Web_Controller\SellerController@seller_panel_dashboard');
     Route::get('seller_panel_store_settings', 'Web_Controller\SellerController@seller_panel_store_settings');
     Route::get('seller_panel_product', 'Web_Controller\SellerController@seller_panel_product');
+
     Route::post('add_product', 'Web_Controller\SellerController@add_product');
     
     Route::post('add_to_bag', 'Web_Controller\AppController@add_to_bag');
@@ -81,12 +82,15 @@ Route::post('add_to_wishlist', 'Web_Controller\App2Controller@add_to_wishlist');
 Route::post('delete_from_wishlist', 'Web_Controller\App2Controller@delete_from_wishlist');
 Route::get('my_wishlist', 'Web_Controller\App2Controller@my_wishlist');
 Route::get('balance_detail', 'Web_Controller\App2Controller@withdraw');
+Route::post('balance_detail', 'Web_Controller\App2Controller@withdraw');
+
 Route::post('balance_withdraw', 'Web_Controller\App2Controller@balance_withdraw');
 
 Route::get('favorite_store', 'Web_Controller\App2Controller@favorite_store');
 
 Route::get('search', 'Web_Controller\App2Controller@search');
-Route::post('search', 'Web_Controller\App2Controller@search_item');
+Route::post('search', 'Web_Controller\App2Controller@search');
+
 
 Route::get('store_detail/{store_id}', 'Web_Controller\App2Controller@store_detail');
 Route::get('request_for_quotation', 'Web_Controller\App2Controller@request_for_quotation');
@@ -103,8 +107,6 @@ Route::post('add_rfq_offer', 'Web_Controller\App2Controller@add_rfq_offer');
 Route::post('accept_rfq_offer', 'Web_Controller\App2Controller@accept_rfq_offer');
 Route::post('close_rfq_request', 'Web_Controller\App2Controller@close_rfq_request');
 
-Route::post('financial_history', 'Web_Controller\App2Controller@financial_history');
-Route::post('balance_detail', 'Web_Controller\App2Controller@withdraw');
 
 Route::post('get_new_product_detail', 'Web_Controller\AppController@get_new_product_detail');
 Route::post('best_seller_product_detail', 'Web_Controller\AppController@best_seller_product_detail');

@@ -333,31 +333,48 @@ class ProductController extends Controller
 
     public static function search(Request $request)
     {
+        try{
+            $product_name = $request->product_name;
+            $min_order =$request->min_order;
+            $price_min=$request->price_min;
+            $price_max=$request->price_max;
+            $rating_min=$request->rating_min;
+            $rating_max=$request->rating_max;
+            $province=$request->province;
+            $city=$request->city;
+            $shipping=$request->shipping;
+            $sort_by=$request->sort_by;
 
-        $product_name = $request->product_name;
-        $min_order =$request->min_order;
-        $price_min=$request->price_min;
-        $price_max=$request->price_max;
-        $rating_min=$request->rating_min;
-        $rating_max=$request->rating_max;
-        $province=$request->province;
-        $city=$request->city;
-        $shipping=$request->shipping;
-        $sort_by=$request->sort_by;
-        
-        $product = DB::table('view_product')
+            $product = DB::table('view_product')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->where('product_name', 'like', '%' .$product_name. '%')
                     ->get();
-        if ($product == null)
+            $all = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->get();
+            $count_product = count($product);
+            $count_all = count($all);
+
+            $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product, 'query'=>$product_name,'count'=>$count_product,'count_all'=>$count_all],200);
+                
+           
+           
+
+        }
+        catch(Exception $error)
         {
-            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
         }
-        else {
-            return response()->json(['status'=>true, 'product_info'=>$product, 'query'=>$product_name],200);
-            
-        }
+
+       
+        
+       
 
     }
 

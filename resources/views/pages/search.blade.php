@@ -27,87 +27,108 @@
         <div class="row" style="padding:0px 10px;">
             <div class="col-xs-12 col-sm-3 col-md-2">
                 <div class="row">
-                    <div class="portlet box blue-hoki">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                Search
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="form-group">
-                                 <div class="col-md-7">
-                                    <label class="control-label">Min Order</label>
-                                 </div>
-                                 <div class="col-md-5">
-                                    <input type="number" class="form-control" min="0" value="0">
-                                 </div>
-                            </div>
-                             <div class="form-group">
-                                <div class="col-md-12">
-                                    <label class="control-label">Price</label>
-                                </div>
-                                <div class="col-md-12">
-                                    <input id="range_26" type="range"  />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <label class="control-label">Province</label>
-
-                                </div>
-                                <div class="col-md-12">
-                                    <select class="form-control" name="province">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                 <div class="col-md-12">
-                                    <label class="control-label">City</label>  
-                                 </div>
-                                
-                                <div class="col-md-12">
-                                    <select class="form-control" name="city">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <label class="control-label">Shipping</label>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <select class="form-control" name="shipping" >
-                                    </select>
+                     <form class="form-horizontal" action="#" id="filter" method="POST" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="portlet box blue-hoki">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    Search
                                 </div>
                             </div>
                             
-                            <div class="form-group">
+                            <div class="portlet-body">
+                                <div class="form-group">
+                                     <div class="col-md-7">
+                                        <label class="control-label">Min Order</label>
+                                     </div>
+                                     <div class="col-md-5">
+                                        <input type="number" class="form-control" min="0" value="0">
+                                     </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label">Price</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input id="range_26" type="range"  />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label">Province</label>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <select class="form-control" name="province">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                     <div class="col-md-12">
+                                        <label class="control-label">City</label>  
+                                     </div>
+                                    
+                                    <div class="col-md-12">
+                                        <select class="form-control" name="city">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label">Shipping</label>
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <select class="form-control" name="shipping" >
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
                                     <label class="control-label">Rating</label>
-                                
-                                <div class="col-md-12">
-                                    <input id="range_25" type="range"  />
+                                    
+                                    <div class="col-md-12">
+                                        <input id="range_25" type="range" oninput="changeInputValue(this.value)"  />
+                                    </div>
                                 </div>
-                            </div>
-                             <div class="form-group">
+                                 <div class="form-group">
                                     <label class="control-label">
-                                </label>
 
-                                <div class="col-md-12">
+                                    </label>
+
+                                    <div class="col-md-12">
+
+                                        <input type="text" id="rating_min" value="">
+                                         <input type="text" id="rating_max">
+                                         <input type="number" id="number" min="0" max="5000" onkeyup="changeRangeValue(this.value)"/> 
+                                        <br />
+                                        <label for="monday">Monday Sales Target - $<span id="monday"></span></label>
+                                        <input type="range" min="0" max="5000" id="range" name="monday" value="0" step="50" oninput="changeInputValue(this.value)" />
+
+                                        <p id="monday">
+                                            <label for="amountmonday">Hours of sleep:</label>
+                                            <input type="text" id="amountmonday">
+                                        </p>
+                                          
+                                        <div id="slidermonday"></div>
+
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+
+                        </div>
+                         <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" class="btn green button-submit" form="filter"> Apply Filter
+                                    </button>
                                 </div>
                             </div>
-                            
-                            
                         </div>
+                    </form>
 
-                    </div>
-                     <div class="form-actions">
-                        <div class="row">
-                            <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green button-submit"> Apply Filter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -133,9 +154,19 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <p id="dynamic_pager_content2" class="well">Showing 100 products for </p>
+                                    @if($result->count == $result->count_all)
+                                    <p id="dynamic_pager_content2" class="well">Showing All products</p>
+
+                                    @elseif ($result->count!=0)
+                                    <p id="dynamic_pager_content2" class="well">Showing {{$result->count}} products for {{$result->query}}</p>
+
+                                    @else 
+                                    <p id="dynamic_pager_content2" class="well">No Result</p>
+                                    @endif
                                 </div>
                             </div>
+
+                             @if ($result->count!=0)
                             <div class="col-md-12">
                                  <div class="col-md-7">
                                     
@@ -153,6 +184,7 @@
                                     </div>
                                 </div>
                             </div>
+                             @endif
 
                         </div>
                     </div>
@@ -164,10 +196,10 @@
                             <a href="" target="_blank" style="text-decoration:none;">
                             <div class="col-xs-6 col-sm-4 col-md-3">
                                 <div class="thumbnail">
-                                    <img src="../dress_marketplace/public/storage/carousel/carousel2.jpg" alt="" style="width: 100%; height: 35%;">
+                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
                                     <div class="caption" style="text-align:center;">
                                         <h4>{{$w->product_name}}</h4>
-                                        <h3>sdsd</h3>
+                                        <h3>IDR {{$w->max_price}}</h3>
                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
                                     </div>
                                 </div>
@@ -176,8 +208,8 @@
                              @endforeach
                         </div>
 
-                        <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
-
+<!--                         <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
+ -->
                     </div>
                 </div>
             </div>
@@ -202,7 +234,6 @@
         {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
-        {{HTML::script('public/js/search.js')}}
   
       
        
@@ -237,5 +268,44 @@
             grid: false
         });
 
+         function showValue1(newValue) { 
+            document.getElementById("monday").innerHTML= newValue;
+        }
+
+        function changeRangeValue(val){
+            document.getElementById("range").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
+             document.getElementById("range_25").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
+
+            showValue1(val);
+        }
+
+        function changeInputValue(val){
+            document.getElementById("number").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
+            document.getElementById("rating_min").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
+            showValue1(val);
+        }
+
+        var amountmonday = $('#amountmonday');
+var slidermonday = $('#slidermonday');
+var max = $('slidermonday').slider('values', 1);
+var min = $('slidermonday').slider('values', 0);
+
+
+    
+    $(function() {
+        slidermonday.slider({
+                range:true,
+                min: 0,
+                max: 24,
+                values: [12, 18],
+                slide: function Total (event, ui) {
+                    amountmonday.val(ui.values[1] - ui.values[0]);
+                    
+            $( "#amountmonday" ).val(  $( "#slidermonday" ).slider( "values", 1 ) - $( "#slidermonday" ).slider( "values", 0));
+                },
+        
+        });
+    });
+    
     </script>
 @endsection
