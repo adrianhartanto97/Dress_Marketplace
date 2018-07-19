@@ -403,6 +403,7 @@ class ComposerStaticInit31b8e853ecc4a8e47069c323d5ebcc34
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Middleware\\admin_auth' => __DIR__ . '/../..' . '/app/Http/Middleware/admin_auth.php',
         'App\\Http\\Middleware\\auth' => __DIR__ . '/../..' . '/app/Http/Middleware/auth.php',
+        'App\\Param_Settings' => __DIR__ . '/../..' . '/app/Param_Settings.php',
         'App\\Partnership_Request' => __DIR__ . '/../..' . '/app/Partnership_Request.php',
         'App\\Partnership_Request_Price' => __DIR__ . '/../..' . '/app/Partnership_Request_Price.php',
         'App\\Product' => __DIR__ . '/../..' . '/app/Product.php',

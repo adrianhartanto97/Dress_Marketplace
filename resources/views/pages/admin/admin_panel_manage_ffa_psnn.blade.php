@@ -146,7 +146,7 @@
             <div class="tab-pane" id="tab_2">
                <div class="portlet box">
                     <div class="portlet-body">
-                        <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST">
+                        
                              {{ csrf_field() }}
                             @if (session()->has('status') && session()->get('status') == false)
                                 <div class="alert alert-danger">
@@ -167,7 +167,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="n_firefly"/>
+                                            <input type="text" class="form-control" name="n_firefly_testing"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -175,7 +175,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="maks_epoch"/>
+                                            <input type="text" class="form-control" name="maks_epoch_ffa_testing"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -183,13 +183,13 @@
                                             <span class="required"> * </span>
                                         </label>
                                        <div class="col-md-3">
-                                            <input type="text" class="form-control" name="min" placeholder="min" />
+                                            <input type="text" class="form-control" name="base_beta_testing_min" placeholder="min" />
                                         </div>
                                         <div class="control-label col-md-2" style="text-align: center;">range
                                         </div>
 
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="max" placeholder="max" />
+                                            <input type="text" class="form-control" name="base_beta_testing_max" placeholder="max" />
                                         </div>
 
                                     </div>
@@ -199,7 +199,7 @@
                                         <label class="control-label col-md-1" style="text-align: center;">step
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="step" placeholder="step" />
+                                            <input type="text" class="form-control" name="base_beta_testing_step" placeholder="step" />
                                         </div>
                                     </div>
                                      
@@ -208,12 +208,12 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="min" placeholder="min" />
+                                            <input type="text" class="form-control" name="gamma_testing_min" placeholder="min" />
                                         </div>
                                         <label class="control-label col-md-2" style="text-align: center;">range
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="max" placeholder="max" />
+                                            <input type="text" class="form-control" name="gamma_testing_max" placeholder="max" />
                                         </div>
                                         
                                     </div>
@@ -222,12 +222,12 @@
                                             <span class="required"> * </span>
                                         </label>
                                        <div class="col-md-3">
-                                            <input type="text" class="form-control" name="min" placeholder="min" />
+                                            <input type="text" class="form-control" name="alpha_testing_min" placeholder="min" />
                                         </div>
                                         <label class="control-label col-md-2" style="text-align: center;">range
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="max" placeholder="max" />
+                                            <input type="text" class="form-control" name="alpha_testing_max" placeholder="max" />
                                         </div>
                                         
                                     </div>
@@ -237,7 +237,7 @@
                                         <label class="control-label col-md-1" style="text-align: center;">step
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="step" placeholder="step" />
+                                            <input type="text" class="form-control" name="alpha_testing_step" placeholder="step" />
                                         </div>
                                     </div>
                                 </div>
@@ -249,7 +249,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="maks_epoch_psnn"/>
+                                            <input type="text" class="form-control" name="maks_epoch_psnn_testing"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -257,7 +257,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="summing_units"/>
+                                            <input type="text" class="form-control" name="summing_units_testing"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -265,7 +265,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="learning_rate"/>
+                                            <input type="text" class="form-control" name="learning_rate_testing"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -273,12 +273,12 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="min" placeholder="min" />
+                                            <input type="text" class="form-control" name="momentum_testing_min" placeholder="min" />
                                         </div>
                                         <label class="control-label col-md-2" style="text-align: center;">range
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="max" placeholder="max" />
+                                            <input type="text" class="form-control" name="momentum_testing_max" placeholder="max" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -287,17 +287,19 @@
                                         <label class="control-label col-md-1" style="text-align: center;">step
                                         </label>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="step" placeholder="step" />
+                                            <input type="text" class="form-control" name="momentum_testing_step" placeholder="step" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br><br>
                             <div class="form-actions" style="text-align:center;">
-                                <button type="submit" class="btn blue">
+                                <button type="submit" class="btn blue" id="btn_submit_testing">
                                      Start Testing</button>
                             </div>
-                        </form>
+                            <div id="training_result_container">
+                            </div>
+                        
                     </div>
                 </div>
             </div>
@@ -571,6 +573,43 @@
                         summing_units : $('input[name="summing_units_training"]').val(),
                         learning_rate : $('input[name="learning_rate_training"]').val(),
                         momentum : $('input[name="momentum_training"]').val()
+                    },
+
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#training_result_container').html(html);
+                        App.unblockUI();
+                    }
+                });
+            });
+
+            $('#btn_submit_testing').click(function() {
+                App.blockUI({
+                    boxed: true
+                });
+                $.ajax({
+                    type:"POST",
+                    url: "http://localhost/dress_marketplace/admin/submit_testing",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data : {
+                        n_firefly : $('input[name="n_firefly_testing"]').val(),
+                        maks_epoch_ffa : $('input[name="maks_epoch_ffa_testing"]').val(),
+                        base_beta_min : $('input[name="base_beta_testing_min"]').val(),
+                        base_beta_max : $('input[name="base_beta_testing_max"]').val(),
+                        base_beta_step : $('input[name="base_beta_testing_step"]').val(),
+                        gamma_min : $('input[name="gamma_testing_min"]').val(),
+                        gamma_max : $('input[name="gamma_testing_max"]').val(),
+                        alpha_min : $('input[name="alpha_testing_min"]').val(),
+                        alpha_max : $('input[name="alpha_testing_max"]').val(),
+                        alpha_step : $('input[name="alpha_testing_step"]').val(),
+                        maks_epoch_psnn: $('input[name="maks_epoch_psnn_testing"]').val(),
+                        summing_units : $('input[name="summing_units_testing"]').val(),
+                        learning_rate : $('input[name="learning_rate_testing"]').val(),
+                        momentum_min : $('input[name="momentum_testing_min"]').val(),
+                        momentum_max : $('input[name="momentum_testing_max"]').val(),
+                        momentum_step : $('input[name="momentum_testing_step"]').val()
                     },
 
                     dataType: 'html',
