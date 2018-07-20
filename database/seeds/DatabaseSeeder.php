@@ -15,5 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProvinceSeeder::class);
         $this->call(CourierSeeder::class);
         $this->call(DressAttributeSeeder::class);
+        $this->call(SortBySeeder::class);
+
     }
 }

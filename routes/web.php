@@ -112,4 +112,7 @@ Route::post('close_rfq_request', 'Web_Controller\App2Controller@close_rfq_reques
 Route::post('get_new_product_detail', 'Web_Controller\AppController@get_new_product_detail');
 Route::post('best_seller_product_detail', 'Web_Controller\AppController@best_seller_product_detail');
 
+Route::get('filter', 'Web_Controller\App2Controller@filter');
+Route::post('filter', 'Web_Controller\App2Controller@filter');
+
 

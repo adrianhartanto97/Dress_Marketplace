@@ -27,7 +27,8 @@
         <div class="row" style="padding:0px 10px;">
             <div class="col-xs-12 col-sm-3 col-md-2">
                 <div class="row">
-                     <form class="form-horizontal" action="#" id="filter" method="POST" enctype="multipart/form-data">
+                    
+                    <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@filter') }}"" id="filter" method="post"  enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="portlet box blue-hoki">
                             <div class="portlet-title">
@@ -42,7 +43,7 @@
                                         <label class="control-label">Min Order</label>
                                      </div>
                                      <div class="col-md-5">
-                                        <input type="number" class="form-control" min="0" value="0">
+                                        <input type="number" name="min_order" id="min_order" class="form-control" min="0" value="0">
                                      </div>
                                 </div>
                                  <div class="form-group">
@@ -88,7 +89,7 @@
                                     <label class="control-label">Rating</label>
                                     
                                     <div class="col-md-12">
-                                        <input id="range_25" type="range" oninput="changeInputValue(this.value)"  />
+                                        <input id="range_25" type="range"  />
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -97,20 +98,17 @@
                                     </label>
 
                                     <div class="col-md-12">
-
-                                        <input type="text" id="rating_min" value="">
-                                         <input type="text" id="rating_max">
-                                         <input type="number" id="number" min="0" max="5000" onkeyup="changeRangeValue(this.value)"/> 
-                                        <br />
-                                        <label for="monday">Monday Sales Target - $<span id="monday"></span></label>
-                                        <input type="range" min="0" max="5000" id="range" name="monday" value="0" step="50" oninput="changeInputValue(this.value)" />
-
-                                        <p id="monday">
-                                            <label for="amountmonday">Hours of sleep:</label>
-                                            <input type="text" id="amountmonday">
-                                        </p>
-                                          
-                                        <div id="slidermonday"></div>
+                                       
+                                        <input type="text" id="price_min" name="price_min" value="1">
+                                         <input type="text" id="price_max"  name="price_max" value="5000000000">
+                                        <input type="text" id="rating_min" name="rating_min" value="0">
+                                        <input type="text" id="rating_max" name="rating_max" value="5">
+                                                                               
+                                        <input type="text" id="province" name="province" value="">
+                                        <input type="text" id="city" name=
+                                        "city" value="">
+                                        <input type="text" id="courier_id" name=
+                                        "courier_id" value="1">
 
                                     </div>
                                 </div>
@@ -154,59 +152,137 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    @if($result->count == $result->count_all)
-                                    <p id="dynamic_pager_content2" class="well">Showing All products</p>
+                                    @if($has_search == "true")
+                                        @if($search_result->count == $search_result->count_all)
+                                        <p id="dynamic_pager_content2" class="well">Showing All products</p>
 
-                                    @elseif ($result->count!=0)
-                                    <p id="dynamic_pager_content2" class="well">Showing {{$result->count}} products for {{$result->query}}</p>
+                                        @elseif ($search_result->count!=0)
+                                        <p id="dynamic_pager_content2" class="well">Showing {{$search_result->count}} products for {{$search_result->query}}</p>
 
-                                    @else 
-                                    <p id="dynamic_pager_content2" class="well">No Result</p>
+                                        @else 
+                                        <p id="dynamic_pager_content2" class="well">No Result</p>
+                                        @endif
+                                    @else
+                                        @if($filter_result->count == $filter_result->count_all)
+                                        <p id="dynamic_pager_content2" class="well">Showing All products</p>
+
+                                        @elseif ($filter_result->count!=0)
+                                        <p id="dynamic_pager_content2" class="well">Showing {{$filter_result->count}} products for {{$search_result->query}}</p>
+
+                                        @else 
+                                        <p id="dynamic_pager_content2" class="well">No Result</p>
+                                        @endif
                                     @endif
+
                                 </div>
                             </div>
 
-                             @if ($result->count!=0)
-                            <div class="col-md-12">
-                                 <div class="col-md-7">
-                                    
-                                </div>
-                                 <div class="col-md-4">
-                                    <div class="col-md-3">
-                                         Sort By
+                            @if($has_search == "true")
+                                 @if ($search_result->count!=0)
+                                <div class="col-md-12">
+                                     <div class="col-md-7">
+                                        
                                     </div>
-                                    <div class="col-md-9">
-                                         <select class="form-control" name="sort_by">
-                                            <option value="recommended">recommended</option>
-                                            <option value="Newest">Newest</option>
-                                            <option value="Oldest">Oldest</option>
-                                        </select>
+                                     <div class="col-md-4">
+                                        <div class="col-md-3">
+                                             Sort By
+                                        </div>
+                                        <div class="col-md-9">
+                                             <select class="form-control" name="sort_by">
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                             @endif
+                                @else
+                                <div class="col-md-12">
+                                     <div class="col-md-7">
+                                        
+                                    </div>
+                                     <div class="col-md-4">
+                                        <div class="col-md-3">
+                                             Sort Bye
+                                        </div>
+                                        <div class="col-md-9">
+                                             <select class="form-control" name="sort_by">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                 @endif
+                            @else
+                                 @if ($filter_result->count!=0)
+                                <div class="col-md-12">
+                                     <div class="col-md-7">
+                                        
+                                    </div>
+                                     <div class="col-md-4">
+                                        <div class="col-md-3">
+                                             Sort By
+                                        </div>
+                                        <div class="col-md-9">
+                                             <select class="form-control" name="sort_by">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                @else
+                                <div class="col-md-12">
+                                     <div class="col-md-7">
+                                        
+                                    </div>
+                                     <div class="col-md-4">
+                                        <div class="col-md-3">
+                                             Sort Bye
+                                        </div>
+                                        <div class="col-md-9">
+                                             <select class="form-control" name="sort_by">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                 @endif
+                            @endif
 
                         </div>
                     </div>
                     <div class="portlet-body">
 
-
-                        <div class="row">
-                             @foreach ($result->product_info as $w)
-                            <a href="" target="_blank" style="text-decoration:none;">
-                            <div class="col-xs-6 col-sm-4 col-md-3">
-                                <div class="thumbnail">
-                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
-                                    <div class="caption" style="text-align:center;">
-                                        <h4>{{$w->product_name}}</h4>
-                                        <h3>IDR {{$w->max_price}}</h3>
-                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                        @if($has_search == true)
+                            <div class="row" name="list">
+                                 @foreach ($search_result->product_info as $w)
+                                <a href="" target="_blank" style="text-decoration:none;">
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="thumbnail">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
+                                        <div class="caption" style="text-align:center;">
+                                            <h4>{{$w->product_name}}</h4>
+                                            <h3>IDR {{$w->max_price}}</h3>
+                                            <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                        </div>
                                     </div>
                                 </div>
+                                </a>
+                                 @endforeach
                             </div>
-                            </a>
-                             @endforeach
-                        </div>
+                        @else 
+                             <div class="row" name="list">
+                                 @foreach ($filter_result->product_info as $w)
+                                <a href="" target="_blank" style="text-decoration:none;">
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="thumbnail">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
+                                        <div class="caption" style="text-align:center;">
+                                            <h4>{{$w->product_name}}</h4>
+                                            <h3>IDR {{$w->max_price}}</h3>
+                                            <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                                 @endforeach
+                            </div>
+                         @endif
+
 
 <!--                         <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
  -->
@@ -222,90 +298,15 @@
 
 @section('script')
 
-
-    <!--BEGIN PAGE LEVEL PLUGINS-->
     {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
         {{HTML::script('public/global/plugins/ion.rangeslider/js/ion.rangeSlider.min.js')}}
         {{HTML::script('public/pages/scripts/components-ion-sliders.min.js')}}
         {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
         {{HTML::script('public/global/plugins/nouislider/wNumb.min.js')}}
-        {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
         {{HTML::script('public/global/plugins/jquery.pulsate.min.js')}}
         {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
-  
-      
-       
-    <script>
-    
-        $( document ).ready(function() {
-            $(".my-rating").starRating({
-                starSize: 25,
-                readOnly: true,   
-            });
-        });
+        {{HTML::script('public/js/search.js')}}
 
-        $("#range_25").ionRangeSlider({
-            type: "double",
-            min: 1,
-            max: 5,
-            from: 1,
-            to: 5,
-            hide_min_max: true,
-            hide_from_to: false,
-            grid: false
-        });
-
-         $("#range_26").ionRangeSlider({
-            type: "double",
-            min: 10000,
-            max: 50000000,
-            from: 10000,
-            to: 50000000,
-            hide_min_max: true,
-            hide_from_to: false,
-            grid: false
-        });
-
-         function showValue1(newValue) { 
-            document.getElementById("monday").innerHTML= newValue;
-        }
-
-        function changeRangeValue(val){
-            document.getElementById("range").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
-             document.getElementById("range_25").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
-
-            showValue1(val);
-        }
-
-        function changeInputValue(val){
-            document.getElementById("number").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
-            document.getElementById("rating_min").value = isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10);
-            showValue1(val);
-        }
-
-        var amountmonday = $('#amountmonday');
-var slidermonday = $('#slidermonday');
-var max = $('slidermonday').slider('values', 1);
-var min = $('slidermonday').slider('values', 0);
-
-
-    
-    $(function() {
-        slidermonday.slider({
-                range:true,
-                min: 0,
-                max: 24,
-                values: [12, 18],
-                slide: function Total (event, ui) {
-                    amountmonday.val(ui.values[1] - ui.values[0]);
-                    
-            $( "#amountmonday" ).val(  $( "#slidermonday" ).slider( "values", 1 ) - $( "#slidermonday" ).slider( "values", 0));
-                },
-        
-        });
-    });
-    
-    </script>
 @endsection

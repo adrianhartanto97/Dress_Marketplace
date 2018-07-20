@@ -304,7 +304,7 @@ class ProductController extends Controller
 
         if ($product == null)
         {
-            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+            return response()->json(['status'=>false, 'product_info'=>"Product Doesn't exist"],200);
         }
         else {
             return response()->json(['status'=>true, 'product_info'=>$product],200);
@@ -323,7 +323,7 @@ class ProductController extends Controller
 
         if ($product == null)
         {
-            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+            return response()->json(['status'=>false, 'product_info'=>"Product Doesn't exist"],200);
         }
         else {
             return response()->json(['status'=>true, 'product_info'=>$product],200);
@@ -372,79 +372,92 @@ class ProductController extends Controller
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
 
-       
-        
-       
+    }
+
+    public static function advance_search(Request $request)
+    {
+        try{
+            $min_order =$request->min_order;
+            $price_min=$request->price_min;
+            $price_max=$request->price_max;
+            $rating_min=$request->rating_min;
+            $rating_max=$request->rating_max;
+            $province=$request->province;
+            $city=$request->city;
+            $courier_id=$request->courier_id;
+            
+            $product = DB::table('view_filter_courier')
+                        ->select('*')
+                        ->where('min_order', '>=', $min_order)
+                        ->where('product_rating', '>=', $rating_min)
+                        ->where('product_rating', '<=', $rating_max)
+                        ->where('max_price', '>=', $price_min)
+                        ->where('max_price', '<=', $price_max)
+                        ->where('province', '=', $province)
+                        ->where('city', '=', $city)
+                        ->where('courier_id', '=', $courier_id)
+                        ->get();
+            $all = DB::table('view_product')
+                        ->select('*')
+                        ->where("product_active_status" , "1")
+                        ->get();
+
+            $count_product = count($product);
+            $count_all = count($all);
+            $status = true;
+
+             return response()->json(['status'=>$status, 'product_info'=>$product,'count'=>$count_product,'count_all'=>$count_all],200);
+                
+
+        }
+        catch(Exception $error){
+             $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
 
     }
 
-     public static function advance_search(Request $request)
+    public function sort_by_asc(Request $request)
     {
-
-        $product_name = $request->product_name;
-        $min_order =$request->min_order;
-        $price_min=$request->price_min;
-        $price_max=$request->price_max;
-        $rating_min=$request->rating_min;
-        $rating_max=$request->rating_max;
-        $province=$request->province;
-        $city=$request->city;
-        $shipping=$request->shipping;
-        $sort_by=$request->sort_by;
-        
-       
-        if($sort_by = "Recommended"){
-                    $product = DB::table('view_product_detail_first_price')
+        try{
+            $product = DB::table('view_product')
                     ->select('*')
                     ->where("product_active_status" , "1")
-                    ->where('product_name', 'like', '%' .$product_name. '%')
-                    ->where('min_order', '>=', $min_order)
-                    ->where('average_rating', '>=', $rating_min)
-                    ->where('average_rating', '<=', $rating_max)
-                     ->where('average_rating', '>=', $rating_min)
-                    ->where('average_rating', '<=', $rating_max)
-                    ->where('province', '=', $province)
-                    ->where('city', '=', $city)
-                    ->where('shipping', '=', $shipping)
-                    ->orderBy('recommendation', 'desc')
+                    ->orderBy("created_at","asc")
                     ->get();
+            $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+                
         }
-        else if($sort_by = "Newest"){
-                    $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->where('product_name', 'like', '%' .$product_name. '%')
-                    ->where('min_order', '>=', $min_order)
-                    ->where('average_rating', '>=', $rating_min)
-                    ->where('average_rating', '<=', $rating_max)
-                    ->where('province', '=', $province)
-                    ->where('city', '=', $city)
-                    ->where('shipping', '=', $shipping)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-        }
-        else{
-                    $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->where('product_name', 'like', '%' .$product_name. '%')
-                    ->where('min_order', '>=', $min_order)
-                    ->where('average_rating', '>=', $rating_min)
-                    ->where('average_rating', '<=', $rating_max)
-                    ->where('province', '=', $province)
-                    ->where('city', '=', $city)
-                    ->where('shipping', '=', $shipping)
-                    ->orderBy('created_at', 'asc')
-                    ->get();
-        }
-
-        if ($product == null)
+        catch(Exception $error)
         {
-            return response()->json(['status'=>false, 'message'=>"Product Doesn't exist"],200);
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
         }
-        else {
-            return response()->json(['status'=>true, 'product_info'=>$product],200);
-            
+
+    }
+
+     public function sort_by_desc(Request $request)
+    {
+        try{
+            $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy("created_at","desc")
+                    ->get();
+            $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+                
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
         }
 
     }

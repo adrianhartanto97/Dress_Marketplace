@@ -63,4 +63,11 @@ class MasterDataController extends Controller
                 'patterntype'=>$patterntype
             ], 200);
     }
+
+     public function get_sort_by_list(Request $request) {
+        $data = DB::table('master_sort')->select('sort_id','sort_name','alias_name')->get();
+
+        return response()->json(['sort'=>$data],200);
+    }
+
 }

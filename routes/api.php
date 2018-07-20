@@ -79,4 +79,9 @@ Route::post('best_seller_product_detail', 'API_Controller\ProductController@best
 Route::post('search', 'API_Controller\ProductController@search');
 Route::post('advance_search', 'API_Controller\ProductController@advance_search');
 Route::post('get_all_product_detail', 'API_Controller\ProductController@get_all_product_detail');
+Route::post('get_sort_by_list', 'API_Controller\MasterDataController@get_sort_by_list');
+Route::post('sort_by_asc', 'API_Controller\ProductController@sort_by_asc');
+Route::post('sort_by_desc', 'API_Controller\ProductController@sort_by_desc');
+
+
 

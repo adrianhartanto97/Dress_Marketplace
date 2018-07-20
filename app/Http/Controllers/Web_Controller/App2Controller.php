@@ -373,7 +373,55 @@ class App2Controller extends Controller
              return view('pages.search',
                 [
                   'login_info' => $login_info,    
-                  'result' => $result,
+                  'search_result' => $result,
+                  'has_search' => "true"
+
+
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+          
+     }
+
+     public function filter (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+        $login_info = $this->get_login_info($jwt);
+        $min_order =$request->min_order;
+        $price_min=$request->price_min;
+        $price_max=$request->price_max;
+        $rating_min=$request->rating_min;
+        $rating_max=$request->rating_max;
+        $province=$request->province;
+        $city=$request->city;
+        $courier_id=$request->courier_id;
+         $client = new Client();
+         try {
+             $search = $client->post($this->base_url.'advance_search', [
+
+                 'form_params' => [
+                     'min_order' => $min_order,
+                     'rating_min' => $rating_min,
+                     'rating_max' => $rating_max,
+                     'province'=>$province,
+                     'city' => $city,
+                     'courier_id' =>$courier_id,
+                     'price_min'=>$price_min,
+                     'price_max'=>$price_max
+
+                 ]
+             ]);
+             $result = json_decode($search->getBody());
+ 
+             return view('pages.search',
+                [
+                  'login_info' => $login_info,    
+                  'filter_result' => $result,
+                  'has_search' => "false"
 
                 ]
             );
