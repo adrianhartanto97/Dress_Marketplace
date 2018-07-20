@@ -1,3 +1,4 @@
+<h2 style="text-align: center;"> Testing Result</h2><br>
 <table class="table table-striped table-bordered table-hover" id="sample_2">
     <thead>
         <tr>
@@ -14,17 +15,19 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($result as $r)
         <tr>
-            <td> {{$}} </td>
-            <td> {{$satu}} </td>
-            <td> {{$dua}}</td>
-            <td> {{2*$satu-1}}</td>
-            <td>  {{3*$dua-1}} </td>
-            <td>  {{4*$dua-1}}</td>
-            <td>  {{$satu+$i}} </td>
-            <td> {{$dua/5}} </td>
-            <td>  {{2*$dua+2}}</td>
-            <td>  {{$dua/10}}</td>
+            <td> {{$r->n_firefly}} </td>
+            <td> {{$r->maks_epoch_ffa}} </td>
+            <td> {{$r->base_beta}}</td>
+            <td> {{$r->gamma}}</td>
+            <td>  {{$r->alpha}} </td>
+            <td>  {{$r->maks_epoch_psnn}}</td>
+            <td>  {{$r->summing_units}} </td>
+            <td> {{$r->learning_rate}} </td>
+            <td>  {{$r->momentum}}</td>
+            <td>  {{$r->rmse}}</td>
         </tr>
+        @endforeach
     </tbody>
 </table>

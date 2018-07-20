@@ -147,7 +147,7 @@
                <div class="portlet box">
                     <div class="portlet-body">
                         
-                             {{ csrf_field() }}
+                        <div class="form-horizontal">
                             @if (session()->has('status') && session()->get('status') == false)
                                 <div class="alert alert-danger">
                                     <button class="close" data-close="alert"></button>
@@ -297,9 +297,9 @@
                                 <button type="submit" class="btn blue" id="btn_submit_testing">
                                      Start Testing</button>
                             </div>
-                            <div id="training_result_container">
+                            <div id="testing_result_container" style="margin-top:50px;">
                             </div>
-                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -614,7 +614,7 @@
 
                     dataType: 'html',
                     success: function(html) {
-                        $('#training_result_container').html(html);
+                        $('#testing_result_container').html(html);
                         App.unblockUI();
                     }
                 });

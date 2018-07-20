@@ -426,44 +426,9 @@ class AdminController extends Controller
 
         
         try {
-            // $result = $this->algoritma_FFA_PSNN($random_seed, $jumlah_firefly, $maks_epoch_ffa, $B0, $g, $a, $maks_epoch_psnn, $J_sum, $LR, $momentum);
-            
-            // DB::beginTransaction();
-
-            // DB::table('param_settings')->delete();
-            // DB::table('param_settings_weight_set')->delete();
-
-            // $param = new Param_Settings();
-            // $param->random_seed = $random_seed;
-            // $param->param_firefly = $jumlah_firefly;
-            // $param->param_maks_epoch_ffa = $maks_epoch_ffa;
-            // $param->param_base_beta = $B0;
-            // $param->param_gamma = $g;
-            // $param->param_alpha = $a;
-            // $param->param_maks_epoch_psnn = $maks_epoch_psnn;
-            // $param->param_summing_units = $J_sum;
-            // $param->param_learning_rate = $LR;
-            // $param->param_momentum = $momentum;
-            // $param->rmse = $result->rmse_terbaik;
-            // $param->save();
-
-            // $param_id = $param->id;
-
-            
-            // for ($i = 0; $i <= $n; $i++) {
-            //     for ($j = 1; $j <= $J_sum; $j++) {
-            //         DB::table('param_settings_weight_set')->insert([
-            //                 'id' => $param_id, 
-            //                 'node_i' => $i,
-            //                 'node_j' => $j,
-            //                 'weight' => $result->weight_terbaik[$i][$j]
-            //             ]
-            //         );
-            //     }
-            // }
-            
-            // DB::commit();
-            // return view('pages.admin.training_result',['result' => $result]);
+            DB::table('param_settings')->delete();
+            DB::table('param_settings_weight_set')->delete();
+            $result = [];
 
             $stop_gamma = false;
             // $gamma_min = 1;
@@ -489,7 +454,63 @@ class AdminController extends Controller
                         $momentum_current = $momentum_min;
                         // $momentum_step = 0.2;
                         while (!$stop_momentum) {
-                            echo $gamma_current." ".$beta_current." ".$alpha_current." ".$momentum_current."<br>";
+                            //echo $gamma_current." ".$beta_current." ".$alpha_current." ".$momentum_current."<br>";
+                            
+                            try {
+                                $hasil = $this->algoritma_FFA_PSNN($random_seed, $jumlah_firefly, $maks_epoch_ffa, $beta_current, $gamma_current, $alpha_current, $maks_epoch_psnn, $J_sum, $LR, $momentum_current);
+            
+                                DB::beginTransaction();
+                                
+                                $param = new Param_Settings();
+                                $param->random_seed = $random_seed;
+                                $param->param_firefly = $jumlah_firefly;
+                                $param->param_maks_epoch_ffa = $maks_epoch_ffa;
+                                $param->param_base_beta = $beta_current;
+                                $param->param_gamma = $gamma_current;
+                                $param->param_alpha = $alpha_current;
+                                $param->param_maks_epoch_psnn = $maks_epoch_psnn;
+                                $param->param_summing_units = $J_sum;
+                                $param->param_learning_rate = $LR;
+                                $param->param_momentum = $momentum_current;
+                                $param->rmse = $hasil->rmse_terbaik;
+                                $param->save();
+
+                                $param_id = $param->id;
+
+                                
+                                for ($i = 0; $i <= $n; $i++) {
+                                    for ($j = 1; $j <= $J_sum; $j++) {
+                                        DB::table('param_settings_weight_set')->insert([
+                                                'id' => $param_id, 
+                                                'node_i' => $i,
+                                                'node_j' => $j,
+                                                'weight' => $hasil->weight_terbaik[$i][$j]
+                                            ]
+                                        );
+                                    }
+                                }
+                                
+                                DB::commit();
+                            }
+                            catch(Exception $error){
+                                DB::rollback();
+                                echo $error->getMessage();
+                            }
+                            
+                            $r = new stdClass();
+                            $r->n_firefly = $jumlah_firefly;
+                            $r->maks_epoch_ffa = $maks_epoch_ffa;
+                            $r->base_beta = $beta_current;
+                            $r->gamma = $gamma_current;
+                            $r->alpha = $alpha_current;
+                            $r->maks_epoch_psnn = $maks_epoch_psnn;
+                            $r->summing_units = $J_sum;
+                            $r->learning_rate = $LR;
+                            $r->momentum = $momentum_current;
+                            $r->rmse = $hasil->rmse_terbaik;
+
+                            array_push($result, $r);
+
 
                             //cek kriteria stop momentum
                             $momentum_current = round($momentum_current + $momentum_step,2);
@@ -531,6 +552,8 @@ class AdminController extends Controller
                     $stop_gamma = true;
                 }
             }
+
+            return view('pages.admin.testing_result',['result' => $result]);
 
         }
         catch(Exception $error)
