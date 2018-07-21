@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('admin/manage_ffa_psnn', 'Web_Controller\AdminController@manage_ffa_psnn');
     Route::post('admin/submit_training', 'Web_Controller\AdminController@submit_training');
     Route::post('admin/submit_testing', 'Web_Controller\AdminController@submit_testing');
+    Route::post('admin/generate_recommendation_api', 'Web_Controller\AdminController@generate_recommendation_api');
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');

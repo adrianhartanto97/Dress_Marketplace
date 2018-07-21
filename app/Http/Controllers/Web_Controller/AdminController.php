@@ -361,8 +361,8 @@ class AdminController extends Controller
             
             DB::beginTransaction();
 
-            DB::table('param_settings')->delete();
-            DB::table('param_settings_weight_set')->delete();
+            // DB::table('param_settings')->delete();
+            // DB::table('param_settings_weight_set')->delete();
 
             $param = new Param_Settings();
             $param->random_seed = $random_seed;
@@ -394,7 +394,8 @@ class AdminController extends Controller
             }
             
             DB::commit();
-            return view('pages.admin.training_result',['result' => $result]);
+            //$this->generate_recommendation($param_id);
+            return view('pages.admin.training_result',['result' => $result, 'param_id' => $param_id]);
         }
         catch(Exception $error)
         {
@@ -426,8 +427,8 @@ class AdminController extends Controller
 
         
         try {
-            DB::table('param_settings')->delete();
-            DB::table('param_settings_weight_set')->delete();
+            // DB::table('param_settings')->delete();
+            // DB::table('param_settings_weight_set')->delete();
             $result = [];
 
             $stop_gamma = false;
@@ -508,6 +509,7 @@ class AdminController extends Controller
                             $r->learning_rate = $LR;
                             $r->momentum = $momentum_current;
                             $r->rmse = $hasil->rmse_terbaik;
+                            $r->param_id = $param_id;
 
                             array_push($result, $r);
 
@@ -783,5 +785,100 @@ class AdminController extends Controller
         $firefly->true_counter = $true_counter_terbaik;
         $firefly->rmse = round($RMSE_terbaik,10);
         return $firefly;
+    }
+
+    public function generate_recommendation($param_id)
+    {
+        $n = 12;
+        $J_sum = (int) (DB::table('param_settings')
+                ->where('id',$param_id)
+                ->first()->param_summing_units);
+
+        $weight_set = DB::table('param_settings_weight_set')
+                ->where('id',$param_id)
+                ->get();
+        $data_raw = DB::table('view_generate_recommendation')->get();
+
+        $data = array();
+        for ($i = 0 ; $i<sizeof($data_raw);$i++) {
+            $data[$i] = array();
+            $data[$i][0] = 1;
+            $data[$i][1] = $this->sigmoid_bipolar($data_raw[$i]->style);
+            $data[$i][2] = $this->sigmoid_bipolar($data_raw[$i]->price);
+            $data[$i][3] = $this->sigmoid_bipolar($data_raw[$i]->rating);
+            $data[$i][4] = $this->sigmoid_bipolar($data_raw[$i]->size);
+            $data[$i][5] = $this->sigmoid_bipolar($data_raw[$i]->season);
+            $data[$i][6] = $this->sigmoid_bipolar($data_raw[$i]->neck_line);
+            $data[$i][7] = $this->sigmoid_bipolar($data_raw[$i]->sleeve_length);
+            $data[$i][8] = $this->sigmoid_bipolar($data_raw[$i]->waist_line);
+            $data[$i][9] = $this->sigmoid_bipolar($data_raw[$i]->material);
+            $data[$i][10] = $this->sigmoid_bipolar($data_raw[$i]->fabric_type);
+            $data[$i][11] = $this->sigmoid_bipolar($data_raw[$i]->decoration);
+            $data[$i][12] = $this->sigmoid_bipolar($data_raw[$i]->pattern_type);
+            $data[$i][13] = 0;
+            $data[$i][14] = $data_raw[$i]->dress_id;            
+        }
+
+        for ($p = 0; $p < sizeof($data_raw); $p++) {
+            $h = array();
+            $pi = 1;
+            for ($j = 1; $j <= $J_sum; $j++) {
+                $h[$j] = 0;
+                for ($k = 0; $k <= $n; $k++) {
+                    $weight = null;
+                    foreach($weight_set as $struct) {
+                        if ($k == $struct->node_i && $j == $struct->node_j) {
+                            $weight = $struct->weight;
+                            break;
+                        }
+                    }
+                    $h[$j] += ($weight * $data[$p][$k]);
+                }
+                $pi *= $h[$j];                 
+            }
+
+            //aktivasi sigmoid
+            $ex = round(exp(-1*$pi), 8);
+            $y = round(1 / (1.0 + $ex) , 8);
+
+            DB::beginTransaction();
+            try {
+                DB::table('product_size')
+                ->where('product_id', $data_raw[$p]->dress_id)
+                ->where('size_id', $data_raw[$p]->size)
+                ->update(['recommendation' => $y]);
+
+                DB::table('param_settings')
+                    ->update(['status_use' => '0']);
+
+                DB::table('param_settings')
+                    ->where('id',$param_id)
+                    ->update(['status_use' => '1']);
+
+                DB::commit();
+            }
+            catch(Exception $error)
+            {
+                DB::rollback();
+                $message = $error->getMessage();
+            }
+        }
+
+        
+    }
+
+    public function generate_recommendation_api(Request $request)
+    {
+        $param_id = $request->param_id;
+        try {
+            $this->generate_recommendation($param_id);
+
+            return response()->json(['status' => true, 'message' => 'success'], 200);
+        }
+        catch(Exception $error)
+        {
+            echo $error->getMessage();
+            return response()->json(['status' => false, 'message' => 'fail'], 200);
+        }
     }
 }
