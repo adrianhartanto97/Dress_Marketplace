@@ -24,7 +24,7 @@ class TestController extends Controller
         $string = "";
         $n = 12;
         $J_sum = 5;
-        $maks_epoch_ffa = 2;
+        $maks_epoch_ffa = 2;//10
         $maks_epoch_psnn = 10;
         $LR = 0.05;
         $jumlah_firefly = 3;

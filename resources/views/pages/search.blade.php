@@ -98,17 +98,16 @@
                                     </label>
 
                                     <div class="col-md-12">
-                                       
-                                        <input type="text" id="price_min" name="price_min" value="1">
-                                         <input type="text" id="price_max"  name="price_max" value="5000000000">
-                                        <input type="text" id="rating_min" name="rating_min" value="0">
-                                        <input type="text" id="rating_max" name="rating_max" value="5">
+                                        <input type="text" id="price_min" name="price_min" value="1" hidden="">
+                                         <input type="text" id="price_max"  name="price_max" value="50000000" hidden="">
+                                        <input type="text" id="rating_min" name="rating_min" value="0" hidden="">
+                                        <input type="text" id="rating_max" name="rating_max" value="5" hidden="">
                                                                                
-                                        <input type="text" id="province" name="province" value="">
+                                        <input type="text" id="province" name="province" value="" hidden="">
                                         <input type="text" id="city" name=
-                                        "city" value="">
+                                        "city" value="" hidden="">
                                         <input type="text" id="courier_id" name=
-                                        "courier_id" value="1">
+                                        "courier_id" value="1" hidden="">
 
                                     </div>
                                 </div>
@@ -167,7 +166,7 @@
                                         <p id="dynamic_pager_content2" class="well">Showing All products</p>
 
                                         @elseif ($filter_result->count!=0)
-                                        <p id="dynamic_pager_content2" class="well">Showing {{$filter_result->count}} products for {{$search_result->query}}</p>
+                                        <p id="dynamic_pager_content2" class="well">Showing {{$filter_result->count}} of {{$filter_result->count_all}}</p>
 
                                         @else 
                                         <p id="dynamic_pager_content2" class="well">No Result</p>
@@ -178,7 +177,7 @@
                             </div>
 
                             @if($has_search == "true")
-                                 @if ($search_result->count!=0)
+                                @if ($search_result->count!=0)
                                 <div class="col-md-12">
                                      <div class="col-md-7">
                                         
@@ -186,21 +185,6 @@
                                      <div class="col-md-4">
                                         <div class="col-md-3">
                                              Sort By
-                                        </div>
-                                        <div class="col-md-9">
-                                             <select class="form-control" name="sort_by">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                @else
-                                <div class="col-md-12">
-                                     <div class="col-md-7">
-                                        
-                                    </div>
-                                     <div class="col-md-4">
-                                        <div class="col-md-3">
-                                             Sort Bye
                                         </div>
                                         <div class="col-md-9">
                                              <select class="form-control" name="sort_by">
@@ -225,21 +209,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @else
-                                <div class="col-md-12">
-                                     <div class="col-md-7">
-                                        
-                                    </div>
-                                     <div class="col-md-4">
-                                        <div class="col-md-3">
-                                             Sort Bye
-                                        </div>
-                                        <div class="col-md-9">
-                                             <select class="form-control" name="sort_by">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
                                  @endif
                             @endif
 
@@ -247,10 +216,10 @@
                     </div>
                     <div class="portlet-body">
 
-                        @if($has_search == true)
+                        @if($has_search == "true")
                             <div class="row" name="list">
                                  @foreach ($search_result->product_info as $w)
-                                <a href="" target="_blank" style="text-decoration:none;">
+                                <a href="{{url('/product_detail')}}/{{$w->product_id}}" target="_blank" style="text-decoration:none;">
                                 <div class="col-xs-6 col-sm-4 col-md-3">
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
@@ -264,10 +233,10 @@
                                 </a>
                                  @endforeach
                             </div>
-                        @else 
+                        @elseif($has_search == "false")
                              <div class="row" name="list">
-                                 @foreach ($filter_result->product_info as $w)
-                                <a href="" target="_blank" style="text-decoration:none;">
+                                 @foreach($filter_result->product_info as $w)
+                                <a href="{{url('/product_detail')}}/{{$w->product_id}}" target="_blank" style="text-decoration:none;" class="sort_item">
                                 <div class="col-xs-6 col-sm-4 col-md-3">
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">

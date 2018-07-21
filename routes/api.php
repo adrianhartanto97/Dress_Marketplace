@@ -82,6 +82,6 @@ Route::post('get_all_product_detail', 'API_Controller\ProductController@get_all_
 Route::post('get_sort_by_list', 'API_Controller\MasterDataController@get_sort_by_list');
 Route::post('sort_by_asc', 'API_Controller\ProductController@sort_by_asc');
 Route::post('sort_by_desc', 'API_Controller\ProductController@sort_by_desc');
-
-
+Route::post('get_sort_by_id', 'API_Controller\ProductController@get_sort_by_id');
+Route::post('get_sort_by_id_store', 'API_Controller\ProductController@get_sort_by_id_store');
 

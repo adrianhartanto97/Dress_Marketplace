@@ -204,7 +204,7 @@ class App2Controller extends Controller
             else{
                 $month=$dt->month;
             }
-       }
+         }
         $client = new Client();
         try {
             $req = $client->post($this->base_url.'financial_history', [
@@ -386,10 +386,12 @@ class App2Controller extends Controller
           
      }
 
-     public function filter (Request $request)
+     
+
+    public function filter (Request $request)
      {
          $jwt = $request->cookie('jwt');
- 
+
         $login_info = $this->get_login_info($jwt);
         $min_order =$request->min_order;
         $price_min=$request->price_min;
@@ -402,29 +404,30 @@ class App2Controller extends Controller
          $client = new Client();
          try {
              $search = $client->post($this->base_url.'advance_search', [
-
                  'form_params' => [
                      'min_order' => $min_order,
+                     'price_min'=>$price_min,
+                     'price_max'=>$price_max,
                      'rating_min' => $rating_min,
                      'rating_max' => $rating_max,
-                     'province'=>$province,
+                     'province'=> $province,
                      'city' => $city,
-                     'courier_id' =>$courier_id,
-                     'price_min'=>$price_min,
-                     'price_max'=>$price_max
+                     'courier_id' => $courier_id
 
                  ]
              ]);
-             $result = json_decode($search->getBody());
- 
-             return view('pages.search',
+             $filter = json_decode($search->getBody());
+
+            return view('pages.search',
                 [
                   'login_info' => $login_info,    
-                  'filter_result' => $result,
+                  'filter_result' => $filter,
                   'has_search' => "false"
-
                 ]
             );
+
+             
+             
          }
          catch (Exception $e) {
              echo $e->getMessage();

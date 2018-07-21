@@ -462,4 +462,100 @@ class ProductController extends Controller
 
     }
 
+     public  function get_sort_by_id(Request $request)
+    {
+        try{
+            $sort_id =$request->sort_id;
+            if($sort_id==1){
+            $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy("product_id","asc")
+                    ->get();
+            $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+
+            }
+            elseif ($sort_id==2) {
+            $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy("created_at","desc")
+                    ->get();
+                $status = true;
+               
+                return response()->json(['status'=>$status, 'product_info'=>$product],200);
+            }
+            elseif($sort_id==3){
+             $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->orderBy("created_at","asc")
+                    ->get();
+             $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+            }
+
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+       
+    }
+
+     public  function get_sort_by_id_store(Request $request)
+    {
+        try{
+            $sort_id =$request->sort_id;
+            $store_id= $request->store_id;
+            if($sort_id==1){
+            $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where("store_id" , $store_id)
+                    ->orderBy("product_id","asc")
+                    ->get();
+            $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+
+            }
+            elseif ($sort_id==2) {
+            $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where("store_id" , $store_id)
+                    ->orderBy("created_at","desc")
+                    ->get();
+                $status = true;
+               
+                return response()->json(['status'=>$status, 'product_info'=>$product],200);
+            }
+            elseif($sort_id==3){
+             $product = DB::table('view_product')
+                    ->select('*')
+                    ->where("product_active_status" , "1")
+                    ->where("store_id" , $store_id)
+                    ->orderBy("created_at","asc")
+                    ->get();
+             $status = true;
+           
+            return response()->json(['status'=>$status, 'product_info'=>$product],200);
+            }
+
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+       
+    }
+
 }

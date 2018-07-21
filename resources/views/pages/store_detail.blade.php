@@ -170,11 +170,11 @@
                                                                 <div class="col-md-4">
                                                                      Sort By
                                                                 </div>
+
                                                                 <div class="col-md-8">
+                                                                    <input type="text" name="id_store" value="{{$store_detail->result->store_id}}" hidden="">
                                                                      <select class="form-control" name="sort_by">
-                                                                        <option value="recommended">recommended</option>
-                                                                        <option value="Newest">Newest</option>
-                                                                        <option value="Oldest">Oldest</option>
+                                                                       
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -185,9 +185,9 @@
                                                 <div class="portlet-body">
 
 
-                                                    <div class="row">
+                                                    <div class="row" name="list">
                                                     @foreach ($store_detail->result->product as $s)
-                                                        <a href="" target="_blank" style="text-decoration:none;">
+                                                        <a href="{{url('/product_detail')}}/{{$s->product_id}}" target="_blank" style="text-decoration:none;">
                                                         <div class="col-xs-6 col-sm-4 col-md-3">
                                                             <div class="thumbnail">
                                                                 <img src="{{asset('/public/storage').'/'.$s->photo}}" alt="" style="width: 100%; height: 20%;">
@@ -204,9 +204,6 @@
                                                   
                                                 </div>
                                             </div>
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +237,6 @@
                                                         <tr>
                                                             <td class="highlight">Description</td>
                                                             <td class="hidden-xs">
-                                                                
                                                                     {{$store_detail->result->description}}
                                                                 
                                                             </td>
@@ -292,40 +288,12 @@
         {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
+        {{HTML::script('public/js/store.js')}}
+
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
     <!--END PAGE LEVEL SCRIPTS-->
-    <script>
-        $( document ).ready(function() {
-            $(".my-rating").starRating({
-                starSize: 25,
-                readOnly: true,   
-            });
-        });
-
-        $("#range_25").ionRangeSlider({
-            type: "double",
-            min: 1,
-            max: 5,
-            from: 1,
-            to: 5,
-            hide_min_max: true,
-            hide_from_to: false,
-            grid: false
-        });
-
-         $("#range_26").ionRangeSlider({
-            type: "double",
-            min: 10000,
-            max: 50000000,
-            from: 10000,
-            to: 50000000,
-            hide_min_max: true,
-            hide_from_to: false,
-            grid: false
-        });
-
-    </script>
+       
 
 
    
