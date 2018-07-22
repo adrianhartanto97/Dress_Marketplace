@@ -3,7 +3,7 @@
                 <div class="page-header-inner ">
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
-                        <a href="{{url('/index')}}">
+                        <a href="{{url('/index')}}" >
                             <img  src="{{asset('public/layouts/layout/img/dress.png')}}" alt="logo" class="logo-default" style="width: 200px;line-height: 200px;margin-top: 8px" /></a>
                         
                     </div>
@@ -24,7 +24,7 @@
                     <form class="search-form search-form-expanded" action="{{ action('Web_Controller\App2Controller@search') }}"" method="post" id="search" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search..." name="product_name" value="">
+                        <input type="text" class="form-control" placeholder="Search..." name="product_name" value="" style="color: white;">
                              <span class="input-group-btn">
                                 <a href="javascript:;" class="btn submit" form="search">
                                     <i class="icon-magnifier"></i>

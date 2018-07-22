@@ -626,4 +626,23 @@ class SellerController extends Controller
 
         var_dump($arr);
     }
+
+    public function update_store_settings(Request $request) {
+        // $size = $request->size;
+        // $price = $request->price_range;
+        // $size[1] = (int)$size[1];
+        $size = $request->size;
+        // var_dump($size);
+        $arr = array();
+
+        foreach ($size as $key => $value) {
+            //echo $value . " in " . $key . ", ";
+            $obj = new stdClass();
+            $obj->size_id = $key;
+            $obj->qty = $value;
+            array_push($arr, $obj);
+        }
+
+        var_dump($arr);
+    }
 }

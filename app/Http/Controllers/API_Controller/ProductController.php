@@ -299,7 +299,7 @@ class ProductController extends Controller
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->orderBy('created_at', 'desc')
-                    ->limit(4)
+                    ->limit(8)
                     ->get();
 
         if ($product == null)
@@ -317,8 +317,8 @@ class ProductController extends Controller
         $product = DB::table('view_product_detail_first_price')
                     ->select('*')
                     ->where("product_active_status" , "1")
-                    ->orderBy('sold')
-                    ->limit(4)
+                    ->orderBy('sold','desc')
+                    ->limit(8)
                     ->get();
 
         if ($product == null)

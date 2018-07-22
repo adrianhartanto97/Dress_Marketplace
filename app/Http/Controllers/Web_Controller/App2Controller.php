@@ -811,4 +811,91 @@ class App2Controller extends Controller
         }
     }
 
+     public function update_store_information(Request $request)
+    {
+        try {
+             $client = new Client();
+             $jwt = $request->cookie('jwt');
+
+
+             $multipart = [
+                [
+                    'name'     => 'token',
+                    'contents' => $jwt
+                ],
+                [
+                    'name'     => 'store_id',
+                    'contents' => $request->store_id
+                ],
+                [
+                    'name'     => 'store_name',
+                    'contents' => $request->store_name
+                ],
+                [
+                    'name'     => 'business_type',
+                    'contents' => $request->business_type
+                ],
+                [
+                    'name'     => 'established_year',
+                    'contents' => $request->established_year
+                ],
+                [
+                    'name'     => 'province',
+                    'contents' => $request->province
+                ],
+                [
+                    'name'     => 'city',
+                    'contents' => $request->city
+                ],
+                [
+                    'name'     => 'contact_person_name',
+                    'contents' => $request->contact_person_name
+                ],
+                [
+                    'name'     => 'contact_person_job_title',
+                    'contents' => $request->contact_person_job_title
+                ],
+                [
+                    'name'     => 'contact_person_phone_number',
+                    'contents' => $request->contact_person_phone_number
+                ],
+                [
+                    'name'     => 'description',
+                    'contents' => $request->description
+                ],
+           
+            ];
+             if (Input::file('photo')) {
+                $photo_file = Input::file('photo');
+                $photo_array = [
+                    'name'     => 'photo',
+                    'contents' => fopen( $photo_file->getRealPath(), 'r'),
+                    'filename' => 'photo.'.$photo_file->getClientOriginalExtension()
+                ];
+                array_push($multipart, $photo_array);
+            }
+            
+
+            if (Input::file('banner')) {
+                $banner_file = Input::file('banner');
+                $banner_array = [
+                    'name'     => 'banner',
+                    'contents' => fopen( $banner_file->getRealPath(), 'r'),
+                    'filename' => 'banner.'.$banner_file->getClientOriginalExtension()
+                ];
+                array_push($multipart, $banner_array);
+            }
+           
+
+            $store = $client->post($this->base_url.'update_store_information', [
+                'multipart' => $multipart
+            ]);
+            $body = json_decode($store->getBody());
+            return Redirect::back()->with('status', $body->status)->with('result', $body->result);
+        }
+         catch (Exception $e) {
+              return Redirect::back()->with('status', false)->with('result', $e);
+        }
+    }
+
 }

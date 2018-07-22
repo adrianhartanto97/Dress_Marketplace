@@ -169,6 +169,3 @@ set_range_slider_value($("#range_26"),$("#price_min"),$("#price_max"),0,10000,10
 
 
 
-
-
-

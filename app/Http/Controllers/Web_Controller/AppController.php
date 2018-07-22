@@ -161,26 +161,7 @@ class AppController extends Controller
                 'name'     => 'description',
                 'contents' => $request->description
             ],
-            // [
-            //     'name'     => 'bank_name',
-            //     'contents' => $request->bank_name
-            // ],
-            // [
-            //     'name'     => 'bank_account_number',
-            //     'contents' => $request->bank_account_number
-            // ],
-            // [
-            //     'name'     => 'branch',
-            //     'contents' => $request->branch
-            // ],
-            // [
-            //     'name'     => 'name_in_bank_account',
-            //     'contents' => $request->name_in_bank_account
-            // ],
-            // [
-            //     'name'     => 'courier',
-            //     'contents' => json_encode($request->courier)
-            // ]
+           
         ];
 
         $courier_list = $request->courier;

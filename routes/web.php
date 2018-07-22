@@ -119,4 +119,4 @@ Route::post('best_seller_product_detail', 'Web_Controller\AppController@best_sel
 Route::get('filter', 'Web_Controller\App2Controller@filter');
 Route::post('filter', 'Web_Controller\App2Controller@filter');
 
-
+Route::post('update_store_information', 'Web_Controller\App2Controller@update_store_information');

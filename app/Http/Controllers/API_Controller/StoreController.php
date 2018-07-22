@@ -207,7 +207,7 @@ class StoreController extends Controller
             }
         }
         catch(Exception $error) {
-            return response()->json(['error'=>$error],500);
+             return response()->json(['status'=>$status,'message'=>$error],200);
         }
 
         return response()->json(['status'=>$status,'message'=>$message],200);
@@ -385,7 +385,7 @@ class StoreController extends Controller
                     ->where('product_id', $p->product_id)
                     ->update(['accept_status' => "2"]);
                 }
-            }
+         }
 
             DB::table('sales_transaction_state')
             ->where('transaction_id', $transaction_id)
@@ -1235,5 +1235,161 @@ class StoreController extends Controller
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
+    }
+
+     public function update_store_information (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->where('store_name',$request->get('store_name'))->count();
+
+            if ($user_store_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+            else{
+                DB::beginTransaction();
+                try{
+                    $store_id = $request->store_id;
+                    $store_name = $request->store_name;
+
+                    $business_type = $request->business_type;
+                    $established_year = $request->established_year;
+                    $province = $request->province;
+                    $city = $request->city;
+                    $contact_person_name = $request->contact_person_name;
+                    $contact_person_job_title = $request->contact_person_job_title;
+                    $contact_person_phone_number = $request->contact_person_phone_number;
+                    $description = $request->description;
+
+
+                    $photo = $request->file('photo');
+                    if ($photo) {
+                        echo $photo;
+                        $photo_path = $photo->storeAs('Store/photo', $store_name."_photo.".$photo->getClientOriginalExtension() , 'public');
+                    }
+                   
+                    $banner = $request->file('banner');
+                    if ($banner) {
+                        echo $banner;
+                        $banner_path = $banner->storeAs('Store/banner', $store_name."_banner.".$banner->getClientOriginalExtension() , 'public');
+                    }
+                    
+                    $store = DB::table('store')
+                                ->where('store_id',$store_id)
+                                ->first();
+
+                    if($store!=null){
+                        if($photo && $banner){
+                            $store = DB::table('store')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+                                    'business_type' => $business_type,
+                                    'established_year' => $established_year,
+                                    'province' => $province,
+                                    'city' => $city,
+                                    'contact_person_name' =>$contact_person_name,
+                                    'contact_person_job_title' =>$contact_person_job_title,
+                                    'contact_person_phone_number' =>$contact_person_phone_number,
+                                    'description'=>$description,
+                                    'photo'=>$photo_path,
+                                    'banner'=>$banner_path
+                                ]
+                            );
+                        }
+                        elseif ($photo) {
+                            $store = DB::table('store')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+                                    'business_type' => $business_type,
+                                    'established_year' => $established_year,
+                                    'province' => $province,
+                                    'city' => $city,
+                                    'contact_person_name' =>$contact_person_name,
+                                    'contact_person_job_title' =>$contact_person_job_title,
+                                    'contact_person_phone_number' =>$contact_person_phone_number,
+                                    'description'=>$description,
+                                    'photo'=>$photo_path,
+                                    'banner'=>$banner_path
+                                ]
+                            );
+                        }
+                        elseif ($banner) {
+                            $store = DB::table('store')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+                                    'business_type' => $business_type,
+                                    'established_year' => $established_year,
+                                    'province' => $province,
+                                    'city' => $city,
+                                    'contact_person_name' =>$contact_person_name,
+                                    'contact_person_job_title' =>$contact_person_job_title,
+                                    'contact_person_phone_number' =>$contact_person_phone_number,
+                                    'description'=>$description,
+                                    'banner'=>$banner_path
+                                ]
+                            );
+                        }
+                        else{
+                            $store = DB::table('store')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+                                    'business_type' => $business_type,
+                                    'established_year' => $established_year,
+                                    'province' => $province,
+                                    'city' => $city,
+                                    'contact_person_name' =>$contact_person_name,
+                                    'contact_person_job_title' =>$contact_person_job_title,
+                                    'contact_person_phone_number' =>$contact_person_phone_number,
+                                    'description'=>$description
+                                    
+                                ]
+                            );
+                        }
+
+                        DB::commit();
+                        $status = true;
+                        $message = "Update Store Information Successfully";
+                        return response()->json(['status'=>$status,'message'=>$message],200);
+
+                        }
+                        else{
+                             DB::rollback();
+                            $status = false;
+                            $message = $error->getMessage();
+                            return response()->json(['status'=>$status,'message'=>$message],200);
+
+                        }
+
+                   
+
+                }
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                     return response()->json(['status'=>$status,'message'=>$message],200);
+
+                }
+
+
+            }
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+
+        }
+        return response()->json(['status'=>$status,'message'=>$message],200);
     }
 }

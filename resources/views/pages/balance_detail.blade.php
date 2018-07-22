@@ -161,7 +161,7 @@
                              <form method="POST" action="{{ action('Web_Controller\App2Controller@withdraw')}}"  id="History">
                                 {{ csrf_field() }}
                                 <div class="col-md-2">
-                                    <select name="date" class="form-control" value="" onclick="getWaktu()">
+                                    <select name="date" class="form-control" value="" onclick="getWaktu()" id="date">
                                         <option value="2018-08">Agustus 2018</option>
                                         <option value="2018-07">July 2018</option>
                                         <option value="2018-06">June 2018</option>
@@ -175,7 +175,7 @@
                             </form>
                              <div class="form-actions">
                                 <div class="col-md-10">
-                                    <button  type="submit" class="btn blue" form="History">Show History</button>
+                                    <button  type="submit" class="btn blue" form="History" onclick="reload()">Show History</button>
                                    <br><br>
                                 </div>
                             </div>

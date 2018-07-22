@@ -47,5 +47,18 @@ jQuery(document).ready(function() {
     });
 });
 
+function reload() {
+  localStorage.setItem('selectedVal',$('#date').val());
+  location.reload(true);
+}
+
+$( document ).ready(function() {
+    var selectedVal = localStorage.getItem('selectedVal');
+    if (selectedVal){
+       $('#date').val(selectedVal)
+    }
+   
+});
+
 
 
