@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use \stdClass;
 
 use App\Store;
 use App\Store_Courier_Service;
@@ -65,10 +66,21 @@ class ProductController extends Controller
                                 ->get();
                     $product->size = $size;
 
-                    $price = DB::table('product_price')
-                                ->select('*')
-                                ->where("product_id" , $product_id)
-                                ->get();
+                    if ($product->available_status == 'Y') {
+                        $price = DB::table('product_price')
+                                    ->select('*')
+                                    ->where("product_id" , $product_id)
+                                    ->get();
+                    }
+                    else {
+                        $price  = [];
+                        $obj = new stdClass();
+                        $obj->qty_min = 1;
+                        $obj->qty_max = 'max';
+                        $obj->price = "(category : ".$product->max_price.")";
+
+                        array_push($price,$obj);
+                    }
                     
                     $product->price = $price;
 

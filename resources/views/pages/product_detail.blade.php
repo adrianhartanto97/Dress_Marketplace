@@ -56,7 +56,7 @@
                                             <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
                                         </div>
                                     </form>
-                                    <button  type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false) disabled @endif>Add to Wishlist</button>
+                                    <button  type="submit" class="btn blue" form="form2"  @if($login_info->login_status == false or $product_detail->product_info->available_status == 'N') disabled @endif>Add to Wishlist</button>
                                  @endif
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12" style="text-align:center; margin-top:20px;">
-                                    <button type="button" class="btn red btn-lg" data-toggle="modal" href="#add_to_bag" @if($login_info->login_status == false) disabled @endif>Add to Bag</button>
+                                    <button type="button" class="btn red btn-lg" data-toggle="modal" href="#add_to_bag" @if($login_info->login_status == false or $product_detail->product_info->available_status == 'N') disabled @endif>Add to Bag</button>
                                 </div>
                             </div>
 
