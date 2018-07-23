@@ -261,14 +261,16 @@ class UserController extends Controller
 
 
     
-      public function add_courier (Request $request)
+      public function show_store_courier (Request $request)
     {
         try {
             $jwt = $request->token;
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
 
-            $user_count = DB::table('user')->where('user_id',$user_id)->count();
+
+            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->where('store_name',$request->get('store_name'))->count();
+            $user_count = DB::table('')->where('user_id',$user_id)->count();
 
             if ($user_count == 0) {
                 $status = false;

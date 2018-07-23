@@ -1392,4 +1392,155 @@ class StoreController extends Controller
         }
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    public function delete_user_store_courier(Request $request) {
+
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->count();
+
+            if ($user_store_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+            else{
+                DB::beginTransaction();
+                try{
+                    $store_id = $request->store_id;
+                    $courier_id = $request->courier_id;
+
+                    
+                    $courier = DB::table('store_courier_service')
+                                ->where('store_id',$store_id)
+                                ->where('courier_id',$courier_id)
+                                ->first();
+
+                    if($courier!=null){
+                     DB::table('store_courier_service')
+                             ->where('store_id',$store_id)
+                            ->where('courier_id',$courier_id)
+                            ->delete();
+
+                        DB::commit();
+                        $status = true;
+                        $message = "record successfully deleted";
+                        return response()->json(['status'=>$status,'message'=>$message],200);
+
+                        }
+                        else{
+                             DB::rollback();
+                            $status = false;
+                            $message = $error->getMessage();
+                            return response()->json(['status'=>$status,'message'=>$message],200);
+
+                        }
+
+                   
+
+                }
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                     return response()->json(['status'=>$status,'message'=>$message],200);
+
+                }
+
+
+            }
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+
+        }
+        return response()->json(['status'=>$status,'message'=>$message],200);
+
+
+    } 
+
+    public function insert_user_store_courier(Request $request) {
+
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->count();
+
+           
+            if ($user_store_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+
+            else{
+                DB::beginTransaction();
+                try{
+
+                
+                    $store_id = $request->store_id;
+                    $courier_id = $request->courier_id;
+
+                    $courier_count = DB::table('store_courier_service')
+                                ->where('store_id',$store_id)
+                                ->where('courier_id',$courier_id)
+                                ->count();
+
+                    if ($courier_count == 0) {
+                        $courier = new Store_Courier_Service();
+                        $courier->store_id = $store_id;
+                        $courier->courier_id = $courier_id;
+                        $courier->save();
+                        DB::commit();
+                        $status = true;
+                        $message = "courier successfully added";
+                        return response()->json(['status'=>$status,'message'=>$message],200);
+
+                        }
+                        
+                    
+                    else{
+                        DB::rollback();
+                        $status = false;
+                        $message ="Courier Already Exists";
+                        return response()->json(['status'=>$status,'message'=>$message],200);
+
+                    }
+            
+                }
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                     return response()->json(['status'=>$status,'message'=>$message],200);
+
+                }
+
+
+            }
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+
+        }
+        return response()->json(['status'=>$status,'message'=>$message],200);
+
+
+    } 
+
+   
+
+   
+
 }

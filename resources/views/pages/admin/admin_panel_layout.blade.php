@@ -55,11 +55,10 @@
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
                         <a href="#">
-                            <h3 style="color:white; margin:10px;">Admin Page</h3>
+                            <h3 style="color:white; margin:10px;" class="logo-default">Admin Page</h3>
                             <!-- <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" />  -->
                         </a>
-                        <div class="menu-toggler sidebar-toggler">
-                            <span></span>
+                    <div class="menu-toggler sidebar-toggler" style="padding: 6px;">    <span></span>
                         </div>
                     </div>
                     <!-- END LOGO -->

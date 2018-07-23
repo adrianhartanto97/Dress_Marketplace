@@ -14,6 +14,8 @@ use \Firebase\JWT\JWT;
 use \Exception;
 use \stdClass;
 use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
+
 
 class SellerController extends Controller
 {
@@ -96,14 +98,86 @@ class SellerController extends Controller
         return $store;
     }
 
+     private function get_user_courier ($jwt,$store_id) {
+        $result = null;
+
+        try {
+            $client = new Client();
+            $response = $client->post($this->base_url.'get_user_store_detail', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'store_id' =>$store_id
+                ]
+            ]);
+
+            $body = json_decode($response->getBody());
+            
+            if ($body->status == true) {
+                $result = $body->result;
+            }
+        }
+        catch(Exception $e) {
+
+        }
+             
+        return $result;
+    }
+
+     private function get_financial_history ($jwt,$year_value,$month_value) {
+        $login_info = $this->get_login_info($jwt);
+        $year= $year_value;
+        $month = $month_value;
+
+        $dt = Carbon::today();
+        if($year=="") $year = $dt->year;
+        if($month=="") {
+            if($month<10){
+                $month="0".$dt->month;
+            }
+            else{
+                $month=$dt->month;
+            }
+         }
+
+
+        try {
+            $client = new Client();
+            $req = $client->post($this->base_url.'financial_history', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'year' => $year,
+                    'month' => $month
+                ]
+            ]);
+            $res = json_decode($req->getBody())->result;
+
+
+            $body = json_decode($res->getBody());
+            
+            if ($body->status == true) {
+                $result = $body->result;
+            }
+        }
+        catch(Exception $e) {
+
+        }
+             
+        return $result;
+    }
+
     public function seller_panel_dashboard (Request $request) 
     {
         $jwt = $request->cookie('jwt');
+
+        $year = $request->year;
+        $month = $request->month;
+
         $store = $this->check_user_store($jwt);
+        $financial_history = $this->get_financial_history($jwt,$year,$month);
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_dashboard', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'dashboard']);
+            return view('pages.seller_panel_dashboard', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'dashboard', 'financial_history' => $financial_history]);
         }
         else {
             return redirect('index');
@@ -116,8 +190,10 @@ class SellerController extends Controller
         $store = $this->check_user_store($jwt);
 
         if ($store) {
+            $store_id = $store->store_id;
+            $courier = $this->get_user_courier($jwt,$store_id);
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_store_settings', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'store_settings']);
+            return view('pages.seller_panel_store_settings', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'store_settings', 'result'=>$courier]);
         }
         else {
             return redirect('index');

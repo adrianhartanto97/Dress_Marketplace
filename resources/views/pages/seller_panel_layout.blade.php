@@ -56,10 +56,10 @@
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
                         <a href="#">
-                            <h3 style="color:white; margin:10px;">{{$store_info->store_name}}</h3>
-                            <!-- <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" />  -->
+                            <h3 style="color:white; margin:10px;" class="logo-default">{{$store_info->store_name}}</h3>
+                           <!--  <img src="{{asset('/public/storage').'/'.$store_info->photo}}" alt="logo" class="logo-default" style="width: 40px;height: 40px;margin-top:5px" / -->
                         </a>
-                        <div class="menu-toggler sidebar-toggler">
+                        <div class="menu-toggler sidebar-toggler" style="padding: 6px;">
                             <span></span>
                         </div>
                     </div>

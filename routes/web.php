@@ -120,3 +120,6 @@ Route::get('filter', 'Web_Controller\App2Controller@filter');
 Route::post('filter', 'Web_Controller\App2Controller@filter');
 
 Route::post('update_store_information', 'Web_Controller\App2Controller@update_store_information');
+Route::post('delete_user_store_courier', 'Web_Controller\App2Controller@delete_user_store_courier');
+Route::post('insert_user_store_courier', 'Web_Controller\App2Controller@insert_user_store_courier');
+

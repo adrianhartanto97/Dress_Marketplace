@@ -87,6 +87,9 @@ function addCSS(filename){
        
        
 jQuery(document).ready(function() {
+    App.blockUI({
+        boxed: true
+    });
     var province_list = null;
     var city_list = null;
     var courier_list = null;
@@ -347,7 +350,7 @@ jQuery(document).ready(function() {
     }
     localStorage.clear();
 
-
+App.unblockUI();
     
 });
 

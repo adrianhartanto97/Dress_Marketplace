@@ -92,4 +92,8 @@ Route::post('update_user_profile', 'API_Controller\UserController@update_user_pr
 Route::post('update_user_image', 'API_Controller\UserController@update_user_image');
 Route::post('update_user_password', 'API_Controller\UserController@update_user_password');
 
- 
+Route::post('delete_user_store_courier', 'API_Controller\StoreController@delete_user_store_courier');
+
+Route::post('insert_user_store_courier', 'API_Controller\StoreController@insert_user_store_courier');
+
+

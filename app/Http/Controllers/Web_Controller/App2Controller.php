@@ -898,4 +898,64 @@ class App2Controller extends Controller
         }
     }
 
+     public function delete_user_store_courier (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $store_id = $request->store_id;
+        $courier_id = $request->courier_id;
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'delete_user_store_courier', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'store_id' => $store_id,
+                    'courier_id' => $courier_id
+
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
+
+     public function insert_user_store_courier (Request $request)
+    {
+        $jwt = $request->cookie('jwt');
+        $store_id = $request->store_id;
+        $courier_id = $request->courier_id;
+
+    
+        $client = new Client();
+        try {
+            $res = $client->post($this->base_url.'insert_user_store_courier', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'store_id' => $store_id,
+                    'courier_id' => $courier_id
+
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
+
 }

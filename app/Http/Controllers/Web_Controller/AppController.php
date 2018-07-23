@@ -306,8 +306,6 @@ class AppController extends Controller
 
     }
 
-   
-
     public function add_to_bag (Request $request)
     {
         $product_id= $request->product_id;

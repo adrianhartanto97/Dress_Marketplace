@@ -34,8 +34,6 @@
                 @endif
                        
                 <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@update_store_information') }}" id="save_change" method="POST" enctype="multipart/form-data">
-
-
                 {{ csrf_field() }}
                  <input type="text" name="store_id" value="{{$store_info->store_id}}" hidden="true" />
                     <div class="form-body">
@@ -80,7 +78,7 @@
                                         <label class="control-label col-md-3">Province
                                             <span class="required"> * </span>
                                         </label>
-                                         <input type="text" value="{{$store_info->province}}" name="province">
+                                         <input type="text" value="{{$store_info->province}}.text" name="province">
 
                                         <div class="col-md-4">
                                             <select class="form-control" name="province" value="{{$store_info->province}}" id="province">
@@ -187,6 +185,17 @@
                 </div>
             </div>
             <div class="tab-pane" id="tab_2">
+                @if (session()->has('status') && session()->get('status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @elseif (session()->has('status') && session()->get('status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @endif
                  <form class="form-horizontal" action="" id="submit_form" method="POST">
                 {{ csrf_field() }}
                     <div class="form-body">
@@ -194,10 +203,20 @@
                              <div class = "col-md-3">
                              </div>
                             <div class = "col-md-6">
-                                    
                                     <div class="portlet-body">
-                                        <div class="form-group">
-                                         
+                                        @if ($result->ktp != "")
+                                         <div class="form-group">
+                                            <div class="col-md-6" >
+                                                <div class="col-md-12">
+                                                    <div class="control-label" style="text-align: left;">KTP</div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align: left;">
+                                                    <span>Status : submitted yet</span>                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @else
+                                         <div class="form-group">
                                             <div class="col-md-6" >
                                                 <div class="col-md-12">
                                                     <div class="control-label" style="text-align: left;">KTP</div>
@@ -205,7 +224,6 @@
                                                 <div class="col-md-12" style="text-align: left;">
                                                     <span>Status : not submitted yet</span>                    
                                                 </div>
-
                                             </div>
 
                                             <div class="col-md-3">
@@ -224,7 +242,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
 
+                                         @if ($result->siup != "")
+                                         <div class="form-group">
+                                             <div class="col-md-6" >
+                                                <div class="col-md-12">
+                                                    <div class="control-label" style="text-align: left;">SIUP</div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align: left;">
+                                                    <span>Status : submitted yet</span>                    
+                                                </div>
+
+                                            </div>
+                                           
+                                          
+                                        </div>
+                                        @else
                                         <div class="form-group">
                                              <div class="col-md-6" >
                                                 <div class="col-md-12">
@@ -235,7 +269,6 @@
                                                 </div>
 
                                             </div>
-
                                            
                                             <div class="col-md-3">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -253,7 +286,22 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
+                                       
 
+                                        @if ($result->npwp != "")
+                                        <div class="form-group">
+                                             <div class="col-md-6" >
+                                                <div class="col-md-12">
+                                                    <div class="control-label" style="text-align: left;">NPWP</div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align: left;">
+                                                    <span>Status : submitted yet</span>                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @else
                                         <div class="form-group">
                                              <div class="col-md-6" >
                                                 <div class="col-md-12">
@@ -262,9 +310,7 @@
                                                 <div class="col-md-12" style="text-align: left;">
                                                     <span>Status : not submitted yet</span>                    
                                                 </div>
-
                                             </div>
-
                                             <div class="col-md-3">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <div class="input-group input-large">
@@ -281,8 +327,22 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
 
-                                        <div class="form-group">
+                                        @if ($result->skdp != "")
+                                         <div class="form-group">
+                                             <div class="col-md-6" >
+                                                <div class="col-md-12">
+                                                    <div class="control-label" style="text-align: left;">SKDP</div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align: left;">
+                                                    <span>Status : submitted yet</span>                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @else
+                                         <div class="form-group">
                                                 <div class="col-md-6" >
                                                     <div class="col-md-12">
                                                         <div class="control-label" style="text-align: left;">SKDP</div>
@@ -308,6 +368,20 @@
                                             </div>
                                         </div>
 
+                                        @endif
+
+                                         @if ($result->tdp != "")
+                                         <div class="form-group">
+                                             <div class="col-md-6" >
+                                                <div class="col-md-12">
+                                                    <div class="control-label" style="text-align: left;">TDP</div>
+                                                </div>
+                                                <div class="col-md-12" style="text-align: left;">
+                                                    <span>Status : submitted yet</span>                    
+                                                </div>
+                                            </div>  
+                                        </div>        
+                                         @else
                                         <div class="form-group">
                                                 <div class="col-md-6" >
                                                     <div class="col-md-12">
@@ -333,6 +407,31 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
+
+                                       @if ($result->ktp == "" || $result->siup == "" ||$result->npwp == "" ||$result->skdp == "" ||$result->tdp == "" )
+                                        <form method="POST" action=""  id="History">
+                                            {{ csrf_field() }}
+                                            <div class="col-md-2">
+                                                <select name="date" class="form-control" value=""  id="date">
+                                                    <option value="2018-08">Agustus 2018</option>
+                                                    <option value="2018-07">July 2018</option>
+                                                    <option value="2018-06">June 2018</option>
+                                                    <option value="2018-05">May 2018</option>
+                                                </select>  
+                                                <input type="text" name="year"  value="" hidden=""> 
+                                                <input type="text" name="month" value="" hidden="">        
+                                            </div>
+                                        </form>
+                                         <div class="form-actions">
+                                            <div class="col-md-10">
+                                                <button  type="submit" class="btn blue" form="History" onclick="reload()">Show History</button>
+                                               <br><br>
+                                            </div>
+                                        </div>
+
+                                       @endif
+
                                     </div>
                             </div>
                             <div class = "col-md-3">
@@ -343,8 +442,18 @@
            
             </div>
             <div class="tab-pane" id="tab_3">
-                    <form class="form-horizontal" action="" id="submit_form" method="POST">
-                {{ csrf_field() }}
+                @if (session()->has('status') && session()->get('status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @elseif (session()->has('status') && session()->get('status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @endif
+            
                     <div class="form-body">
                         <div class = "row">
                             <div class = "col-md-12">
@@ -352,23 +461,30 @@
                                     <div class="col-md-3">
                                     Courier Service                                
                                     </div>
+                                   <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@insert_user_store_courier') }}" id="insert_courier" method="POST" enctype="multipart/form-data">
+                                                {{ csrf_field() }}
+
+                                            <input type="text" name="store_id" value="{{$result->store_id}}" hidden="">
+
+                                        <div class="col-md-3">
+                                            <select name="courier_id" class="form-control" value="">
+                                                <option value="1">JNE</option>
+                                                <option value="2">POS Indonesia</option>
+                                                <option value="3">TIKI</option>
+                                            </select>                                    
+                                        </div>
+                                    </form>
                                     <div class="col-md-3">
-                                        <select name="gender" class="form-control" value="" id="History">
-                                            <option value="JNE">JNE</option>
-                                            <option value="TIKI">TIKI</option>
-                                          
-                                        </select>                                    
+                                    </div>
+                                    <div class="col-md-3">
+                                         <div class="form-actions">
+                                           <button type="submit" class="btn blue" form="insert_courier" onclick="refresh()">Add Courier</button><br><br>
+                                        </div>
                                     </div>
                                 </div>
                                
                                 <div class="form-group" style="text-align: center;">
-                                    <div class="col-md-3">
-                                    </div>
-                                    <div class="col-md-3">
-                                         <button type="button" class="btn blue" data-toggle="modal" href="" >Add Courier</button><br><br>
-                                    </div>
                                     
-                                   
                                 </div>
                                 <div class="form-group" style="text-align: center;">
                                     <div class="col-md-2">
@@ -377,23 +493,30 @@
                                         <div class="portlet-body">
                                         <table class="table table-striped table-bordered table-hover" id="sample_2">
                                             <thead>
-                                                <tr>
-                                                    <th>Courier Code</th>
-                                                    <th>Courier Name</th>
-                                                    <th>Action</th>
-                                                    
+                                                <tr style="text-align: center;">
+                                                    <th style="text-align: center;">Courier Name</th>
+                                                    <th style="text-align: center;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td> JNE </td>
-                                                    <td> Jalur Nugroho Ekokurir </td>
-                                                    <td> <a>Delete</a> </td>
-                                                 
+                                               <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@delete_user_store_courier') }}" id="delete_courier" method="POST" enctype="multipart/form-data">
+                                                {{ csrf_field() }}
+                                                @foreach($result->courier_service as $c)
+                                                <tr style="text-align: center;">
+                                                    <td> {{$c->courier_name}}</td>
+                                                    <td> 
+                                                        <input type="text" name="courier_id" value="{{$c->courier_id}}" hidden="">
 
+                                                        <input type="text" name="store_id" value="{{$result->store_id}}" hidden="">
+
+                                                        <div class="form-actions">
+                                                           <button type="submit" class="btn red" form="delete_courier" >Delete</button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
-                                              
-                                               
+                                                @endforeach
+                                                 </form>
+
                                             </tbody>
                                         </table>
 
@@ -401,14 +524,7 @@
                                     </div>
                                      <div class="col-md-2">
                                     </div>
-
-                                    
                                 </div>
-
-
-                                
-
-                               
                             </div>
                         </div>
                     </div>
@@ -432,9 +548,8 @@
     <script>
     
         document.getElementById('business_type').value="{{$store_info->business_type}}";
-        document.getElementById('province').value="{{$store_info->province}}";
-        document.getElementById('city').value="{{$store_info->city}}";
-       
+      
+      
 
     </script>
 @endsection
