@@ -2,7 +2,7 @@
 
 @section('css')
     {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
-
+   
 @endsection
    
 @section('content')
@@ -47,54 +47,54 @@
 
                 <h1>New Product</h1>
                 <a href="{{url('/search')}}" >Go to all product page</a>
-
-                 <div class="portlet light bordered">
+            
+                <div class="portlet light bordered">
                     <div class="portlet-body">
-                        <div class="row">
+                         <div class="row">
                            @foreach ($all_product->new_product->product_info as $w)
-                            <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
-                            <div class="col-xs-6 col-sm-4 col-md-3">
-                                <div class="thumbnail">
-                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
-                                    <div class="caption" style="text-align:center;">
-                                        <h4>{{$w->product_name}}</h4>
-                                        <h3>{{$w->store_name}}</h3>
+                             <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                                    <div class="thumbnail">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                            <div style="height: 60px;">
+                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                            </div>
+                                           
+                                        <b>{{$w->store_name}}</b>
                                         <h3>IDR {{$w->max_price}}</h3>
-
-                                        <p><a href="$" target="_blank" class="my-rating satu" data-rating="{{$w->average_rating}}"></a></p>
+                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
                                     </div>
                                 </div>
-                            </div>
-                            </a>
-                         @endforeach
+                             </a>
+                             @endforeach
                         </div>
                     </div>
                 </div>
-
                 <h1>Best Seller</h1>
-
                  <div class="portlet light bordered">
                     <div class="portlet-body">
-                        <div class="row">
-                           @foreach ($all_product->best_product->product_info as $w)
-                            <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
-                            <div class="col-xs-6 col-sm-4 col-md-3">
-                                <div class="thumbnail">
-                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
-                                    <div class="caption" style="text-align:center;">
-                                        <h4>{{$w->product_name}}</h4>
-                                        <h3>{{$w->store_name}}</h3>
+                         <div class="row">
+                             @foreach ($all_product->best_product->product_info as $w)
+                             <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                                    <div class="thumbnail">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                            <div style="height: 60px;">
+                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                            </div>
+                                           
+                                        <b>{{$w->store_name}}</b>
                                         <h3>IDR {{$w->max_price}}</h3>
-
-                                         <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
+                                         <p class="my-rating" data-rating="4"></p>
                                     </div>
                                 </div>
-                            </div>
-                            </a>
-                         @endforeach
+                             </a>
+                             @endforeach
                         </div>
                     </div>
                 </div>
+
+                
             </div>
             </div>
     </div>

@@ -220,35 +220,39 @@
                         @if($has_search == "true")
                             <div class="row" name="list">
                                  @foreach ($search_result->product_info as $w)
-                                <a href="{{url('/product_detail')}}/{{$w->product_id}}" target="_blank" style="text-decoration:none;">
-                                <div class="col-xs-6 col-sm-4 col-md-3">
+                               <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
                                     <div class="thumbnail">
-                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
-                                        <div class="caption" style="text-align:center;">
-                                            <h4>{{$w->product_name}}</h4>
-                                            <h3>IDR {{$w->max_price}}</h3>
-                                            <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
-                                        </div>
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                            <div style="height: 60px;">
+                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                            </div>
+                                           
+                                        <b>{{$w->store_name}}</b>
+                                        <h3>IDR {{$w->max_price}}</h3>
+                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
                                     </div>
                                 </div>
-                                </a>
+                             </a>
                                  @endforeach
                             </div>
                         @elseif($has_search == "false")
                              <div class="row" name="list">
                                  @foreach($filter_result->product_info as $w)
-                                <a href="{{url('/product_detail')}}/{{$w->product_id}}" target="_blank" style="text-decoration:none;" class="sort_item">
-                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                <div class=" col-xs-6 col-sm-4 col-md-3 center">
                                     <div class="thumbnail">
-                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 35%;">
-                                        <div class="caption" style="text-align:center;">
-                                            <h4>{{$w->product_name}}</h4>
-                                            <h3>IDR {{$w->max_price}}</h3>
-                                            <p><a href="$" target="_blank" class="my-rating satu" data-rating="3"></a></p>
-                                        </div>
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                            <div style="height: 60px;">
+                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                            </div>
+                                           
+                                        <b>{{$w->store_name}}</b>
+                                        <h3>IDR {{$w->max_price}}</h3>
+                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
                                     </div>
                                 </div>
-                                </a>
+                             </a>
                                  @endforeach
                             </div>
                          @endif

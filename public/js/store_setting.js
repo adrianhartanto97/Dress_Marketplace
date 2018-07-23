@@ -6,6 +6,11 @@ jQuery(document).ready(function() {
     var province_input = $("select[name='province']");
     var city_input = $("select[name='city']");
     var courier_input = $("#courier_input");
+
+     var province_value = document.querySelector('input[name="province"]');
+    var city_value = document.querySelector('input[name="city"]');
+
+
     $.ajax({
         type:"POST",
         url : "http://localhost/dress_marketplace/api/get_province_list",
@@ -39,6 +44,10 @@ jQuery(document).ready(function() {
                         $('<option></option>').val(value.city_id).html(value.city_type+" "+value.city_name)
                     );
                 });
+                 var selected = $("select[name='province'] option:selected").val();
+                province_value.value=selected;
+                var selected2 = $("select[name='city'] option:selected").val();
+                city_value.value=selected2;
             },
             error: function() {
                 alert('Error occured');
@@ -47,6 +56,11 @@ jQuery(document).ready(function() {
     });
 
     province_input.trigger('change');
+
+    city_input.change(function() {
+        var selected2 = $("select[name='city'] option:selected").val();
+        city_value.value=selected2;
+    });
 
     $.ajax({
         type:"POST",
@@ -67,5 +81,11 @@ jQuery(document).ready(function() {
             alert('Error occured');
         }
     });
-    App.unblockUI();
+
+ 
+   
+
+
 });
+
+  

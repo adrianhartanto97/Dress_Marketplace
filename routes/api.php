@@ -87,4 +87,9 @@ Route::post('get_sort_by_id_store', 'API_Controller\ProductController@get_sort_b
 
 Route::post('update_store_information', 'API_Controller\StoreController@update_store_information');
 
-Route::post('update_user_profile', 'API_Controller\StoreController@update_store_information');
+Route::post('update_user_profile', 'API_Controller\UserController@update_user_profile');
+
+Route::post('update_user_image', 'API_Controller\UserController@update_user_image');
+Route::post('update_user_password', 'API_Controller\UserController@update_user_password');
+
+ 

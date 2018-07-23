@@ -117,7 +117,7 @@ class UserController extends Controller
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
 
-            $user_count = DB::table('view_user_store')->where('user_id',$user_id)->count();
+            $user_count = DB::table('user')->where('user_id',$user_id)->count();
 
             if ($user_count == 0) {
                 $status = false;
@@ -127,39 +127,22 @@ class UserController extends Controller
                 DB::beginTransaction();
                 try{
                     $full_name = $request->full_name;
-                    $store_name = $request->store_name;
+                    $phone_number = $request->phone_number;
 
-                    $business_type = $request->business_type;
-                    $established_year = $request->established_year;
-                    $province = $request->province;
-                    $city = $request->city;
-                    $contact_person_name = $request->contact_person_name;
-                    $contact_person_job_title = $request->contact_person_job_title;
-                    $contact_person_phone_number = $request->contact_person_phone_number;
-                    $description = $request->description;
-
-                   
-
-                    $user = DB::table('store')
-                            ->where('store_id',$store_id)
+                  
+                    
+                    $user = DB::table('user')
+                            ->where('user_id',$user_id)
                             ->update(
                                 [
-                                    'business_type' => $business_type,
-                                    'established_year' => $established_year,
-                                    'province' => $province,
-                                    'city' => $city,
-                                    'contact_person_name' =>$contact_person_name,
-                                    'contact_person_job_title' =>$contact_person_job_title,
-                                    'contact_person_phone_number' =>$contact_person_phone_number,
-                                    'description'=>$description,
-                                    'photo'=>$photo_path,
-                                    'banner'=>$banner_path
+                                    'full_name'=> $full_name,
+                                    'phone_number' => $phone_number
                                 ]
                             );
 
                     DB::commit();
                     $status = true;
-                    $message = "Update Store Information Successfully";
+                    $message = "Update User Information Successfully";
 
                 }
                 catch(Exception $error) {
@@ -171,8 +154,158 @@ class UserController extends Controller
 
             }
             
-           
+        }
+        catch(Exception $error)
+        {
+           return response()->json(['error'=>$error],500);
+        }
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+     public function update_user_image (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
 
+            $user_count = DB::table('user')->where('user_id',$user_id)->count();
+
+            if ($user_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+            else{
+                DB::beginTransaction();
+                try{
+
+                    $avatar = $request->file('avatar');
+                    if ($avatar) {
+                        echo $avatar;
+                        $avatar_path = $avatar->storeAs('profile_image', $user_id."_avatar.".$avatar->getClientOriginalExtension() , 'public');
+                    }
+                    $user = DB::table('user')
+                            ->where('user_id',$user_id)
+                            ->update(
+                                [
+
+                                    'avatar' => $avatar_path
+                                ]
+                            );
+
+                    DB::commit();
+                    $status = true;
+                    $message = "Update User Information Successfully";
+
+                }
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                }
+
+
+            }
+            
+        }
+        catch(Exception $error)
+        {
+           return response()->json(['error'=>$error],500);
+        }
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+    public function update_user_password  (Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+        
+            $password = $request->password;
+            $new_password = $request->new_password;
+
+            $password_dbase = DB::table('user')->where('user_id',$user_id)->first()->password;
+
+            if(!Hash::check($password, $password_dbase))
+            {
+                $status = false;
+                $message = "Wrong Password";
+            }
+            else {
+                
+
+                DB::table('user')
+                ->where('user_id', $user_id)
+                ->update(
+                    [ 
+                         'password' => bcrypt($request->get('new_password'))
+                     ]
+                );
+
+                DB::commit();
+                $status = true;
+                $message = "Update Password Successfully";
+            }
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+
+    
+      public function add_courier (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $user_count = DB::table('user')->where('user_id',$user_id)->count();
+
+            if ($user_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+            else{
+                DB::beginTransaction();
+                try{
+
+                    $avatar = $request->file('avatar');
+                    if ($avatar) {
+                        echo $avatar;
+                        $avatar_path = $avatar->storeAs('profile_image', $user_id."_avatar.".$avatar->getClientOriginalExtension() , 'public');
+                    }
+                    $user = DB::table('user')
+                            ->where('user_id',$user_id)
+                            ->update(
+                                [
+
+                                    'avatar' => $avatar_path
+                                ]
+                            );
+
+                    DB::commit();
+                    $status = true;
+                    $message = "Update User Information Successfully";
+
+                }
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                }
+
+
+            }
+            
         }
         catch(Exception $error)
         {

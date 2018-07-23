@@ -80,8 +80,10 @@
                                         <label class="control-label col-md-3">Province
                                             <span class="required"> * </span>
                                         </label>
+                                         <input type="text" value="{{$store_info->province}}" name="province">
+
                                         <div class="col-md-4">
-                                            <select class="form-control" name="province" id="province">
+                                            <select class="form-control" name="province" value="{{$store_info->province}}" id="province">
                                             </select>
                                         </div>
                                     </div>
@@ -89,8 +91,9 @@
                                         <label class="control-label col-md-3">City
                                             <span class="required"> * </span>
                                         </label>
+                                        <input type="text" value="{{$store_info->city}}" name="city" >
                                         <div class="col-md-4">
-                                            <select class="form-control" name="city" id="city">
+                                            <select class="form-control" name="city" value="{{$store_info->city}}" id="city">
                                             </select>
                                         </div>
                                     </div>
@@ -363,7 +366,6 @@
                                     </div>
                                     <div class="col-md-3">
                                          <button type="button" class="btn blue" data-toggle="modal" href="" >Add Courier</button><br><br>
-
                                     </div>
                                     
                                    
@@ -432,8 +434,7 @@
         document.getElementById('business_type').value="{{$store_info->business_type}}";
         document.getElementById('province').value="{{$store_info->province}}";
         document.getElementById('city').value="{{$store_info->city}}";
-
-    
+       
 
     </script>
 @endsection
