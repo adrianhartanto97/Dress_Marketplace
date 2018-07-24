@@ -735,7 +735,7 @@ class AppController extends Controller
             //$transaction = new LengthAwarePaginator($collection, count($collection), 1, 1, ['path'=>url('transaction_history')]);
             
             $page = Input::get('page', 1);
-            $perPage = 5;
+            $perPage = 1;
 	        
 	        $transaction = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('transaction_history')]);
 

@@ -198,23 +198,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="center">
-                                                <!-- <tr>
-                                                    <td> 12 Juli 2018 </td>
-                                                    <td> Isi Ulang </td>
-                                                    <td> Rp 11.000.000</td>
-                                                    <td> -</td>
-                                                    <td> Rp 11.000.000</td>
-                                                    <td> Berhasil </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td> 13 Juli 2018 </td>
-                                                    <td> Tarik Tunai </td>
-                                                    <td>  -</td>
-                                                    <td> Rp 1.000.000</td>
-                                                    <td> Rp 10.000.000</td>
-                                                    <td> Berhasil </td>
-                                                </tr> -->
+                                          
                                                 @foreach ($financial_history as $h)
                                                 <tr>
                                                     <td> {{$h->date}}</td>

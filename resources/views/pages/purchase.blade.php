@@ -71,7 +71,9 @@
 
                                     @foreach($p->order_store as $store)
                                     <div class="portlet box green-meadow" style="margin-top:20px;">
+
                                         <div class="portlet-title">
+
                                                 <div class="row" style="margin-top:10px;">
                                                     <div class="col-md-6">
                                                         {{$store->order_number}}
@@ -114,7 +116,8 @@
                                                                         <tr>
                                                                         <td>
                                                                                 <img src="{{asset('/public/storage/').'/'.$pr->product_photo}}" width="80px" style="margin: 0 auto;">
-                                                                                <span style="margin-left:20px;"></span><b>{{$pr->product_name}}</b>
+                                                                                <span style="margin-left:20px;"></span>
+                                                                                <b><a href="product_detail/{{$pr->product_id}}">{{$pr->product_name}}</a></b>
                                                                         </td>
                                                                         <td style="text-align:center;vertical-align:middle;">
                                                                                 IDR {{number_format($pr->price_unit)}}
@@ -243,6 +246,7 @@
                                             {{$o->store_name}}
                                         </div>
                                     </div>
+                                  
                                 </div>
                                 <div class="portlet-body">
                                     <form action="#" class="form-horizontal">
@@ -496,6 +500,7 @@
                                     
                                 </div>
                             </div>   
+
                             @endforeach
                         </div>
                         <div class="tab-pane" id="tab_3">

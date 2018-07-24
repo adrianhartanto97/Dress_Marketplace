@@ -57,7 +57,13 @@
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
                                             <div style="height: 60px;">
-                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                                 <h4 class="black">
+                                                    @if(strlen($w->product_name) > 60 )
+                                                    {{substr($w->product_name,0,60)."..."}}
+                                                    @else
+                                                    {{$w->product_name}}
+                                                    @endif
+                                                </h4>
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
@@ -80,7 +86,13 @@
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
                                             <div style="height: 60px;">
-                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                                 <h4 class="black">
+                                                    @if(strlen($w->product_name) > 60 )
+                                                    {{substr($w->product_name,0,60)."..."}}
+                                                    @else
+                                                    {{$w->product_name}}
+                                                    @endif
+                                                </h4>
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
@@ -116,7 +128,11 @@
                 readOnly: true,   
             });
         });
-
+        function readmore($string){
+         $string = substr($string, 0, 5); 
+        $string = $string . "..."; 
+        return $string; 
+        }
        
 
     </script>

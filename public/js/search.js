@@ -226,9 +226,16 @@ jQuery(document).ready(function() {
                             "<div class='thumbnail'>"+
                                 '<img src="./public/storage/' + value.photo + '" style="width: 100%; height: 170px;">'+
                                 '<div style="height:60px;">'+
-                                    '<h4 class="black">'+value.product_name+'</h4>'+
+
+                                    '<h4 class="black">'+
+                                    (value.product_name.length>=60 ?
+                                        value.product_name.substr(0,60)+'...':
+                                        value.product_name.substr(0,60)
+
+                                        )+
+                                    '</h4>'+
                                 '</div>'+
-                                    " <b> IDR "+value.store_name+"</b>"+
+                                    " <b> "+value.store_name+"</b>"+
 
                                     " <h3> IDR "+value.max_price+"</h3>"+
                                     '<p class="my-rating" data-rating="3">'+
@@ -378,3 +385,12 @@ $( document ).ready(function() {
 
 });
 
+
+var yourString = "The quick brown fox jumps over the lazy dog"; //replace with your string.
+var maxLength = 6 // maximum number of characters to extract
+
+//trim the string to the maximum length
+var trimmedString = yourString.substr(0, maxLength);
+
+//re-trim if we are in the middle of a word
+trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))

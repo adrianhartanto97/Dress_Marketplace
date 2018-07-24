@@ -483,6 +483,7 @@ class ProductController extends Controller
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->orderBy("product_id","asc")
+                     ->limit(8)
                     ->get();
             $status = true;
            
@@ -494,6 +495,7 @@ class ProductController extends Controller
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->orderBy("created_at","desc")
+                     ->limit(8)
                     ->get();
                 $status = true;
                
@@ -504,6 +506,7 @@ class ProductController extends Controller
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->orderBy("created_at","asc")
+                     ->limit(8)
                     ->get();
              $status = true;
            

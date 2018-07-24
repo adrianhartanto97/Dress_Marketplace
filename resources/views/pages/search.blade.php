@@ -159,6 +159,7 @@
                                         @elseif ($search_result->count!=0)
                                         <p id="dynamic_pager_content2" class="well">Showing {{$search_result->count}} products for {{$search_result->query}}</p>
 
+
                                         @else 
                                         <p id="dynamic_pager_content2" class="well">No Result</p>
                                         @endif
@@ -218,14 +219,20 @@
                     <div class="portlet-body">
 
                         @if($has_search == "true")
-                            <div class="row" name="list">
-                                 @foreach ($search_result->product_info as $w)
+                            <div class="row tampung" name="list">
+                                 @foreach ($search as $w)
                                <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                                 <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
                                             <div style="height: 60px;">
-                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                                 <h4 class="black">
+                                                    @if(strlen($w->product_name) > 60 )
+                                                    {{substr($w->product_name,0,60)."..."}}
+                                                    @else
+                                                    {{$w->product_name}}
+                                                    @endif
+                                                </h4>
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
@@ -236,15 +243,24 @@
                              </a>
                                  @endforeach
                             </div>
+                            <div class="row" style="text-align:center;">
+                                {!! $search->render() !!}
+                            </div>
                         @elseif($has_search == "false")
-                             <div class="row" name="list">
-                                 @foreach($filter_result->product_info as $w)
+                             <div class="row tampung" name="list">
+                                 @foreach($filter_result as $w)
                                 <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                                 <div class=" col-xs-6 col-sm-4 col-md-3 center">
                                     <div class="thumbnail">
                                         <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
                                             <div style="height: 60px;">
-                                                 <h4 class="black">{{$w->product_name}}</h4>
+                                                 <h4 class="black">
+                                                    @if(strlen($w->product_name) > 60 )
+                                                    {{substr($w->product_name,0,60)."..."}}
+                                                    @else
+                                                    {{$w->product_name}}
+                                                    @endif
+                                                </h4>
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
@@ -257,9 +273,6 @@
                             </div>
                          @endif
 
-
-<!--                         <p id="dynamic_pager_demo2" style="text-align: center;"> </p>
- -->
                     </div>
                 </div>
             </div>
@@ -268,6 +281,7 @@
 
     </div>
 </div>
+
 @endsection
 
 @section('script')
@@ -282,5 +296,4 @@
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
         {{HTML::script('public/js/search.js')}}
-
 @endsection

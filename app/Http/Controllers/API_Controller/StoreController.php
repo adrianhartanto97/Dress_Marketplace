@@ -46,6 +46,23 @@ class StoreController extends Controller
         return response()->json(['have_store'=>$have_store,'store'=>$store],200);
     }
 
+    public function get_all_store(Request $request)
+    {
+        $store = DB::table('view_user_store')
+                    ->select('*')
+                    ->where("store_active_status" , "1")
+                    ->get();
+
+        if ($store== null)
+        {
+            return response()->json(['status'=>false, 'store_info'=>"Store Doesn't exist"],200);
+        }
+        else {
+            return response()->json(['status'=>true, 'store_info'=>$store],200);
+            
+        }
+    }
+
     public function check_store_name(Request $request) {
         $status = true;
         $message = "";

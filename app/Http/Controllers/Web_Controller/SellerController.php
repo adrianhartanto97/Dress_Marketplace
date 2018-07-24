@@ -149,10 +149,9 @@ class SellerController extends Controller
                     'month' => $month
                 ]
             ]);
-            $res = json_decode($req->getBody())->result;
 
 
-            $body = json_decode($res->getBody());
+            $body = json_decode($req->getBody());
             
             if ($body->status == true) {
                 $result = $body->result;
@@ -183,6 +182,7 @@ class SellerController extends Controller
             return redirect('index');
         }
     }
+    
 
     public function seller_panel_store_settings (Request $request) 
     {
@@ -721,4 +721,7 @@ class SellerController extends Controller
 
         var_dump($arr);
     }
+
+   
+
 }

@@ -23,12 +23,12 @@
     @if($stat == "1")
          <h1>Balance : IDR {{ number_format($login_info->user_info->balance,0,",",".") }} </h1>
           <div class="form-group">
-                <div class="col-md-12" style="padding-top: 80px">
+                <div class="col-md-12" style="padding-top: 50px">
                     <h2>Transaction History</h2>
                 </div>
             </div>
             <div class="form-group">
-                 <form method="POST" action="{{ action('Web_Controller\App2Controller@withdraw')}}"  id="History">
+                 <form method="POST" action="{{ action('Web_Controller\SellerController@seller_panel_dashboard')}}"  id="History">
                     {{ csrf_field() }}
                     <div class="col-md-2">
                         <select name="date" class="form-control" value="" onclick="getWaktu()" id="date">
@@ -87,28 +87,7 @@
 
 @section('script')
 
-        {{HTML::script('public/pages/scripts/table-datatables-buttons.min.js')}}
-      
        
-        {{ HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js') }}
-        {{ HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js') }}
-        {{ HTML::script('public/global/plugins/select2/js/select2.full.min.js') }}
-        
-        {{ HTML::script('public/global/scripts/app.min.js') }}
-        
-        {{ HTML::script('public/pages/scripts/login.js') }}
-       
-       {{HTML::script('public/global/plugins/select2/js/select2.full.min.js')}}
-       
-        {{HTML::script('public/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}
-        {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
-        {{HTML::script('public/global/plugins/jquery-repeater/jquery.repeater.js')}}
-        {{HTML::script('public/global/plugins/bootstrap-select/js/bootstrap-select.min.js')}}
-
-        <!--END PAGE LEVEL PLUGINS-->
-
-        <!--BEGIN PAGE LEVEL SCRIPTS-->
-        {{ HTML::script('public/pages/scripts/components-bootstrap-select.min.js') }}
         {{ HTML::script('public/js/withdraw.js') }}
 
 
@@ -134,7 +113,7 @@
                 for(var i=5 ; i<=6;i++){
                     month+=date[i];
                 }
-                 objfrm.year.value= year;
+                objfrm.year.value= year;
                 objfrm.month.value= month;
             }
         </script>
