@@ -684,6 +684,36 @@ class SellerController extends Controller
         }
     }
 
+    public function get_sort_by_id_store(Request $request)
+    {
+        try {
+            $sort_id =$request->sort_id;
+            $store_id= $request->store_id;
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'get_sort_by_id_store', [
+                'form_params' => [
+                    'sort_id' => $sort_id,
+                    'store_id' => $store_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return view('pages.store_sort_result', 
+                    [
+                        'product_info' => $body->product_info
+                    ]
+                );
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            echo $message;
+        }
+    }
+
     public function test(Request $request) {
         // $size = $request->size;
         // $price = $request->price_range;

@@ -307,9 +307,10 @@ class ProductController extends Controller
 
     public function get_new_product_detail(Request $request)
     {
-        $product = DB::table('view_product_detail_first_price')
+        $product = DB::table('view_product')
                     ->select('*')
                     ->where("product_active_status" , "1")
+                    ->where("product_type" , "0")
                     ->orderBy('created_at', 'desc')
                     ->limit(8)
                     ->get();
@@ -326,9 +327,10 @@ class ProductController extends Controller
 
     public function best_seller_product_detail(Request $request)
     {
-        $product = DB::table('view_product_detail_first_price')
+        $product = DB::table('view_product')
                     ->select('*')
                     ->where("product_active_status" , "1")
+                    ->where("product_type" , "0")
                     ->orderBy('sold','desc')
                     ->limit(8)
                     ->get();
@@ -529,11 +531,12 @@ class ProductController extends Controller
             $sort_id =$request->sort_id;
             $store_id= $request->store_id;
             if($sort_id==1){
-            $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->where("store_id" , $store_id)
-                    ->orderBy("product_id","asc")
+            $product = DB::table('view_product_recommendation')
+                        ->select('*')
+                        ->where('store_id',$store_id)
+                        ->where('product_type','0')
+                        ->where('product_active_status','1')
+                        ->orderBy('recommendation','desc')
                     ->get();
             $status = true;
            
@@ -541,22 +544,26 @@ class ProductController extends Controller
 
             }
             elseif ($sort_id==2) {
-            $product = DB::table('view_product')
+            $product = DB::table('view_product_recommendation')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->where("store_id" , $store_id)
+                    ->where('product_type','0')
                     ->orderBy("created_at","desc")
+                    ->orderBy("product_id","desc")
                     ->get();
                 $status = true;
                
                 return response()->json(['status'=>$status, 'product_info'=>$product],200);
             }
             elseif($sort_id==3){
-             $product = DB::table('view_product')
+             $product = DB::table('view_product_recommendation')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->where("store_id" , $store_id)
+                    ->where('product_type','0')
                     ->orderBy("created_at","asc")
+                    ->orderBy("product_id","asc")
                     ->get();
              $status = true;
            

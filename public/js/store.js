@@ -51,6 +51,9 @@ jQuery(document).ready(function() {
     });
   
    sort_by.change(function() {
+        App.blockUI({
+            boxed: true
+        });
         all_product.empty();
 
         $.ajax({
@@ -83,7 +86,7 @@ jQuery(document).ready(function() {
                         )
                     );
                     addScript('public/star-rating-svg-master/src/jquery.star-rating-svg.js');
-
+                    App.unblockUI();
                 });
             },
             error: function() {

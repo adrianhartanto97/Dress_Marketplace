@@ -484,6 +484,7 @@ class App2Controller extends Controller
 
     public function store_detail(Request $request, $store_id)
     {
+        set_time_limit(86400);
         $client = new Client();
         $jwt = $request->cookie('jwt');
 

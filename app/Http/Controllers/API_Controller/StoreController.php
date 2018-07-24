@@ -1179,11 +1179,12 @@ class StoreController extends Controller
                                 ->get();
 
                 $store->courier_service =$courier_service;
-                $product = DB::table('view_product')
-                            ->select(DB::raw('product_id,product_name,photo,store_name,average_rating'))
+                $product = DB::table('view_product_recommendation')
+                            ->select('*')
                             ->where('store_id',$store_id)
                             ->where('product_type','0')
                             ->where('product_active_status','1')
+                            ->orderBy('recommendation','desc')
                             ->get();
                             // ->paginate(10);
 

@@ -124,3 +124,4 @@ Route::post('update_store_information', 'Web_Controller\App2Controller@update_st
 Route::post('delete_user_store_courier', 'Web_Controller\App2Controller@delete_user_store_courier');
 Route::post('insert_user_store_courier', 'Web_Controller\App2Controller@insert_user_store_courier');
 
+Route::post('get_sort_by_id_store', 'Web_Controller\SellerController@get_sort_by_id_store');

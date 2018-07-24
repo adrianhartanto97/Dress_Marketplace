@@ -96,6 +96,7 @@ class AppController extends Controller
 
     public function index(Request $request)
     {
+        set_time_limit(86400);
         $client = new Client();
         $jwt = $request->cookie('jwt');
 

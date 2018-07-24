@@ -186,17 +186,34 @@
 
 
                                                     <div class="row" name="list">
-                                                    @foreach ($store_detail->result->product as $s)
-                                                        <a href="{{url('/product_detail')}}/{{$s->product_id}}" target="_blank" style="text-decoration:none;">
-                                                        <div class="col-xs-6 col-sm-4 col-md-3">
-                                                            <div class="thumbnail">
-                                                                <img src="{{asset('/public/storage').'/'.$s->photo}}" alt="" style="width: 100%; height: 20%;">
-                                                                <div class="caption" style="text-align:center;">
-                                                                    <h4>{{$s->product_name}}</h4>
-                                                                    <p><a href="$" target="_blank" class="my-rating satu" data-rating="{{$s->average_rating}}"></a></p>
+                                                    @foreach ($store_detail->result->product as $w)
+                                                        
+                                                        <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                                            <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                                                                <div class="thumbnail">
+                                                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                                                        <div style="height: 90px;">
+                                                                            <h4 class="black">
+                                                                                @if(strlen($w->product_name) > 60 )
+                                                                                {{substr($w->product_name,0,60)."..."}}
+                                                                                @else
+                                                                                {{$w->product_name}}
+                                                                                @endif
+                                                                            </h4>
+                                                                        </div>
+                                                                    
+                                                                    <b>{{$w->store_name}}</b>
+                                                                    <h3>
+                                                                        IDR 
+                                                                        @if($w->available_status == 'Y')
+                                                                            {{number_format($w->max_price)}}
+                                                                        @else
+                                                                            ({{$w->max_price}})
+                                                                        @endif
+                                                                    </h3>
+                                                                    <div class="my-rating" data-rating="{{$w->average_rating}}"></div>
                                                                 </div>
                                                             </div>
-                                                        </div>
                                                         </a>
                                                      @endforeach
 
@@ -288,13 +305,127 @@
         {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
         {{HTML::script('public/global/plugins/holder.js')}}
         {{HTML::script('public/pages/scripts/ui-general.min.js')}}
-        {{HTML::script('public/js/store.js')}}
+        <!-- {{HTML::script('public/js/store.js')}} -->
 
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
     <!--END PAGE LEVEL SCRIPTS-->
        
+<script>
+    $( document ).ready(function() {
+        $(".my-rating").starRating({
+            starSize: 25,
+            readOnly: true,   
+        });
+        var sort_by = $("select[name='sort_by']");
+        var all_product= $("div[name='list']");
+        var product_list = null;
+        $.ajax({
+            type:"POST",
+            url : "http://localhost/dress_marketplace/api/get_sort_by_list",
+            async: false,
+            success : function(response) {
+                product_list = response.sort;
+                $.each(product_list, function(index, value) {          
+                    sort_by.append(
+                        $('<option></option>').val(value.sort_id).html(value.sort_name)
+                    );
+                });
 
 
-   
+            },
+            error: function() {
+                alert('Error occured');
+            }
+        });
+        
+        $("select[name='sort_by']").change(function() {
+            
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/get_sort_by_id_store",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data : {
+                    sort_id : $(this).val(),
+                    store_id : $("input[type=text][name=id_store]" ).val()
+                },
+                async: false,
+                success : function(response) {
+                    $("div[name='list']").html(response);
+                    
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //RAnge 25  
+ 
+    function set_range_slider_value($range, $from,$to,range,min,max,from,to,num)
+    {
+    
+        var updateValues = function () {
+            $from.prop("value", from);
+            $to.prop("value", to);
+        };
+
+        $range.ionRangeSlider({
+            type: "double",
+            min: min,
+            max: max,
+            prettify_enabled: false,
+            grid: true,
+            grid_num: num,
+            onChange: function (data) {
+                from = data.from;
+                to = data.to;
+                
+                updateValues();
+            }
+        });
+
+        range = $range.data("ionRangeSlider");
+
+        var updateRange = function () {
+            range.update({
+                from: from,
+                to: to
+            });
+        };
+
+        $from.on("change", function () {
+            from = +$(this).prop("value");
+            if (from < min) {
+                from = min;
+            }
+            if (from > to) {
+                from = to;
+            }
+
+            updateValues();    
+            updateRange();
+        });
+
+        $to.on("change", function () {
+            to = +$(this).prop("value");
+            if (to > max) {
+                to = max;
+            }
+            if (to < from) {
+                to = from;
+            }
+
+            updateValues();    
+            updateRange();
+        });
+
+    }
+
+    set_range_slider_value($("#range_25"),$("#rating_min"),$("#rating_max"),0,0,5,0,0,4);
+    set_range_slider_value($("#range_26"),$("#price_min"),$("#price_max"),0,10000,10000000,0,0,3);
+</script>
 @endsection

@@ -67,8 +67,15 @@
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
-                                        <h3>IDR {{$w->max_price}}</h3>
-                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
+                                        <h3>
+                                            IDR 
+                                            @if($w->available_status == 'Y')
+                                                {{number_format($w->max_price)}}
+                                            @else
+                                                ({{$w->max_price}})
+                                            @endif
+                                        </h3>
+                                         <div class="my-rating" data-rating="{{$w->average_rating}}"></div>
                                     </div>
                                 </div>
                              </a>
@@ -96,8 +103,15 @@
                                             </div>
                                            
                                         <b>{{$w->store_name}}</b>
-                                        <h3>IDR {{$w->max_price}}</h3>
-                                         <p class="my-rating" data-rating="4"></p>
+                                        <h3>
+                                            IDR 
+                                            @if($w->available_status == 'Y')
+                                                {{number_format($w->max_price)}}
+                                            @else
+                                                ({{$w->max_price}})
+                                            @endif
+                                        </h3>
+                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
                                     </div>
                                 </div>
                              </a>
@@ -128,11 +142,11 @@
                 readOnly: true,   
             });
         });
-        function readmore($string){
-         $string = substr($string, 0, 5); 
-        $string = $string . "..."; 
-        return $string; 
-        }
+        // function readmore($string){
+        //  $string = substr($string, 0, 5); 
+        // $string = $string . "..."; 
+        // return $string; 
+        // }
        
 
     </script>

@@ -98,3 +98,5 @@ Route::post('insert_user_store_courier', 'API_Controller\StoreController@insert_
 
 Route::post('get_all_store', 'API_Controller\StoreController@get_all_store');
 
+Route::post('generate_recommendation', 'API_Controller\MasterDataController@generate_recommendation');
+
