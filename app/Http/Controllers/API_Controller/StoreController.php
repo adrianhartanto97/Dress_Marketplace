@@ -1275,7 +1275,6 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 try{
                     $store_id = $request->store_id;
-
                     $business_type = $request->business_type;
                     $established_year = $request->established_year;
                     $province = $request->province;

@@ -580,4 +580,24 @@ class ProductController extends Controller
        
     }
 
+     public function get_product_by_style(Request $request)
+    {
+        try {
+            $style_id = $request->style_id;
+
+            $style = DB::table('view_product')
+                        ->select('*')
+                        ->where('style_id',$style_id)
+                        ->get();
+            $status = true;
+
+            return response()->json(['status'=>$status,'result'=>$style],200);
+        }
+        catch(Exception $error) {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
 }

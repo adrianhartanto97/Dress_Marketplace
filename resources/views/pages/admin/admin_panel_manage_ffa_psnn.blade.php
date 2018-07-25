@@ -25,12 +25,12 @@
             <li>
                 <a href="#tab_3" data-toggle="tab"> Product Recommendation</a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="#tab_4" data-toggle="tab"> Training Result</a>
             </li>
             <li>
                 <a href="#tab_5" data-toggle="tab"> Testing Result</a>
-            </li>
+            </li> -->
         </ul>
         <div id="info">
         </div>

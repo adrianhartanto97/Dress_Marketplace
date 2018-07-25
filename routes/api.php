@@ -100,5 +100,6 @@ Route::post('get_all_store', 'API_Controller\StoreController@get_all_store');
 Route::post('update_store_document', 'API_Controller\StoreController@update_store_document');
 
 Route::post('generate_recommendation', 'API_Controller\MasterDataController@generate_recommendation');
+Route::post('get_product_by_style', 'API_Controller\ProductController@get_product_by_style');
 
 
