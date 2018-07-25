@@ -40,6 +40,7 @@
         {{ HTML::script('public/layouts/layout/scripts/demo.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-sidebar.min.js') }}
         {{ HTML::script('public/layouts/global/scripts/quick-nav.min.js') }}
+         {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
         <!-- END THEME LAYOUT SCRIPTS -->
 
         <!-- BEGIN PAGE LEVEL PLUGINS -->

@@ -1261,8 +1261,9 @@ class StoreController extends Controller
             $jwt = $request->token;
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
+            $name = $request->name;
 
-            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->where('store_name',$request->get('store_name'))->count();
+            $user_store_count = DB::table('store')->where('user_id',$user_id)->where('name',$request->get('name'))->count();
 
             if ($user_store_count == 0) {
                 $status = false;
@@ -1272,7 +1273,6 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 try{
                     $store_id = $request->store_id;
-                    $store_name = $request->store_name;
 
                     $business_type = $request->business_type;
                     $established_year = $request->established_year;
@@ -1287,13 +1287,13 @@ class StoreController extends Controller
                     $photo = $request->file('photo');
                     if ($photo) {
                         echo $photo;
-                        $photo_path = $photo->storeAs('Store/photo', $store_name."_photo.".$photo->getClientOriginalExtension() , 'public');
+                        $photo_path = $photo->storeAs('Store/photo', $name."_photo.".$photo->getClientOriginalExtension() , 'public');
                     }
                    
                     $banner = $request->file('banner');
                     if ($banner) {
                         echo $banner;
-                        $banner_path = $banner->storeAs('Store/banner', $store_name."_banner.".$banner->getClientOriginalExtension() , 'public');
+                        $banner_path = $banner->storeAs('Store/banner', $name."_banner.".$banner->getClientOriginalExtension() , 'public');
                     }
                     
                     $store = DB::table('store')
@@ -1556,6 +1556,119 @@ class StoreController extends Controller
 
 
     } 
+
+ public function update_store_document (Request $request) {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $store_id = $request->store_id;
+
+            $user_store_count = DB::table('store_supporting_documents')->where('store_id',$store_id)->count();
+
+            if ($user_store_count == 0) {
+                $status = false;
+                $message = "You don't have privilege";
+            }
+
+            else {
+                DB::beginTransaction();
+                try {
+                  
+
+                    $ktp = $request->file('ktp');
+                    if ($ktp) {
+                        $ktp_path = $ktp->storeAs('Store/documents/ktp', $request->store_name."_ktp.".$ktp->getClientOriginalExtension() , 'public');
+
+                         $update1 = DB::table('store_supporting_documents')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+
+                                    'ktp' => $ktp_path
+                                ]
+                            );
+
+                    }
+
+                    $siup = $request->file('siup');
+                    if ($siup) {
+                        $siup_path = $siup->storeAs('Store/documents/siup', $request->store_name."_siup.".$siup->getClientOriginalExtension() , 'public');
+
+                         $update2 = DB::table('store_supporting_documents')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+
+                                    'siup' => $siup_path
+                                ]
+                            );
+                    }
+
+                    $npwp = $request->file('npwp');
+                    if ($npwp) {
+                        $npwp_path = $npwp->storeAs('Store/documents/npwp', $request->store_name."_npwp.".$npwp->getClientOriginalExtension() , 'public');
+
+                         $update3 = DB::table('store_supporting_documents')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+
+                                    'npwp' => $npwp_path
+                                ]
+                            );
+                    }
+
+                    $skdp = $request->file('skdp');
+                    if ($skdp) {
+                        $skdp_path = $skdp->storeAs('Store/documents/skdp', $request->store_name."_skdp.".$skdp->getClientOriginalExtension() , 'public');
+
+                         $update4 = DB::table('store_supporting_documents')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+
+                                    'skdp' => $skdp_path
+                                ]
+                            );
+                    }
+
+                    $tdp = $request->file('tdp');
+                    if ($tdp) {
+                        $tdp_path = $tdp->storeAs('Store/documents/tdp', $request->store_name."_tdp.".$tdp->getClientOriginalExtension() , 'public');
+
+                         $update5 = DB::table('store_supporting_documents')
+                            ->where('store_id',$store_id)
+                            ->update(
+                                [
+
+                                    'tdp' => $tdp_path
+                                ]
+                            );
+                    }
+
+
+
+
+                    DB::commit();
+                    $status = true;
+                    $message = "documents update successfully ";
+                }
+
+                catch(Exception $error) {
+                    DB::rollback();
+                    $status = false;
+                    $message = $error->getMessage();
+                }
+            }
+        }
+        catch(Exception $error) {
+            $status = false;
+             return response()->json(['status'=>$status,'message'=>$error],200);
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 
    
 

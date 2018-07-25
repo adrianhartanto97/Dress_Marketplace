@@ -97,6 +97,8 @@ Route::post('delete_user_store_courier', 'API_Controller\StoreController@delete_
 Route::post('insert_user_store_courier', 'API_Controller\StoreController@insert_user_store_courier');
 
 Route::post('get_all_store', 'API_Controller\StoreController@get_all_store');
+Route::post('update_store_document', 'API_Controller\StoreController@update_store_document');
 
 Route::post('generate_recommendation', 'API_Controller\MasterDataController@generate_recommendation');
+
 

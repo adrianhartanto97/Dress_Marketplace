@@ -61,7 +61,8 @@ class AdminController extends Controller
     public function manage_store (Request $request)
     {
         $pending_store = DB::table('view_store_pending')->get();
-        return view('pages.admin.admin_panel_manage_store',['active_nav' => "manage_store", 'pending_store' => $pending_store]);
+         $store_list =  DB::table('view_store_active')->get();
+        return view('pages.admin.admin_panel_manage_store',['active_nav' => "manage_store", 'pending_store' => $pending_store,'active_store' =>$store_list]);
     }
 
     public function accept_store (Request $request) 
@@ -151,6 +152,11 @@ class AdminController extends Controller
                             ->where("product_ownership" , "0")
                             ->get();
 
+         $product_active = DB::table('view_product')
+                            ->select('*')
+                            ->where("product_active_status" , "1")
+                            ->get();
+
         foreach ($pending_product as $p) {
             $price = DB::table('product_price')
                     ->select('*')
@@ -166,7 +172,7 @@ class AdminController extends Controller
             $p->size = $size;
         }
 
-        return view('pages.admin.admin_panel_manage_product',['active_nav' => "manage_product", 'pending_product' => $pending_product]);
+        return view('pages.admin.admin_panel_manage_product',['active_nav' => "manage_product", 'pending_product' => $pending_product,'product_active'=>$product_active]);
         //print_r($pending_product);
     }
 

@@ -209,7 +209,39 @@
             @endforeach
             </div>
             <div class="tab-pane" id="tab_2">
-                tes
+
+
+                 <div class="portlet light bordered">
+                        <div class="portlet-body">
+                            <div class="row">
+                                @foreach ($product_active as $w)
+                                
+                                <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                                    <div class="thumbnail" style="text-align: center;">
+                                        <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                            <div style="height: 60px;">
+                                                 <h4 class="black">
+                                                    @if(strlen($w->product_name) > 60 )
+                                                    {{substr($w->product_name,0,60)."..."}}
+                                                    @else
+                                                    {{$w->product_name}}
+                                                    @endif
+                                                </h4>
+                                            </div>
+                                           
+                                        <b>{{$w->store_name}}</b>
+                                        <h3>IDR {{$w->max_price}}</h3>
+                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
+                                    </div>
+                                </div>
+                             </a>
+                                @endforeach 
+
+                            
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>

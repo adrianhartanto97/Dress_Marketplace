@@ -220,7 +220,33 @@
             @endforeach
             </div>
             <div class="tab-pane" id="tab_2">
-                tes
+                <div class="portlet-body">
+                    <div class="row" name="list">
+                    @foreach ($active_store as $w)
+                     <a href="{{url('/store_detail')}}/{{$w->store_id}}"  style="text-decoration:none;">
+                        <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                            <div class="thumbnail">
+                                <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                    <div style="height: 60px;">
+                                         <h4 class="black" style="text-align: center;">
+                                            @if(strlen($w->name) > 30 )
+                                            {{substr($w->name,0,30)."..."}}
+                                            @else
+                                            {{$w->name}}
+                                            @endif
+                                        </h4>
+                                    </div>
+                                   
+                                 <p class="my-rating" data-rating="{{$w->rating}}"></p>
+                            </div>
+                        </div>
+                     </a>
+                    
+                     @endforeach
+
+                    </div>
+                  
+                </div>
             </div>
         </div>
     </div>
