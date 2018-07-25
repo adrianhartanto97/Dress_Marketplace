@@ -844,8 +844,8 @@ class App2Controller extends Controller
                     'contents' => $request->store_id
                 ],
                 [
-                    'name'     => 'store_name',
-                    'contents' => $request->store_name
+                    'name'     => 'name',
+                    'contents' => $request->name
                 ],
                 [
                     'name'     => 'business_type',
@@ -907,10 +907,10 @@ class App2Controller extends Controller
                 'multipart' => $multipart
             ]);
             $body = json_decode($store->getBody());
-            return Redirect::back()->with('status', $body->status)->with('result', $body->result);
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
          catch (Exception $e) {
-              return Redirect::back()->with('status', false)->with('result', $e);
+              return Redirect::back()->with('status', false)->with('message', $body->message);
         }
     }
 

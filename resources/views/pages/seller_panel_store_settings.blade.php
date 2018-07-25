@@ -33,7 +33,7 @@
                     </div>
                 @endif
                        
-                <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@update_store_information') }}" id="save_change" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@update_store_information')}}" id="save_store" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                  <input type="text" name="store_id" value="{{$store_info->store_id}}" hidden="true" />
                     <div class="form-body">
@@ -46,7 +46,7 @@
                                         </label>
 
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" name="store_name" value="{{$store_info->store_name}}" readonly/>
+                                            <input type="text" class="form-control" name="name" value="{{$store_info->store_name}}" readonly/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -78,7 +78,6 @@
                                         <label class="control-label col-md-3">Province
                                             <span class="required"> * </span>
                                         </label>
-                                         <input type="text" value="{{$store_info->province}}.text" name="province">
 
                                         <div class="col-md-4">
                                             <select class="form-control" name="province" value="{{$store_info->province}}" id="province">
@@ -89,7 +88,6 @@
                                         <label class="control-label col-md-3">City
                                             <span class="required"> * </span>
                                         </label>
-                                        <input type="text" value="{{$store_info->city}}" name="city" >
                                         <div class="col-md-4">
                                             <select class="form-control" name="city" value="{{$store_info->city}}" id="city">
                                             </select>
@@ -149,7 +147,7 @@
                                                     <span class="btn red btn-outline btn-file">
                                                         <span class="fileinput-new"> Select image </span>
                                                         <span class="fileinput-exists"> Change </span>
-                                                        <input type="hidden" value="{{$store_info->photo}}" name="..."><input type="file" name="photo"> </span>
+                                                        <input type="hidden" value="" name="..."><input type="file" name="photo"> </span>
                                                     <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                 </div>
                                             </div>
@@ -167,7 +165,7 @@
                                                     <span class="btn red btn-outline btn-file">
                                                         <span class="fileinput-new"> Select image </span>
                                                         <span class="fileinput-exists"> Change </span>
-                                                        <input type="hidden" value="{{$store_info->banner}}" name="..."><input type="file" name="banner"> </span>
+                                                        <input type="hidden" value="" name="..."><input type="file" name="banner"> </span>
                                                     <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                 </div>
                                             </div>
@@ -179,9 +177,9 @@
                         </div>
                     </div>
                 </form>
+               
                 <div class="form-actions" style="text-align: center;">
-                    <button type="submit" class="btn blue" form="save_change">Save Changes</button>
-                     
+                    <button type="submit" class="btn blue" form="save_store">Save Changes</button>
                 </div>
             </div>
             <div class="tab-pane" id="tab_2">
@@ -548,6 +546,9 @@
     <script>
     
         document.getElementById('business_type').value="{{$store_info->business_type}}";
+        document.getElementById('province').value="{{$store_info->province}}";
+        document.getElementById('city').value="{{$store_info->city}}";
+
       
       
 

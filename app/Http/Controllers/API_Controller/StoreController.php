@@ -143,6 +143,8 @@ class StoreController extends Controller
                     $store->contact_person_job_title = $request->contact_person_job_title;
                     $store->contact_person_phone_number = $request->contact_person_phone_number;
 
+                    // {{asset('/public/storage/')
+
                     $photo = $request->file('photo');
                     if ($photo) {
                         $photo_path = $photo->storeAs('Store/photo', $request->store_name."_photo.".$photo->getClientOriginalExtension() , 'public');
@@ -1333,7 +1335,6 @@ class StoreController extends Controller
                                     'contact_person_phone_number' =>$contact_person_phone_number,
                                     'description'=>$description,
                                     'photo'=>$photo_path,
-                                    'banner'=>$banner_path
                                 ]
                             );
                         }
