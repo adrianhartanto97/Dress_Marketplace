@@ -396,7 +396,7 @@ class App2Controller extends Controller
 
      
 
-    public function filter (Request $request)
+   public function filter (Request $request)
      {
          $jwt = $request->cookie('jwt');
 
@@ -424,19 +424,22 @@ class App2Controller extends Controller
 
                  ]
              ]);
-             $filt = json_decode($search->getBody())->product_info;
 
-             $collection = collect($filt);
+             $result = json_decode($search->getBody());
+             $collection = collect($result->product_info);
 
-             $page=Input::get('page',1);
-             $perPage = 5;
+             $page = Input::get('page', 1);
+             $perPage = 16;
 
-             $filter = new LengthAwarePaginator($collection->forPage($page,$perPage),$collection->count(),$perPage,$page,['path'=>url('advance_search')]);
-
+             $search_result = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('advance_search')]);
+ 
+             
             return view('pages.search',
                 [
                   'login_info' => $login_info,    
-                  'filter_result' => $filter,
+                  'filter_result' => $result,
+                   'filter' => $search_result,
+
                   'has_search' => "false"
                 ]
             )->render();
@@ -910,7 +913,7 @@ class App2Controller extends Controller
             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
          catch (Exception $e) {
-              return Redirect::back()->with('status', false)->with('message', $body->message);
+              return Redirect::back()->with('status', false)->with('message', "Server sedang sibuk");
         }
     }
 
@@ -973,5 +976,87 @@ class App2Controller extends Controller
         }
 
     }
+
+     public function get_settings (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+         $phone_number = $request->phone_number;
+         $full_name = $request->full_name;
+ 
+         $client = new Client();
+         try {
+            
+             return view('pages.settings',
+                [
+                    'active_nav' => "settings",
+                    'login_info' => $login_info, 
+
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+     }
+
+
+     public function settings(Request $request)
+    {
+        try {
+             $client = new Client();
+             $jwt = $request->cookie('jwt');
+             $login_info = $this->get_login_info($jwt);
+           
+         $client = new Client();
+
+             $multipart = [
+                [
+                    'name'     => 'token',
+                    'contents' => $jwt
+                ],
+                [
+                    'name'     => 'phone_number',
+                    'contents' => $request->phone_number
+                ],
+               
+                [
+                    'name'     => 'full_name',
+                    'contents' => $request->full_name
+                ],
+               
+           
+            ];
+            // if (Input::file('avatar')) {
+            //     $photo_file = Input::file('avatar');
+            //     $photo_array = [
+            //         'name'     => 'avatar',
+            //         'contents' => fopen( $photo_file->getRealPath(), 'r'),
+            //         'filename' => 'avatar.'.$photo_file->getClientOriginalExtension()
+            //     ];
+            //     array_push($multipart, $photo_array);
+            // }
+            
+            // if (Input::file('avatar')) {
+            //      $image = $client->post($this->base_url.'update_user_profile', [
+            //             'multipart' => $multipart
+            //      ]);
+            // }
+            
+            $user = $client->post($this->base_url.'update_user_profile', [
+                    'multipart' => $multipart
+             ]);
+            
+           
+           
+            $body = json_decode($store->getBody());
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+         catch (Exception $e) {
+              return Redirect::back()->with('status', false)->with('message', "Server sedang sibuk");
+        }
+    }
+
 
 }

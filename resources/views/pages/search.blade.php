@@ -248,7 +248,7 @@
                             </div>
                         @elseif($has_search == "false")
                              <div class="row tampung" name="list">
-                                 @foreach($filter_result as $w)
+                                 @foreach($filter as $w)
                                 <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                                 <div class=" col-xs-6 col-sm-4 col-md-3 center">
                                     <div class="thumbnail">
@@ -265,11 +265,14 @@
                                            
                                         <b>{{$w->store_name}}</b>
                                         <h3>IDR {{$w->max_price}}</h3>
-                                         <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
+                                         <p class="my-rating" data-rating="{{$w->product_rating}}"></p>
                                     </div>
                                 </div>
                              </a>
                                  @endforeach
+                            </div>
+                             <div class="row" style="text-align:center;">
+                                {!! $filter->render() !!}
                             </div>
                          @endif
 

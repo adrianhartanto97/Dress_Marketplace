@@ -103,3 +103,4 @@ Route::post('generate_recommendation', 'API_Controller\MasterDataController@gene
 Route::post('get_product_by_style', 'API_Controller\ProductController@get_product_by_style');
 
 
+Route::post('delete_all_product_from_bag', 'API_Controller\TransactionController@delete_all_product_from_bag');

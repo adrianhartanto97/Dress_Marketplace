@@ -67,7 +67,7 @@
                     <div class="row list-group">
                         <a href="{{url('/my_wishlist')}}" class="list-group-item @if($active_nav == 'wishlist')abu @else @endif"> Wishlist </a>
                         <a href="{{url('/favorite_store')}}" class="list-group-item @if($active_nav == 'favorite_store')abu @else @endif"> Favorite Store </a>  
-                        <a href="javascript:;" class="list-group-item @if($active_nav == 'settings')abu @else @endif"> Settings </a>                 
+                        <a href="{{url('/settings')}}" class="list-group-item @if($active_nav == 'settings')abu @else @endif"> Settings </a>                 
                     </div>
                 </div>
             </div>

@@ -228,14 +228,15 @@ jQuery(document).ready(function() {
                                 '<div style="height:60px;">'+
 
                                     '<h4 class="black">'+
-                                    (value.product_name.length>=60 ?
-                                        value.product_name.substr(0,60)+'...':
-                                        value.product_name.substr(0,60)
+                                    (value.product_name.length>=50 ?
+                                        value.product_name.substr(0,50)+'...':
+                                        value.product_name.substr(0,50)
 
                                         )+
                                     '</h4>'+
                                 '</div>'+
                                     " <b> "+value.store_name+"</b>"+
+                                    // " <br><b> "+value.recommendation+"</b>"+
 
                                     " <h3> IDR "+value.max_price+"</h3>"+
                                     '<p class="my-rating" data-rating="3">'+

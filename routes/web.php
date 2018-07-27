@@ -87,6 +87,7 @@ Route::get('my_wishlist', 'Web_Controller\App2Controller@my_wishlist');
 Route::get('balance_detail', 'Web_Controller\App2Controller@withdraw');
 Route::post('balance_detail', 'Web_Controller\App2Controller@withdraw');
 
+
 Route::post('balance_withdraw', 'Web_Controller\App2Controller@balance_withdraw');
 
 Route::get('favorite_store', 'Web_Controller\App2Controller@favorite_store');
@@ -125,3 +126,6 @@ Route::post('delete_user_store_courier', 'Web_Controller\App2Controller@delete_u
 Route::post('insert_user_store_courier', 'Web_Controller\App2Controller@insert_user_store_courier');
 
 Route::post('get_sort_by_id_store', 'Web_Controller\SellerController@get_sort_by_id_store');
+
+Route::get('settings', 'Web_Controller\App2Controller@get_settings');
+Route::post('settings', 'Web_Controller\App2Controller@settings');

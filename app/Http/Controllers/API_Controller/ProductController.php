@@ -359,12 +359,16 @@ class ProductController extends Controller
             $shipping=$request->shipping;
             $sort_by=$request->sort_by;
 
-            $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->where('product_name', 'like', '%' .$product_name. '%')
-                    ->get();
-            $all = DB::table('view_product')
+            $product = DB::table('view_product_recommendation')
+                        ->select('*')
+                        ->where('product_type','0')
+                        ->where('product_active_status','1')
+                        ->where('product_name', 'like', '%' .$product_name. '%')
+                        ->orderBy('recommendation','desc')
+                        ->get();
+
+
+            $all = DB::table('view_product_recommendation')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->get();
@@ -411,6 +415,9 @@ class ProductController extends Controller
                         ->where('city', '=', $city)
                         ->where('courier_id', '=', $courier_id)
                         ->get();
+
+
+
             $all = DB::table('view_product')
                         ->select('*')
                         ->where("product_active_status" , "1")
@@ -432,83 +439,42 @@ class ProductController extends Controller
 
     }
 
-    public function sort_by_asc(Request $request)
-    {
-        try{
-            $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->orderBy("created_at","asc")
-                    ->get();
-            $status = true;
-           
-            return response()->json(['status'=>$status, 'product_info'=>$product],200);
-                
-        }
-        catch(Exception $error)
-        {
-            $status = false;
-            $message = $error->getMessage();
-            return response()->json(['status'=>$status,'message'=>$message],200);
-        }
-
-    }
-
-     public function sort_by_desc(Request $request)
-    {
-        try{
-            $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->orderBy("created_at","desc")
-                    ->get();
-            $status = true;
-           
-            return response()->json(['status'=>$status, 'product_info'=>$product],200);
-                
-        }
-        catch(Exception $error)
-        {
-            $status = false;
-            $message = $error->getMessage();
-            return response()->json(['status'=>$status,'message'=>$message],200);
-        }
-
-    }
+  
 
      public  function get_sort_by_id(Request $request)
     {
         try{
             $sort_id =$request->sort_id;
             if($sort_id==1){
-            $product = DB::table('view_product')
-                    ->select('*')
-                    ->where("product_active_status" , "1")
-                    ->orderBy("product_id","asc")
-                     ->limit(8)
-                    ->get();
+            $product = DB::table('view_product_recommendation')
+                        ->select('*')
+                        ->where('product_type','0')
+                        ->where('product_active_status','1')
+                        ->orderBy('recommendation','desc')
+                        ->get();
             $status = true;
            
             return response()->json(['status'=>$status, 'product_info'=>$product],200);
 
             }
             elseif ($sort_id==2) {
-            $product = DB::table('view_product')
+            $product = DB::table('view_product_recommendation')
                     ->select('*')
+                    ->where('product_type','0')
                     ->where("product_active_status" , "1")
                     ->orderBy("created_at","desc")
-                     ->limit(8)
                     ->get();
                 $status = true;
                
                 return response()->json(['status'=>$status, 'product_info'=>$product],200);
             }
             elseif($sort_id==3){
-             $product = DB::table('view_product')
+             $product = DB::table('view_product_recommendation')
                     ->select('*')
+                    ->where('product_type','0')
+
                     ->where("product_active_status" , "1")
                     ->orderBy("created_at","asc")
-                     ->limit(8)
                     ->get();
              $status = true;
            
