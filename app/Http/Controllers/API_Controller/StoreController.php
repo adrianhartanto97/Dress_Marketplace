@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use \stdClass;
 
 use App\Store;
 use App\Store_Bank_Account;
@@ -1230,6 +1231,7 @@ class StoreController extends Controller
             $rfq = DB::table('view_rfq_offer_history')
                     ->select('*')
                     ->where('store_id',$store_id)
+                    ->orderBy('rfq_offer_id','desc')
                     ->get();
 
             foreach ($rfq as $r) {
@@ -1555,7 +1557,75 @@ class StoreController extends Controller
         return response()->json(['status'=>$status,'message'=>$message],200);
 
 
-    } 
+    }
+
+    public function dashboard(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
+            $store_id = $store->store_id;
+
+            $result = new stdClass();
+            $type = $request->type;
+
+            if ($type=="1") {
+                $total = DB::select( DB::raw("select
+                    coalesce(
+                        sum( total_receive ),
+                        0
+                    ) as total
+                from
+                    view_dashboard
+                where
+                    (cast(created_at as date) = cast(now() as date)) and store_id = '".$store_id."'") )[0]->total;
+                $result->total = $total;
+                $result->description = "Today (".date('Y-m-d').")";
+            }
+            else if ($type=="2") {
+                $total = DB::select( DB::raw("select
+                    coalesce(
+                        sum( total_receive ),
+                        0
+                    ) as total
+                from
+                    view_dashboard
+                where
+                    (created_at between '2018-01-01' and now()) and store_id = '".$store_id."'") )[0]->total;
+                $result->total = $total;
+                $result->description = "Year To Date (".date('Y-01-01')." / ".date('Y-m-d').")";
+            }
+            else if ($type == "3") {
+                // $total = DB::table('view_dashboard')
+                //         ->select(DB::raw("coalesce(sum(total_receive),0) as total"))
+                //         ->where(DB::raw("created_at between date_format( now(), '%Y-%m-01' ) and now()"))
+                //         ->where('store_id',$store_id)
+                //         ->first()->total;
+                $total = DB::select( DB::raw("select
+                    coalesce(
+                        sum( total_receive ),
+                        0
+                    ) as total
+                from
+                    view_dashboard
+                where
+                    (created_at between date_format( now(), '%Y-%m-01' ) and now()) and store_id = '".$store_id."'") )[0]->total;
+                $result->total = $total;
+                $result->description = "Month To Date (".date('Y-m-01')." / ".date('Y-m-d').")";
+            }
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$result],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
 
  public function update_store_document (Request $request) {
         try {

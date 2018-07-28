@@ -307,11 +307,12 @@ class ProductController extends Controller
 
     public function get_new_product_detail(Request $request)
     {
-        $product = DB::table('view_product')
+        $product = DB::table('view_product_recommendation')
                     ->select('*')
                     ->where("product_active_status" , "1")
                     ->where("product_type" , "0")
                     ->orderBy('created_at', 'desc')
+                    ->orderBy('recommendation', 'desc')
                     ->limit(8)
                     ->get();
 
@@ -327,11 +328,13 @@ class ProductController extends Controller
 
     public function best_seller_product_detail(Request $request)
     {
-        $product = DB::table('view_product')
-                    ->select('*')
+        $product = DB::table('view_product_recommendation as a')
+                    ->leftJoin('view_sold_product as b', 'a.product_id', '=', 'b.product_id')
+                    ->select(DB::raw('a.*,coalesce(b.sold,0) as sold'))
                     ->where("product_active_status" , "1")
                     ->where("product_type" , "0")
                     ->orderBy('sold','desc')
+                    ->orderBy('recommendation', 'desc')
                     ->limit(8)
                     ->get();
 

@@ -21,7 +21,7 @@
     @endif
 
     @if($stat == "1")
-         <h1>Balance : IDR {{ number_format($login_info->user_info->balance,0,",",".") }} </h1>
+         <!-- <h1>Balance : IDR {{ number_format($login_info->user_info->balance,0,",",".") }} </h1>
           <div class="form-group">
                 <div class="col-md-12" style="padding-top: 50px">
                     <h2>Transaction History</h2>
@@ -78,18 +78,29 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- END EXAMPLE TABLE PORTLET-->
-            </div>
-                      
+                
+            </div> -->
+
+            <div class="row" style="margin-top:50px;">
+                <div class="col-md-6">
+                    <div style="font-size:24px;">Total Sales : </div>
+                    <h4 id="desc"></h4>
+                    <h1><b>IDR <span id="total"></span></b></h1>
+                </div>
+                <div class="col-md-3">
+                    <input type="hidden" name="token" value="{{$jwt}}">
+                    <select class="form-control" name="type" onchange="refresh()">
+                        <option value="1">Today</option>
+                        <option value="2">Year-to-date</option>
+                        <option value="3">Month-to-date</option>
+                    </select>
+                </div>
+            </div>        
 
     @endif
 @endsection
 
 @section('script')
-
-       
-        {{ HTML::script('public/js/withdraw.js') }}
-
 
         <script>
             $(document).ready(function()
@@ -98,6 +109,7 @@
                 {
                     $('#radio1003').attr('checked', 'checked');
                 });
+                refresh();
             })
             function getWaktu()
             {
@@ -115,6 +127,25 @@
                 }
                 objfrm.year.value= year;
                 objfrm.month.value= month;
+            }
+
+            function refresh() {
+                App.blockUI({
+                    boxed: true
+                });
+                $.ajax({
+                    type:"POST",
+                    url: "http://localhost/dress_marketplace/api/dashboard",
+                    data : {
+                        token : $('input[name="token"]').val(),
+                        type : $('select[name="type"]').val()
+                    },
+                    success: function(res) {
+                        $('#desc').html(res.result.description);
+                        $('#total').html(res.result.total);
+                        App.unblockUI();
+                    }
+                });
             }
         </script>
 

@@ -2,6 +2,10 @@
 
 @section('css')
     {{ HTML::style('public/star-rating-svg-master/src/css/star-rating-svg.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}
+    {{ HTML::style('public/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css') }}
 @endsection
 
 @section('content')
@@ -11,6 +15,17 @@
         <div class="row" style="padding:0px 10px;">
             @include('layout.user_sidebar',['login_info' => $login_info])
             <div class="col-xs-12 col-sm-9 col-md-10">
+                @if (session()->has('status') && session()->get('status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @elseif (session()->has('status') && session()->get('status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @endif
                 <div class="tabbable-custom">
                     <ul class="nav nav-tabs ">
                         <li class="active">
@@ -169,6 +184,14 @@
                                                 {{ csrf_field() }}
                                                 <div class="form-body">
                                                     <input type="hidden" name="transaction_id" value="{{$p->transaction_id}}">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3">Date
+                                                            <span class="required"> * </span>
+                                                        </label>
+                                                        <div class="col-md-7">
+                                                            <input class="form-control form-control-inline input-medium date-picker" size="16" type="text" name="date" value="{{$p->date}}">
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group">
                                                         <label class="control-label col-md-3">Transfer to
                                                         <span class="required"> * </span>
@@ -738,7 +761,7 @@
                                             </div>
                                             <div class="row" style="margin-top:10px;">
                                                 <div class="col-md-12">
-                                                    <textarea type="text" class="form-control" name="product_review[{{$p->product_id}}]" placeholder="Write your review about the product here"></textarea>
+                                                    <textarea type="text" class="form-control" name="product_review[{{$p->product_id}}]" placeholder="Write your review about the product here" required></textarea>
                                                 </div>
                                             </div>
                                             <script>
@@ -779,7 +802,11 @@
 
 @section('script')
     {{HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js')}}
-    {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}
+    {{HTML::script('public/star-rating-svg-master/src/jquery.star-rating-svg.js')}}{{HTML::script('public/global/plugins/moment.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}}
+    {{HTML::script('public/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}
 
     <script>
         @foreach ($purchase_payment as $p)
@@ -802,6 +829,9 @@
                     required: true
                 },
                 sender_name: {
+                    required: true
+                },
+                date: {
                     required: true
                 },
             },
@@ -846,6 +876,10 @@
                     $('#transaction_history_container').html(html);
                     App.unblockUI();
                 }
+            });
+
+            $('input[name="date"]').datepicker({
+                format : 'yyyy-mm-dd'
             });
         });
     </script>

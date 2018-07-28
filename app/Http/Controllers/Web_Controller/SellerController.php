@@ -176,7 +176,7 @@ class SellerController extends Controller
 
         if ($store) {
             $login_info = $this->get_login_info($jwt);
-            return view('pages.seller_panel_dashboard', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'dashboard', 'financial_history' => $financial_history]);
+            return view('pages.seller_panel_dashboard', ['login_info' => $login_info,'store_info' => $store, 'active_nav' => 'dashboard', 'jwt' => $jwt, 'financial_history'=>$financial_history]);
         }
         else {
             return redirect('index');

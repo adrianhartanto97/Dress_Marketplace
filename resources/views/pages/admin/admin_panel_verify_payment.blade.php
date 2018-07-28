@@ -21,6 +21,12 @@
                 </div>
                 <div class="form-body">
                     <div class="form-group">
+                        <label class="control-label col-md-3">Date :</label>
+                        <div class="col-md-7">
+                            <p class="form-control-static">{{$p->date}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3">Transfer to :</label>
                         <div class="col-md-7">
                             <p class="form-control-static">{{$p->bank_name}} {{$p->account_number}}</p>

@@ -613,6 +613,7 @@ class AppController extends Controller
         $sender_account_number = $request->sender_account_number;
         $sender_name = $request->sender_name;
         $note = $request->note;
+        $date = $request->date;
         $jwt = $request->cookie('jwt');
 
         $client = new Client();
@@ -627,6 +628,7 @@ class AppController extends Controller
                     'sender_account_number' => $sender_account_number,
                     'sender_name' => $sender_name,
                     'note' => $note,
+                    'date' => $date
                 ]
             ]);
 

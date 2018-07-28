@@ -16,58 +16,65 @@
                     <div style="margin-top:-20px">
                     </div>
                     <div class="form-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Invoice Date :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->invoice_date}}</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Invoice Date :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->invoice_date}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Receiver Name :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->receiver_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Shipping Address :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->address}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Province :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->province_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">City :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->city_name}}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Receiver Name :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->receiver_name}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Shipping Address :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->address}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Province :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->province_name}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">City :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->city_name}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Phone Number :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->phone_number}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Postal Code :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->postal_code}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Courier :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->courier_name}} {{$o->courier_service}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Note :</label>
-                            <div class="col-md-7">
-                                <p class="form-control-static">{{$o->note}}</p>
+
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Phone Number :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->phone_number}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Postal Code :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->postal_code}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:-25px;">
+                                    <label class="control-label col-md-4">Courier :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->courier_name}} {{$o->courier_service}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Note :</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static">{{$o->note}}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

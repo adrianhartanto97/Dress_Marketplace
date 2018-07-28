@@ -17,7 +17,8 @@ class Sales_Transaction_Payment extends Model
         'note',
         'status',
         'receive_amount',
-        'reject_comment'
+        'reject_comment',
+        'date'
     ];
     protected $primaryKey = 'transaction_id';
 }

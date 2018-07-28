@@ -495,6 +495,7 @@ class TransactionController extends Controller
             $sender_account_number = $request->sender_account_number;
             $sender_name = $request->sender_name;
             $note = $request->note;
+            $date = $request->date;
 
             $payment_status = DB::table('view_sales_transaction_payment')
                             ->where('transaction_id', $transaction_id)
@@ -517,6 +518,7 @@ class TransactionController extends Controller
             $payment->sender_name = $sender_name;
             $payment->note = $note;
             $payment->status = '0';
+            $payment->date = $date;
 
             $payment->save();
             DB::commit();

@@ -41,13 +41,16 @@
                                     {{$r->rfq_offer_id}}
                                 </div>
                                 <div class="col-md-6" style="text-align:right">
-                                    
+                                    {{$r->created_at}}
                                 </div>
                             </div>
                         </div>
                         <div class="portlet-body">
                             <div class="form-horizontal">
                                 <div style="margin-top:-10px">
+                                </div>
+                                <div style="text-align:center">
+                                    <h3>Status : {{$r->offer_status}}</h3>
                                 </div>
                                 <div class="form-body">
                                     <div class="form-group">
