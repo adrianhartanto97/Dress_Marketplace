@@ -977,13 +977,74 @@ class App2Controller extends Controller
 
     }
 
+     public function settings (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+         $phone_number=$request->phone_number;
+         $full_name = $request->full_name;
+ 
+         $client = new Client();
+         try {
+             $user = $client->post($this->base_url.'update_user_profile', [
+                 'form_params' => [
+                     'token' => $jwt,
+                     'phone_number'=>$phone_number,
+                     'full_name'=>$full_name
+
+                 ]
+             ]);
+             $result = json_decode($user->getBody());
+ 
+             return view('pages.settings',
+                [
+                    'active_nav' => "settings",
+                    'login_info' => $login_info, 
+                    'result' => $result
+                ]
+            );
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+     }
+
+     public function psettings (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+ 
+         $login_info = $this->get_login_info($jwt);
+         $phone_number=$request->phone_number;
+         $full_name = $request->full_name;
+ 
+         $client = new Client();
+         try {
+             $user = $client->post($this->base_url.'update_user_profile', [
+                 'form_params' => [
+                     'token' => $jwt,
+                     'phone_number'=>$phone_number,
+                     'full_name'=>$full_name
+
+                 ]
+             ]);
+             $body = json_decode($user->getBody());
+ 
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+
+           
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+     }
+
      public function get_settings (Request $request)
      {
          $jwt = $request->cookie('jwt');
  
          $login_info = $this->get_login_info($jwt);
-         $phone_number = $request->phone_number;
-         $full_name = $request->full_name;
+       
  
          $client = new Client();
          try {
@@ -1002,7 +1063,7 @@ class App2Controller extends Controller
      }
 
 
-     public function settings(Request $request)
+     public function post_settings(Request $request)
     {
         try {
              $client = new Client();
@@ -1049,8 +1110,7 @@ class App2Controller extends Controller
              ]);
             
            
-           
-            $body = json_decode($store->getBody());
+            $body = json_decode($user->getBody());
             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
          catch (Exception $e) {

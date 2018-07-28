@@ -49,7 +49,7 @@
                         <div class="tab-content">
                            <!--  <div class="tab-pane active" id="tab_1"> -->
                                 <div class="form">
-                                <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@settings') }}" id="submit_form" method="POST" enctype="multipart/form-data">
+                                <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@psettings') }}" id="submit_form" method="POST" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     @if (session()->has('status') && session()->get('status') == false)
                                         <div class="alert alert-danger">
@@ -65,7 +65,8 @@
                                     <div class="form-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
+                                                Edit Profile
+                                               <!--  <div class="form-group">
                                                     <label class="control-label col-md-4">Change Image <span class="required"> * </span></label>
                                                     <div class="col-md-7">
                                                         <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -79,21 +80,21 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-group">
                                                     <label class="control-label col-md-4">Full Name
                                                         <span class="required"> * </span>
                                                     </label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control" name="full_name" value="{{$login_info->full_name}}" />
+                                                        <input type="text" class="form-control" name="full_name" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-4">Phone Number
+                                                    <label class="control-label col-md-4">Phone Number 
                                                         <span class="required"> * </span>
                                                     </label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control" name="phone_number" value="{{$login_info->phone_number}}" />
+                                                        <input type="text" class="form-control" name="phone_number" value="" />
                                                     </div>
                                                 </div>
                                             </div>

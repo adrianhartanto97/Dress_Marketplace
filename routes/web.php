@@ -127,5 +127,5 @@ Route::post('insert_user_store_courier', 'Web_Controller\App2Controller@insert_u
 
 Route::post('get_sort_by_id_store', 'Web_Controller\SellerController@get_sort_by_id_store');
 
-Route::get('settings', 'Web_Controller\App2Controller@get_settings');
-Route::post('settings', 'Web_Controller\App2Controller@settings');
+Route::get('settings', 'Web_Controller\App2Controller@settings');
+Route::post('settings', 'Web_Controller\App2Controller@psettings');
