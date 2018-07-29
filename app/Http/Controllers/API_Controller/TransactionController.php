@@ -388,10 +388,10 @@ class TransactionController extends Controller
                 ->update(['balance' => DB::raw("balance - ".$request->use_point)]);
 
 
-            // DB::table('cart')
-            // ->where([
-            //     'user_id' =>$user_id
-            // ])->delete();
+            DB::table('cart')
+            ->where([
+                'user_id' =>$user_id
+            ])->delete();
 
             DB::commit();
             $status = true;

@@ -56,7 +56,28 @@ var FormWizard = function () {
                     description: {
                         required: true
                     },
-                    
+                    ktp: {
+                        required: true
+                    },
+                    siup: {
+                        required: true
+                    },
+                    npwp: {
+                        required: true
+                    },
+                    skdp: {
+                        required: true
+                    },
+                    tdp: {
+                        required: true
+                    },
+                    photo: {
+                        required: true
+                    },
+                    banner: {
+                        required: true
+                    },
+
                     //store bank
                     bank_name: {
                         required: true
@@ -165,7 +186,7 @@ var FormWizard = function () {
                     jQuery(li_list[i]).addClass("done");
                 }
 
-                if (current == 1 || current == 2) {
+                if (current == 1) {
                     $('#form_wizard_1').find('.button-previous').hide();
                 } else {
                     $('#form_wizard_1').find('.button-previous').show();
@@ -208,36 +229,68 @@ var FormWizard = function () {
                     if (index == 1) {
                         var stat = true;
                         $.ajax({
-                            url: 'http://localhost/dress_marketplace/api/register_store_name',
+                            url: 'http://localhost/dress_marketplace/api/check_store_name',
                             type: 'POST',
                             async: false,
                             data: {
-                                token : jwt,
-                                store_name: $( "input[name='store_name']" ).val()
+                               store_name: $( "input[name='store_name']" ).val()
                             },
                             error: function() {
-                                store_availability.removeClass('text-info').addClass('text-danger');
                                store_availability.html('<p>An error has occurred</p>');
-                               stat = false;
                             },
                             dataType: 'json',
                             success: function(data) {
                                 if (data.status == false) {
-                                    store_availability.removeClass('text-info').addClass('text-danger');
-                                    store_availability.html('<p>Store Name Already Exists</p>');
-                                    stat =  false;
+                                    //store_availability.removeClass('text-info').addClass('text-danger');
+                                    store_availability.html('<p style="color:red">Store Name Already Exists</p>');
+                                    stat = false;
                                 }
                                 else {
-                                    stat = true;
+                                    store_availability.removeClass('text-danger').addClass('text-info');
+                                    store_availability.html('<p>Store Name Available</p>');
                                     $( "input[name='store_name_2']" ).val($("input[name='store_name']").val());
+                                    stat = true;
                                 }
                             }
                          });
-                         //alert(stat);
-                         if (stat == false) {
+
+                        if (stat == false) {
                             return false;
-                         }
+                        }
                     }
+                    // if (index == 1) {
+                    //     var stat = true;
+                    //     $.ajax({
+                    //         url: 'http://localhost/dress_marketplace/api/register_store_name',
+                    //         type: 'POST',
+                    //         async: false,
+                    //         data: {
+                    //             token : jwt,
+                    //             store_name: $( "input[name='store_name']" ).val()
+                    //         },
+                    //         error: function() {
+                    //             store_availability.removeClass('text-info').addClass('text-danger');
+                    //            store_availability.html('<p>An error has occurred</p>');
+                    //            stat = false;
+                    //         },
+                    //         dataType: 'json',
+                    //         success: function(data) {
+                    //             if (data.status == false) {
+                    //                 store_availability.removeClass('text-info').addClass('text-danger');
+                    //                 store_availability.html('<p>Store Name Already Exists</p>');
+                    //                 stat =  false;
+                    //             }
+                    //             else {
+                    //                 stat = true;
+                    //                 $( "input[name='store_name_2']" ).val($("input[name='store_name']").val());
+                    //             }
+                    //         }
+                    //      });
+                    //      //alert(stat);
+                    //      if (stat == false) {
+                    //         return false;
+                    //      }
+                    // }
 
                     handleTitle(tab, navigation, index);
                 },
@@ -276,6 +329,17 @@ jQuery(document).ready(function() {
     });
     FormWizard.init();
 
+    $('input[name="store_name"]').keyup(function() {
+        if ($(this).val()=="")
+        {
+            $("#check_store_name").prop('disabled', true);
+        }
+        else {
+            $("#check_store_name").prop('disabled', false);
+        }
+    });
+
+
     $('#check_store_name').click(
         function() {
             $.ajax({
@@ -291,8 +355,9 @@ jQuery(document).ready(function() {
                 dataType: 'json',
                 success: function(data) {
                     if (data.status == false) {
-                        store_availability.removeClass('text-info').addClass('text-danger');
-                        store_availability.html('<p>Store Name Already Exists</p>');
+                        //store_availability.removeClass('text-info').addClass('text-danger');
+                        store_availability.html('<p style="color:red">Store Name Already Exists</p>');
+                        
                     }
                     else {
                         store_availability.removeClass('text-danger').addClass('text-info');

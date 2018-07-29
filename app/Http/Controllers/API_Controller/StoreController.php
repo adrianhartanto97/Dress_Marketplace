@@ -124,17 +124,25 @@ class StoreController extends Controller
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
 
-            $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->where('store_name',$request->get('store_name'))->count();
+            // $user_store_count = DB::table('view_user_store')->where('user_id',$user_id)->where('store_name',$request->get('store_name'))->count();
 
-            if ($user_store_count == 0) {
+            // if ($user_store_count == 0) {
+            //     $status = false;
+            //     $message = "You don't have privilege";
+            // }
+
+            $store_dbase = DB::table('store')->where('name',$request->store_name)->count();
+            if ($store_dbase > 0) {
                 $status = false;
-                $message = "You don't have privilege";
+                $message = "Store Name Already Exists";
             }
-
             else {
                 DB::beginTransaction();
                 try {
-                    $store = Store::where('name', $request->store_name)->first();
+                    // $store = Store::where('name', $request->store_name)->first();
+                    $store = new Store();
+                    $store->user_id = $user_id;
+                    $store->name = $request->store_name;
                     $store->description = $request->description;
                     $store->established_year = $request->established_year;
                     $store->province = $request->province;
@@ -143,6 +151,7 @@ class StoreController extends Controller
                     $store->contact_person_name = $request->contact_person_name;
                     $store->contact_person_job_title = $request->contact_person_job_title;
                     $store->contact_person_phone_number = $request->contact_person_phone_number;
+                    $store->store_active_status = "0";
 
                     // {{asset('/public/storage/')
 

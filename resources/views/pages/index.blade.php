@@ -10,6 +10,17 @@
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content">
             <div class="row" style="padding:0px 10px;">
+                @if (session()->has('status') && session()->get('status') == false)
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @elseif (session()->has('status') && session()->get('status') == true)
+                    <div class="alert alert-success">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{ session('message')}}</span>
+                    </div>
+                @endif
             @include('layout.user_sidebar',['login_info' => $login_info])
             <div class="@if($login_info->login_status == true)col-xs-12 col-sm-9 col-md-10 @else col-xs-12 col-sm-12 col-md-12 @endif">
                 <div id="carousel-example-generic-v1" class="carousel slide widget-carousel" data-ride="carousel">

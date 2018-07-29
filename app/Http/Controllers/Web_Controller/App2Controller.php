@@ -913,7 +913,7 @@ class App2Controller extends Controller
             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
         }
          catch (Exception $e) {
-              return Redirect::back()->with('status', false)->with('message', "Server sedang sibuk");
+              return Redirect::back()->with('status', false)->with('message', $e->getMessage());
         }
     }
 

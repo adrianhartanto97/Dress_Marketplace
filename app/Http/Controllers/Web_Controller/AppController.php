@@ -249,7 +249,7 @@ class AppController extends Controller
         ]);
         $store_info = json_decode($store->getBody());
         
-        return redirect('index');
+        return redirect('index')->with('status', $store_info->status)->with('message', $store_info->message);
         // var_dump($store_info);
     }
 

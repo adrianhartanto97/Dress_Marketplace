@@ -81,11 +81,4 @@ jQuery(document).ready(function() {
             alert('Error occured');
         }
     });
-
- 
-   
-
-
 });
-
-  

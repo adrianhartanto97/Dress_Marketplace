@@ -163,7 +163,7 @@
                                 </a>
                             </li>
 
-                            @if($store_info->store_active_status == "1" || $store_info->store_active_status == "2")
+                            @if($store_info->store_active_status == "1")
                             <li class="nav-item @if($active_nav == 'store_settings')active @else @endif">
                                 <a href="{{url('/seller_panel_store_settings')}}" class="nav-link">
                                     <i class="icon-settings"></i>

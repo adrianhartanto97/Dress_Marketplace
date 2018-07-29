@@ -109,7 +109,10 @@
                 {
                     $('#radio1003').attr('checked', 'checked');
                 });
+
+                @if ($stat == "1")
                 refresh();
+                @endif
             })
             function getWaktu()
             {

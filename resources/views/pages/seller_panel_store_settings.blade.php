@@ -536,20 +536,106 @@
 @endsection
 
 @section('script')
-{{HTML::script('public/global/plugins/select2/js/select2.full.min.js')}}
+    {{HTML::script('public/global/plugins/select2/js/select2.full.min.js')}}
     {{HTML::script('public/global/plugins/jquery-validation/js/jquery.validate.min.js')}}
     {{HTML::script('public/global/plugins/jquery-validation/js/additional-methods.min.js')}}
     {{HTML::script('public/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}
     {{HTML::script('public/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}
     {{HTML::script('public/global/plugins/icheck/icheck.min.js')}}
-     {{ HTML::script('public/js/store_setting.js') }}
+    <!-- {{ HTML::script('public/js/store_setting.js') }} -->
     <script>
     
-        document.getElementById('business_type').value="{{$store_info->business_type}}";
-        document.getElementById('province').value="{{$store_info->province}}";
-        document.getElementById('city').value="{{$store_info->city}}";
+        //document.getElementById('business_type').value="{{$store_info->business_type}}";
+        // document.getElementById('province').value="{{$store_info->province}}";
+        // document.getElementById('city').value="{{$store_info->city}}";
 
-      
+        jQuery(document).ready(function() {
+   
+            var province_list = null;
+            var city_list = null;
+            var courier_list = null;
+            var province_input = $("select[name='province']");
+            var city_input = $("select[name='city']");
+            var courier_input = $("#courier_input");
+
+            var province_value = document.querySelector('input[name="province"]');
+            var city_value = document.querySelector('input[name="city"]');
+
+
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/api/get_province_list",
+                async: false,
+                success : function(response) {
+                    province_list = response.province;
+                    $.each(province_list, function(index, value) {          
+                        province_input.append(
+                            $('<option></option>').val(value.province_id).html(value.province_name)
+                        );
+                    });
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+
+            province_input.change(function() {
+                city_input.empty();
+                $.ajax({
+                    type:"POST",
+                    url : "http://localhost/dress_marketplace/api/get_city_by_province",
+                    data : {
+                        province_id : $(this).val()
+                    },
+                    async: false,
+                    success : function(response) {
+                        city_list = response.city;
+                        $.each(city_list, function(index, value) {          
+                            city_input.append(
+                                $('<option></option>').val(value.city_id).html(value.city_type+" "+value.city_name)
+                            );
+                        });
+                        // var selected = $("select[name='province'] option:selected").val();
+                        // province_value.value=selected;
+                        // var selected2 = $("select[name='city'] option:selected").val();
+                        // city_value.value=selected2;
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+            });
+            
+            province_input.val("{{$store_info->province}}");
+            province_input.trigger('change');
+            city_input.val("{{$store_info->city}}");
+            document.getElementById('business_type').value="{{$store_info->business_type}}";
+
+            // city_input.change(function() {
+            //     var selected2 = $("select[name='city'] option:selected").val();
+            //     city_value.value=selected2;
+            // });
+
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/api/get_courier_list",
+                async: false,
+                success : function(response) {
+                    courier_list = response.courier;
+                    $.each(courier_list, function(index, value) {          
+                        courier_input.append(
+                                '<label><input type="checkbox" class="icheck" name="courier[]" data-title="' + value.courier_name +  '" value="' + value.courier_id + '">' + value.courier_name + '</label>'
+                        );
+                    });
+                    $('input').iCheck({
+                        checkboxClass: 'icheckbox_square-blue'
+                    });
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+        });
       
 
     </script>

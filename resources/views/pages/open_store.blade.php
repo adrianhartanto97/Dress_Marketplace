@@ -84,7 +84,7 @@
                                             <b><span class="help-block text-info" id="store_availability"></span></b>
                                         </div>
                                         <div class="col-md-4">
-                                            <button type="button" class="btn green-meadow" id="check_store_name">Check Store Name</button>
+                                            <button type="button" class="btn green-meadow" id="check_store_name" disabled>Check Store Name</button>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -191,12 +191,12 @@
                                             <div class="portlet box green-meadow">
                                                 <div class="portlet-title">
                                                     <div class="caption">
-                                                        <span aria-hidden="true" class="icon-docs"></span> Supporting Documents
+                                                        <span aria-hidden="true" class="icon-docs"></span> Legal Documents
                                                     </div>
                                                 </div>
                                                 <div class="portlet-body">
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">KTP</label>
+                                                        <label class="control-label col-md-3">KTP <span class="required"> * </span></label>
                                                         <div class="col-md-3">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <div class="input-group input-large">
@@ -215,7 +215,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">SIUP</label>
+                                                        <label class="control-label col-md-3">SIUP <span class="required"> * </span></label>
                                                         <div class="col-md-3">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <div class="input-group input-large">
@@ -234,7 +234,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">NPWP</label>
+                                                        <label class="control-label col-md-3">NPWP <span class="required"> * </span></label>
                                                         <div class="col-md-3">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <div class="input-group input-large">
@@ -253,7 +253,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">SKDP</label>
+                                                        <label class="control-label col-md-3">SKDP <span class="required"> * </span></label>
                                                         <div class="col-md-3">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <div class="input-group input-large">
@@ -272,7 +272,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">TDP</label>
+                                                        <label class="control-label col-md-3">TDP <span class="required"> * </span></label>
                                                         <div class="col-md-3">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <div class="input-group input-large">
@@ -293,7 +293,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">Photo</label>
+                                                <label class="control-label col-md-3">Photo <span class="required"> * </span></label>
                                                 <div class="col-md-3">
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                         <div class="input-group input-large">
@@ -312,7 +312,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">Banner</label>
+                                                <label class="control-label col-md-3">Banner <span class="required"> * </span></label>
                                                 <div class="col-md-3">
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                         <div class="input-group input-large">
