@@ -569,4 +569,29 @@ class ProductController extends Controller
         }
     }
 
+    public function delete_product(Request $request)
+    {
+        $product_id = $request->product_id;
+
+        DB::beginTransaction();
+        try {
+            DB::table('product')
+            ->where('product_id', $product_id)
+            ->update(
+                [ 
+                    'product_active_status' => '3',
+                ]
+            );
+            $status = true;
+            $message = "Product Deleted";
+            DB::commit();
+        }
+        catch(Exception $error) {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }

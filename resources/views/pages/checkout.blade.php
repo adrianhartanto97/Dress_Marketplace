@@ -127,7 +127,7 @@
                                             <div class="row">
                                                 <div class="col-md-7" style="font-size:16px;">
                                                     <div class="col-md-6">
-                                                        <i class="fa fa-money"></i> Your Points :
+                                                        <i class="fa fa-money"></i> Your Cash :
                                                     </div>
                                                     <div class="col-md-6" style="text-align : right" id="available_points">
                                                         
@@ -137,7 +137,7 @@
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-top:20px;">   
-                                                <label class="col-md-3">Use Point</label>
+                                                <label class="col-md-3">Use Cash</label>
                                                 <div class="col-md-7" >
                                                     <div class="form-group">
                                                         <div class="input-group">
@@ -234,7 +234,7 @@
         $("input[name='use_point']").keyup(function() {
             var point = $(this).val() || 0;
             
-            $("h4#use_point").text("Use Point : - IDR " + point.toLocaleString()).show();
+            $("h4#use_point").text("Use Cash : - IDR " + point.toLocaleString()).show();
 
             var tmp_total_price = global_total_price - parseInt(point);
 

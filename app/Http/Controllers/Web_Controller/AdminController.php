@@ -119,7 +119,11 @@ class AdminController extends Controller
             DB::table('user')
             ->where('user_id', $request->user_id)
             ->update(['active_status' => '2']);
-            }
+
+            DB::table('store')
+            ->where('user_id', $request->user_id)
+            ->update(['store_active_status' => '3']);
+        }
         catch (Exception $e) {
             $status = false;
             print_r($e->getMessage());
@@ -135,7 +139,11 @@ class AdminController extends Controller
             DB::table('user')
             ->where('user_id', $request->user_id)
             ->update(['active_status' => '1']);
-            }
+
+            DB::table('store')
+            ->where('user_id', $request->user_id)
+            ->update(['store_active_status' => '1']);
+        }
         catch (Exception $e) {
             $status = false;
             print_r($e->getMessage());

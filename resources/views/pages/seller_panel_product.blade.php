@@ -291,6 +291,7 @@
                                             <h4>{{$w->product_name}}</h4>
                                             <h3>{{$w->store_name}}</h3>
                                             <p><a href="product_detail/{{$w->product_id}}" target="_blank" class="my-rating satu" data-rating="{{$w->average_rating}}"></a></p>
+                                            <button class="btn red" onclick="delete_product({{$w->product_id}})">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -332,6 +333,23 @@
                 readOnly: true,   
             });
         });
+
+        function delete_product(product_id) {
+            App.blockUI({
+                    boxed: true
+                });
+            $.ajax({
+                type:"POST",
+                url: "http://localhost/dress_marketplace/api/delete_product",
+                data : {
+                    product_id : product_id
+                },
+                success: function(res) {
+                    location.reload();
+                    App.unblockUI();
+                }
+            });
+        }
 
     </script>
     <!--END PAGE LEVEL PLUGINS-->
