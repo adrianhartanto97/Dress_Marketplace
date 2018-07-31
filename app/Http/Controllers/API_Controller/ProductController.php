@@ -395,7 +395,7 @@ class ProductController extends Controller
 
     }
 
-    public static function advance_search(Request $request)
+    public function advance_search(Request $request)
     {
         try{
             $min_order =$request->min_order;
@@ -409,19 +409,19 @@ class ProductController extends Controller
             
             $product = DB::table('view_filter_courier')
                         ->select('*')
-                        ->where('min_order', '>=', $min_order)
-                        ->where('product_rating', '>=', $rating_min)
-                        ->where('product_rating', '<=', $rating_max)
-                        ->where('max_price', '>=', $price_min)
-                        ->where('max_price', '<=', $price_max)
-                        ->where('province', '=', $province)
-                        ->where('city', '=', $city)
-                        ->where('courier_id', '=', $courier_id)
+                        ->where('min_order', '>=', (int)$min_order)
+                        ->where('product_rating', '>=', (int)$rating_min)
+                        ->where('product_rating', '<=', (int) $rating_max)
+                        ->where('max_price', '>=', (int) $price_min)
+                        ->where('max_price', '<=', (int) $price_max)
+                        ->where('province', '=', (int)$province)
+                        ->where('city', '=', (int) $city)
+                        ->where('courier_id', '=', (int)$courier_id)
                         ->get();
 
 
 
-            $all = DB::table('view_product')
+            $all = DB::table('view_product_recommendation')
                         ->select('*')
                         ->where("product_active_status" , "1")
                         ->get();

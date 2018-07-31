@@ -1636,7 +1636,7 @@ class StoreController extends Controller
         }
     }
 
- public function update_store_document (Request $request) {
+    public function update_store_document (Request $request) {
         try {
             $jwt = $request->token;
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
@@ -1654,7 +1654,6 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 try {
                   
-
                     $ktp = $request->file('ktp');
                     if ($ktp) {
                         $ktp_path = $ktp->storeAs('Store/documents/ktp', $request->store_name."_ktp.".$ktp->getClientOriginalExtension() , 'public');
@@ -1728,7 +1727,6 @@ class StoreController extends Controller
 
 
 
-
                     DB::commit();
                     $status = true;
                     $message = "documents update successfully ";
@@ -1747,6 +1745,51 @@ class StoreController extends Controller
         }
 
         return response()->json(['status'=>$status,'message'=>$message],200);
+    }
+
+     public function filter_product_store(Request $request)
+    {
+        try{
+            $min_order =$request->min_order;
+            $price_min=$request->price_min;
+            $price_max=$request->price_max;
+            $rating_min=$request->rating_min;
+            $rating_max=$request->rating_max;
+            $store_id = $request->store_id;
+            
+            
+            $product = DB::table('view_product_recommendation as a')
+                        ->join('product as b','a.product_id','=','b.product_id')
+                        ->select(DB::raw('a.*,b.min_order'))
+                        ->where('b.min_order', '>=', (int) $min_order)
+                        ->where('a.average_rating', '>=', (int) $rating_min)
+                        ->where('a.average_rating', '<=', (int) $rating_max)
+                        ->where('a.max_price', '>=', (int) $price_min)
+                        ->where('a.max_price', '<=', (int) $price_max)
+                        ->where('a.store_id', '=', $store_id)
+                        ->get();
+
+
+
+            $all = DB::table('view_product_recommendation')
+                        ->select('*')
+                        ->where("product_active_status" , "1")
+                        ->get();
+
+            $count_product = count($product);
+            $count_all = count($all);
+            $status = true;
+
+             return response()->json(['status'=>$status, 'product_info'=>$product,'count'=>$count_product,'count_all'=>$count_all],200);
+                
+
+        }
+        catch(Exception $error){
+             $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+
     }
 
    
