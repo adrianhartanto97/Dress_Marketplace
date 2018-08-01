@@ -129,3 +129,6 @@ Route::post('get_sort_by_id_store', 'Web_Controller\SellerController@get_sort_by
 
 Route::get('settings', 'Web_Controller\App2Controller@settings');
 Route::post('settings', 'Web_Controller\App2Controller@psettings');
+
+Route::get('filter_product_store', 'Web_Controller\App2Controller@filter_product_store');
+Route::post('filter_product_store', 'Web_Controller\App2Controller@filter_product_store');

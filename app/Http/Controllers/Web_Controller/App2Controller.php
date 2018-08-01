@@ -485,27 +485,7 @@ class App2Controller extends Controller
 
  
 
-    public function store_detail(Request $request, $store_id)
-    {
-        set_time_limit(86400);
-        $client = new Client();
-        $jwt = $request->cookie('jwt');
-
-        $login_info = $this->get_login_info($jwt);
-
-        $store_detail_api = $client->post($this->base_url.'get_user_store_detail', [
-            'form_params' => [
-                'store_id' => $store_id,
-                'token' => $jwt
-            ]
-        ]);
-        $store_detail = json_decode($store_detail_api->getBody());
-
-        if ($store_detail->status)
-            return view('pages.store_detail', ['login_info' => $login_info, 'store_detail' => $store_detail,'store_detail_api'=>$store_detail_api]);
-        else 
-            print_r($store_detail->message);
-    }
+    
 
   
 
@@ -1117,6 +1097,93 @@ class App2Controller extends Controller
               return Redirect::back()->with('status', false)->with('message', "Server sedang sibuk");
         }
     }
+
+    public function store_detail(Request $request, $store_id)
+    {
+        set_time_limit(86400);
+        $client = new Client();
+        $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+
+        $store_detail_api = $client->post($this->base_url.'get_user_store_detail', [
+            'form_params' => [
+                'store_id' => $store_id,
+                'token' => $jwt
+            ]
+        ]);
+        $store_detail = json_decode($store_detail_api->getBody());
+
+        if ($store_detail->status)
+            return view('pages.store_detail',
+             ['login_info' => $login_info, 
+             'store_detail' => $store_detail,
+             'store_detail_api'=>$store_detail_api,
+             'has_filter'=>'false']);
+        else 
+            print_r($store_detail->message);
+    }
+
+
+     public function filter_product_store (Request $request)
+     {
+         $jwt = $request->cookie('jwt');
+
+        $login_info = $this->get_login_info($jwt);
+        $min_order =$request->min_order;
+        $price_min=$request->price_min;
+        $price_max=$request->price_max;
+        $rating_min=$request->rating_min;
+        $rating_max=$request->rating_max;
+        $store_id = $request->store_id;
+      
+         $client = new Client();
+         try {
+             $search = $client->post($this->base_url.'filter_product_store', [
+                 'form_params' => [
+                     'min_order' => $min_order,
+                     'price_min'=>$price_min,
+                     'price_max'=>$price_max,
+                     'rating_min' => $rating_min,
+                     'rating_max' => $rating_max,
+                     'store_id' => $store_id
+
+                    
+
+                 ]
+             ]);
+
+
+             $result = json_decode($search->getBody());
+             
+            $store_detail_api = $client->post($this->base_url.'get_user_store_detail', [
+                'form_params' => [
+                    'store_id' => $store_id,
+                    'token' => $jwt
+                ]
+            ]);
+            $store_detail = json_decode($store_detail_api->getBody());
+ 
+             
+            return view('pages.store_detail',
+                [
+                  'login_info' => $login_info,    
+                  'filter_result' => $result,
+                  'store_detail' => $store_detail,
+                  'store_detail_api'=>$store_detail_api,
+                  'has_filter'=>'true'
+                ]
+            );
+            // )->render();
+
+             
+             
+         }
+         catch (Exception $e) {
+             echo $e->getMessage();
+         }  
+          
+     }
 
 
 }

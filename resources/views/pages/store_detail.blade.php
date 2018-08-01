@@ -114,49 +114,62 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                             <div class="portlet-body">
-                                                <div class="form-group">
-                                                     <div class="col-md-7">
-                                                        <label class="control-label">Min Order</label>
-                                                     </div>
-                                                     <div class="col-md-5">
-                                                        <input type="number" class="form-control" min="0" value="0">
-                                                     </div>
-                                                </div>
-                                                 <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        <label class="control-label">Price</label>
+                                        <form class="form-horizontal" action="{{ action('Web_Controller\App2Controller@filter_product_store')}}"" id="filter_store" method="post"  enctype="multipart/form-data">
+                                                 {{ csrf_field() }}
+                                            <div class="col-md-3">
+                                                 <div class="portlet-body">
+                                                    <div class="form-group">
+                                                         <div class="col-md-7">
+                                                            <label class="control-label">Min Order</label>
+                                                         </div>
+                                                         <div class="col-md-5">
+                                                            <input type="number" name="min_order" id="min_order" class="form-control" min="0" value="0">
+                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        <input id="range_26" type="range"  />
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="form-group">
-                                                        <label class="control-label">Rating</label>
-                                                    
-                                                    <div class="col-md-12">
-                                                        <input id="range_25" type="range"  />
-                                                    </div>
-                                                </div>
-                                                 <div class="form-group">
-                                                        <label class="control-label">
-                                                    </label>
 
-                                                    <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label class="control-label">Price</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input id="range_26" type="range"  />
+                                                        </div>
+                                                    </div>
+
+                                                     <div class="form-group">
+                                                        <label class="control-label">Rating</label>
+                                                        
+                                                        <div class="col-md-12">
+                                                            <input id="range_25" type="range"  />
+                                                        </div>
+                                                    </div>            
+                                                    
+                                                   
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                        </label>
+
+                                                        <div class="col-md-12">
+
+                                                            <input type="text" id="price_min" name="price_min" value="1" hidden="">
+                                                             <input type="text" id="price_max"  name="price_max" value="50000000" hidden="" >
+                                                            <input type="text" id="rating_min" name="rating_min"  value="0" hidden="">
+                                                            <input type="text" id="rating_max" name="rating_max" value="5" hidden="">
+                                                             <input type="text" id="store_id" name="store_id" value="{{$store_detail->result->store_id}}" hidden="">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-offset-3 col-md-9">
+                                                            <button type="submit" class="btn green button-submit" form="filter_store" onclick="reload()"> Apply Filter
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-actions">
-                                                <div class="row">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <button type="submit" class="btn green button-submit"> Apply Filter
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </form>
                                         <div class="col-md-9">
                                             <div class="portlet light bordered">
                                                 <div class="portlet-body">
@@ -184,10 +197,9 @@
                                                 </div>
                                                 <div class="portlet-body">
 
-
+                                                    @if ($has_filter == "false")
                                                     <div class="row" name="list">
                                                     @foreach ($store_detail->result->product as $w)
-                                                        
                                                         <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
                                                             <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
                                                                 <div class="thumbnail">
@@ -216,8 +228,42 @@
                                                             </div>
                                                         </a>
                                                      @endforeach
-
                                                     </div>
+                                                    @elseif ($has_filter == "true")
+
+                                                    <div class="row" name="list">
+                                                    @foreach ($filter_result->product_info as $w)
+                                                        <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+                                                            <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+                                                                <div class="thumbnail">
+                                                                    <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                                                                        <div style="height: 90px;">
+                                                                            <h4 class="black">
+                                                                                @if(strlen($w->product_name) > 60 )
+                                                                                {{substr($w->product_name,0,60)."..."}}
+                                                                                @else
+                                                                                {{$w->product_name}}
+                                                                                @endif
+                                                                            </h4>
+                                                                        </div>
+                                                                    
+                                                                    <b>{{$w->store_name}}</b>
+                                                                    <h3>
+                                                                        IDR 
+                                                                        @if($w->available_status == 'Y')
+                                                                            {{number_format($w->max_price)}}
+                                                                        @else
+                                                                            ({{$w->max_price}})
+                                                                        @endif
+                                                                    </h3>
+                                                                    <div class="my-rating" data-rating="{{$w->average_rating}}"></div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                     @endforeach
+                                                    </div>
+                                                    @else
+                                                    @endif
                                                   
                                                 </div>
                                             </div>
@@ -296,16 +342,16 @@
     {{HTML::script('public/global/plugins/fuelux/js/spinner.min.js')}}
     {{HTML::script('public/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js')}}
     <!--END PAGE LEVEL PLUGINS-->
-        {{HTML::script('public/global/plugins/ion.rangeslider/js/ion.rangeSlider.min.js')}}
-        {{HTML::script('public/pages/scripts/components-ion-sliders.min.js')}}
-        {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
-        {{HTML::script('public/global/plugins/nouislider/wNumb.min.js')}}
-        {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
-         {{HTML::script('public/global/plugins/jquery.pulsate.min.js')}}
-        {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
-        {{HTML::script('public/global/plugins/holder.js')}}
-        {{HTML::script('public/pages/scripts/ui-general.min.js')}}
-        <!-- {{HTML::script('public/js/store.js')}} -->
+    {{HTML::script('public/global/plugins/ion.rangeslider/js/ion.rangeSlider.min.js')}}
+    {{HTML::script('public/pages/scripts/components-ion-sliders.min.js')}}
+    {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
+    {{HTML::script('public/global/plugins/nouislider/wNumb.min.js')}}
+    {{HTML::script('public/global/plugins/nouislider/nouislider.min.js')}}
+     {{HTML::script('public/global/plugins/jquery.pulsate.min.js')}}
+    {{HTML::script('public/global/plugins/jquery-bootpag/jquery.bootpag.min.js')}}
+    {{HTML::script('public/global/plugins/holder.js')}}
+    {{HTML::script('public/pages/scripts/ui-general.min.js')}}
+    {{HTML::script('public/js/store.js')}}
 
 
     <!--BEGIN PAGE LEVEL SCRIPTS-->
@@ -365,67 +411,6 @@
 
     //RAnge 25  
  
-    function set_range_slider_value($range, $from,$to,range,min,max,from,to,num)
-    {
-    
-        var updateValues = function () {
-            $from.prop("value", from);
-            $to.prop("value", to);
-        };
-
-        $range.ionRangeSlider({
-            type: "double",
-            min: min,
-            max: max,
-            prettify_enabled: false,
-            grid: true,
-            grid_num: num,
-            onChange: function (data) {
-                from = data.from;
-                to = data.to;
-                
-                updateValues();
-            }
-        });
-
-        range = $range.data("ionRangeSlider");
-
-        var updateRange = function () {
-            range.update({
-                from: from,
-                to: to
-            });
-        };
-
-        $from.on("change", function () {
-            from = +$(this).prop("value");
-            if (from < min) {
-                from = min;
-            }
-            if (from > to) {
-                from = to;
-            }
-
-            updateValues();    
-            updateRange();
-        });
-
-        $to.on("change", function () {
-            to = +$(this).prop("value");
-            if (to > max) {
-                to = max;
-            }
-            if (to < from) {
-                to = from;
-            }
-
-            updateValues();    
-            updateRange();
-        });
-
-    }
-
-    set_range_slider_value($("#range_25"),$("#rating_min"),$("#rating_max"),0,0,5,0,0,4);
-    set_range_slider_value($("#range_26"),$("#price_min"),$("#price_max"),0,10000,10000000,0,0,3);
+   
 </script>
 @endsection
