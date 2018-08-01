@@ -338,24 +338,44 @@
                                     </div>
 
                                     
-                                    @if (sizeof($s->product) != 0)
+                                    @if (sizeof($s->product) != 0 && $s->shipping_status == "0")
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Input Receipt Number :</label>
                                         <div class="col-md-7">
                                             <input class="form-control" name="receipt_number" required>
                                         </div>
                                     </div>
+                                    @elseif($s->shipping_status == "1")
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Receipt Number :</label>
+                                        <div class="col-md-7">
+                                            <p class="form-control-static">{{$s->receipt_number}}</p>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:center; margin-top:30px;">
+                                        <h3> Status : 
+                                        @if($s->receipt_status == "0")
+                                        Not yet Received
+                                        @else
+                                        Received by Buyer
+                                        @endif
+                                        </h3>
+                                    </div>
                                     @endif
                             </div>
                         </form>
-                        @if (sizeof($s->product) != 0)
-                        <div class="row" style="margin-top:20px;text-align:center">
-                            <button type="submit" class="btn green" form="form_shipping_{{$s->order_number}}">Submit</button>    
-                        </div>
-                        @else
-                        <div class="row" style="margin-top:20px;text-align:center">
-                            <button class="btn green" onclick="finish_order({{$s->transaction_id}}, {{$s->store_id}})">Finish Order</button>
-                        </div>
+                        @if ($s->shipping_status == "0")
+
+                            @if (sizeof($s->product) != 0)
+                            <div class="row" style="margin-top:20px;text-align:center">
+                                <button type="submit" class="btn green" form="form_shipping_{{$s->order_number}}">Submit</button>    
+                            </div>
+                            @else
+                            <div class="row" style="margin-top:20px;text-align:center">
+                                <button class="btn green" onclick="finish_order({{$s->transaction_id}}, {{$s->store_id}})">Finish Order</button>
+                            </div>
+                            @endif
+                        
                         @endif
                     </div>
                 </div>

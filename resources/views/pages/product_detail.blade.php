@@ -476,7 +476,7 @@
 
 
     <script>
-     
+        var in_bag = {{$product_detail->product_info->in_bag?1:0}};
 
         $( document ).ready(function() {
             $(".my-rating").starRating({
@@ -489,7 +489,6 @@
             $('#store_info').height(tinggi-30);
             console.log({{$product_detail->wishlist_status?"true":"false"}});
 
-           
            
         });
 
@@ -536,11 +535,21 @@
                 }
             });
 
-            if (total >= min_order) {
-                $('#btn_bag').prop('disabled', false);
+            if (in_bag == 1) {
+                if (total <= 0) {
+                    $('#btn_bag').prop('disabled', true);
+                }
+                else {
+                    $('#btn_bag').prop('disabled', false);
+                }
             }
             else {
-                $('#btn_bag').prop('disabled', true);
+                if (total >= min_order) {
+                    $('#btn_bag').prop('disabled', false);
+                }
+                else {
+                    $('#btn_bag').prop('disabled', true);
+                }
             }
 
             var total_harga = total * harga;

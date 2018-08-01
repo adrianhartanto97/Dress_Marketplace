@@ -120,9 +120,9 @@ class AdminController extends Controller
             ->where('user_id', $request->user_id)
             ->update(['active_status' => '2']);
 
-            DB::table('store')
-            ->where('user_id', $request->user_id)
-            ->update(['store_active_status' => '3']);
+            // DB::table('store')
+            // ->where('user_id', $request->user_id)
+            // ->update(['store_active_status' => '3']);
         }
         catch (Exception $e) {
             $status = false;
@@ -140,9 +140,9 @@ class AdminController extends Controller
             ->where('user_id', $request->user_id)
             ->update(['active_status' => '1']);
 
-            DB::table('store')
-            ->where('user_id', $request->user_id)
-            ->update(['store_active_status' => '1']);
+            // DB::table('store')
+            // ->where('user_id', $request->user_id)
+            // ->update(['store_active_status' => '1']);
         }
         catch (Exception $e) {
             $status = false;

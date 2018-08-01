@@ -460,11 +460,16 @@ class StoreController extends Controller
             $store = DB::table('view_user_store')->where('user_id',$user_id)->first();
 
             if ($store) {
-                $order = DB::table('view_order_shipping')
-                        ->where('store_id', $store->store_id)
-                        ->where('state', '3')
-                        ->where('shipping_status', '0')
-                        ->get();
+                // $order = DB::table('view_order_shipping')
+                //         ->where('store_id', $store->store_id)
+                //         ->where(DB::raw("CAST(state AS UNSIGNED) >= 3"))
+                //         //->where('state', '3')
+                //         //->where('shipping_status', '0')
+                //         ->get();
+                $order = DB::select( DB::raw("select
+                * from view_order_shipping
+                where
+                (cast(state as unsigned) >= 3) and store_id = '".$store->store_id."'") );
 
                 foreach ($order as $o)
                 {

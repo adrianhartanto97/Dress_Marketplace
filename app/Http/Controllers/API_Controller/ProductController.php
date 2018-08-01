@@ -84,6 +84,19 @@ class ProductController extends Controller
                     
                     $product->price = $price;
 
+                    $bag_count = DB::table('cart')
+                                ->where("user_id" , $user_id)
+                                ->where("product_id" , $product_id)
+                                ->count();
+
+                    if ($bag_count > 0)
+                    {
+                        $product->in_bag = true;
+                    }
+                    else {
+                        $product->in_bag = false;
+                    }
+
                     $downline_partner = DB::table('view_downline_partner')
                                         ->select('*')
                                         ->where("product_id" , $product_id)
