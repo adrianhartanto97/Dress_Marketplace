@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::post('admin/submit_training', 'Web_Controller\AdminController@submit_training');
     Route::post('admin/submit_testing', 'Web_Controller\AdminController@submit_testing');
     Route::post('admin/generate_recommendation_api', 'Web_Controller\AdminController@generate_recommendation_api');
+    Route::post('admin/product_recommendation', 'Web_Controller\AdminController@product_recommendation');
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');

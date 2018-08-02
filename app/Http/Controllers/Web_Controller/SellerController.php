@@ -752,6 +752,4 @@ class SellerController extends Controller
         var_dump($arr);
     }
 
-   
-
 }

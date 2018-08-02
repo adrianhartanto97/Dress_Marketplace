@@ -324,30 +324,50 @@ class AdminController extends Controller
 
      public function manage_ffa_psnn (Request $request)
     {
-        $pending_product = DB::table('view_product')
-                            ->select('*')
-                            ->where("product_type" , "0")
-                            ->where("product_active_status" , "0")
-                            ->where("product_ownership" , "0")
-                            ->get();
+        // $pending_product = DB::table('view_product')
+        //                     ->select('*')
+        //                     ->where("product_type" , "0")
+        //                     ->where("product_active_status" , "0")
+        //                     ->where("product_ownership" , "0")
+        //                     ->get();
 
-        foreach ($pending_product as $p) {
-            $price = DB::table('product_price')
-                    ->select('*')
-                    ->where("product_id" , $p->product_id)
+        // foreach ($pending_product as $p) {
+        //     $price = DB::table('product_price')
+        //             ->select('*')
+        //             ->where("product_id" , $p->product_id)
+        //             ->get();
+
+        //     $size =  DB::table('product_size')
+        //             ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
+        //             ->select('product_size.size_id', 'product_size_attribute.size_name')
+        //             ->where("product_id" , $p->product_id)
+        //             ->get();
+        //     $p->price = $price;
+        //     $p->size = $size;
+        // }
+
+        $history = DB::table('param_settings')
                     ->get();
+        $store = DB::table('store')
+                ->where('store_active_status','1')
+                ->get();
 
-            $size =  DB::table('product_size')
-                    ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
-                    ->select('product_size.size_id', 'product_size_attribute.size_name')
-                    ->where("product_id" , $p->product_id)
-                    ->get();
-            $p->price = $price;
-            $p->size = $size;
-        }
-
-        return view('pages.admin.admin_panel_manage_ffa_psnn',['active_nav' => "algo", 'pending_product' => $pending_product]);
+        return view('pages.admin.admin_panel_manage_ffa_psnn',['active_nav' => "algo", 'history' => $history, 'store' => $store]);
         //print_r($pending_product);
+    }
+
+    public function product_recommendation(Request $request)
+    {
+        $store_id = $request->store_id;
+        $product = DB::table('view_product_recommendation')
+                    ->select('*')
+                    ->where('store_id',$store_id)
+                    ->where('product_type','0')
+                    ->where('product_active_status','1')
+                    ->orderBy('recommendation','desc')
+                    ->get(); 
+
+        return view('pages.admin.store_product_recommendation',['result' => $product]);
     }
 
     private function sigmoid_bipolar($x) {
@@ -895,4 +915,5 @@ class AdminController extends Controller
             return response()->json(['status' => false, 'message' => 'fail'], 200);
         }
     }
+
 }

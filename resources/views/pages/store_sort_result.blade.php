@@ -21,6 +21,7 @@
                 IDR {{number_format($w->max_price)}}
             </h3>
             <div class="my-rating" data-rating="{{$w->average_rating}}"></div>
+            <div style="text-align:center">{{$w->recommendation}}</div>
         </div>
     </div>
 </a>

@@ -153,5 +153,7 @@ class MasterDataController extends Controller
                 $message = $error->getMessage();
             }
         }
+
+        return response()->json(['status'=>true],200);
     }
 }

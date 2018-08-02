@@ -23,7 +23,10 @@
                 <a href="#tab_2" data-toggle="tab"> Testing</a>
             </li>
             <li>
-                <a href="#tab_3" data-toggle="tab"> Product Recommendation</a>
+                <a href="#tab_3" data-toggle="tab"> History</a>
+            </li>
+            <li>
+                <a href="#tab_4" data-toggle="tab"> Product Recommendation</a>
             </li>
             <!-- <li>
                 <a href="#tab_4" data-toggle="tab"> Training Result</a>
@@ -303,7 +306,74 @@
                     </div>
                 </div>
             </div>
+
             <div class="tab-pane" id="tab_3">
+                <table class="table table-striped table-bordered table-hover" id="sample_2">
+                    <thead>
+                        <tr>
+                            <th>Random Seed</th>
+                            <th>Firefly</th>
+                            <th>Maks Epoch FFA</th>
+                            <th>Base Beta</th>
+                            <th>Gamma</th>
+                            <th>Alpha</th>
+                            <th>Maks Epoch PSNN</th>
+                            <th>Summing Unit</th>
+                            <th>Learning Rate</th>
+                            <th>Momentum</th>
+                            <th>RMSE</th>
+                            <th>Status Use</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($history as $r)
+                        <tr>
+                            <td> {{$r->random_seed}} </td>
+                            <td> {{$r->param_firefly}} </td>
+                            <td> {{$r->param_maks_epoch_ffa}} </td>
+                            <td> {{round($r->param_base_beta,2)}}</td>
+                            <td> {{round($r->param_gamma,2)}}</td>
+                            <td>  {{round($r->param_alpha,2)}} </td>
+                            <td>  {{$r->param_maks_epoch_psnn}}</td>
+                            <td>  {{$r->param_summing_units}} </td>
+                            <td> {{round($r->param_learning_rate,2)}} </td>
+                            <td>  {{round($r->param_momentum,2)}}</td>
+                            <td>  {{$r->rmse}}</td>
+                            <td>  {{$r->status_use?"true":"false"}}</td>
+                            <td>
+                                @if($r->status_use==0) 
+                                <button class="btn blue" onclick="generate_recommendation({{$r->id}})">
+                            Generate<br> Recommendation</button>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="tab_4">
+                <div class="form-horizontal">
+                    <div class="form-body row">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Store
+                            </label>
+                            <div class="col-md-3">
+                                <select class="form-control" name="store">
+                                    @foreach($store as $s)
+                                    <option value="{{$s->store_id}}">{{$s->store_id}} - {{$s->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin_top:50px" id="product_recommendation_container">
+                </div>
+            </div>
+            <!-- <div class="tab-pane" id="tab_3">
 
                 <div class="portlet box">
                     <div class="portlet-body">
@@ -363,8 +433,8 @@
                         </form>
                     </div>
                 </div>   
-            </div>
-            <div class="tab-pane" id="tab_4">
+            </div> -->
+            <!-- <div class="tab-pane" id="tab_4">
                 <div class="portlet box">
                     <div class="portlet-body">
                         <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST">
@@ -451,58 +521,7 @@
                              Generate Recommendation</button>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane" id="tab_5">
-                <div class="portlet box">
-                    <div class="portlet-body">
-                         <h2 style="text-align: center;"> Testing Result</h2><br>
-
-                        <!-- <form action="#" class="form-horizontal" enctype="multipart/form-data" id="submit_form" method="POST"> -->
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <div class="portlet-body">
-                                        <table class="table table-striped table-bordered table-hover" id="sample_2">
-                                            <thead>
-                                                <tr>
-                                                    <th>Firefly</th>
-                                                    <th>Maks Epoch FFA</th>
-                                                    <th>Base Beta</th>
-                                                    <th>Gamma</th>
-                                                    <th>Alpha</th>
-                                                    <th>Maks Epoch PSNN</th>
-                                                    <th>Summing Unit</th>
-                                                    <th>Learning Rate</th>
-                                                    <th>Momentum</th>
-                                                    <th>RMSE</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @for($i=1,$satu=1,$dua=0.5;$i<=5;$i++,$satu+=2,$dua+=0.5)
-                                                <tr>
-                                                    <td> {{$i}} </td>
-                                                    <td> {{$satu}} </td>
-                                                    <td> {{$dua}}</td>
-                                                    <td> {{2*$satu-1}}</td>
-                                                    <td>  {{3*$dua-1}} </td>
-                                                    <td>  {{4*$dua-1}}</td>
-                                                    <td>  {{$satu+$i}} </td>
-                                                    <td> {{$dua/5}} </td>
-                                                    <td>  {{2*$dua+2}}</td>
-                                                    <td>  {{$dua/10}}</td>
-                                                </tr>
-                                               
-                                                @endfor
-                                               
-                                               
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div> 
-                        
-                    </div>
-                </div>   
-            </div>
+            </div> -->
           
         </div>
     </div>
@@ -520,7 +539,7 @@
                 data : {
                     product_id : product_id
                 },
-                async: false,
+                async: true,
                 success : function(response) {
                     location.reload();
                 },
@@ -618,7 +637,55 @@
                         App.unblockUI();
                     }
                 });
-            });   
+            });
+
+            $('select[name="store"]').change(function() {
+                App.blockUI({
+                    boxed: true
+                });
+                $.ajax({
+                    type:"POST",
+                    url: "http://localhost/dress_marketplace/admin/product_recommendation",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data : {
+                        store_id : $(this).val()
+                    },
+
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#product_recommendation_container').html(html);
+                        App.unblockUI();
+                    }
+                });
+            });
+            
+            $('select[name="store"]').trigger('change');
         });
+
+        function generate_recommendation(param_id)
+        {
+            App.blockUI({
+                boxed: true
+            });
+            $.ajax({
+                type:"POST",
+                url : "http://localhost/dress_marketplace/api/generate_recommendation",
+                data : {
+                    param_id : param_id
+                },
+                async: false,
+                success : function(response) {
+                    location.reload();
+                    //console.log(response);
+                    App.unblockUI();
+                },
+                error: function() {
+                    alert('Error occured');
+                    App.unblockUI();
+                }
+            });
+        }
     </script>
 @endsection
