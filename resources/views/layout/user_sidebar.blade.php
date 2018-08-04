@@ -57,9 +57,9 @@
         </div>
 
         <div class="row">
-            <div class="portlet box yellow">
+            <div class="portlet box" style="background-color: grey;">
                 <div class="portlet-title">
-                    <div class="caption">
+                    <div class="caption" style="text-align: right;margin-right: 0px;padding-right: 0px; color:black;">
                         My Profile
                     </div>
                 </div>
