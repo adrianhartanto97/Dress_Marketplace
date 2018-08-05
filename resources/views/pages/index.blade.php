@@ -56,10 +56,10 @@
                     </div>
                 </div>
 
-                <div style="text-align: right">
+                <!-- <div style="text-align: right"> -->
                 <h1>New Product</h1>
                 <a href="{{url('/search')}}" >Go to all product page</a>
-                </div>
+                <!-- </div> -->
             
                 <div class="portlet light bordered">
                     <div class="portlet-body">

@@ -209,7 +209,7 @@
                                                             <span class="required"> * </span>
                                                         </label>
                                                         <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="amount" value="{{$p->amount}}"/>
+                                                            <input type="text" class="form-control" name="amount" value="@if(!$p->amount){{$p->invoice_grand_total}}@else{{$p->amount}}@endif"/>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">

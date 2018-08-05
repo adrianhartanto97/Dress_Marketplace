@@ -755,4 +755,17 @@ class AppController extends Controller
             echo $e->getMessage();
         }
     }
+
+    public function faq_page(Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.faq',['login_info' => $login_info]);
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
 }

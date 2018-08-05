@@ -211,6 +211,14 @@
                                                         {{ csrf_field() }}
                                                         <div class="form-body">
                                                             <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                                            <div class="form-group row">
+                                                                <div class="col-md-3" style="text-align:right;">
+                                                                    <b>Size</b>
+                                                                </div>
+                                                                <div class="col-md-7" style="text-align:center;">
+                                                                    <b>Qty</b>
+                                                                </div>
+                                                            </div>
                                                             @foreach ($product_detail->product_info->size as $s)
                                                             <div class="form-group">
                                                                 <label class="control-label col-md-3">

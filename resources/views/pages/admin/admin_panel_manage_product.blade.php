@@ -1,7 +1,7 @@
 @extends('pages.admin.admin_panel_layout')
 
 @section('content')
-    <div class="tabbable-custom">
+    <!-- <div class="tabbable-custom">
         <ul class="nav nav-tabs ">
             <li class="active">
                 <a href="#tab_1" data-toggle="tab"> Pending Product</a>
@@ -202,9 +202,9 @@
                                 <button type="button" class="btn green" onclick="reject({{$s->product_id}})">Reject</button>
                             </div>
                         </div>
-                        <!-- /.modal-content -->
+                        
                     </div>
-                    <!-- /.modal-dialog -->
+                    
                 </div>
             @endforeach
             </div>
@@ -244,6 +244,35 @@
                     </div>
             </div>
         </div>
+    </div> -->
+
+    <div style="text-align:center;">
+    <h2>Product List</h2>
+    </div>
+    <div class="row" style="margin-top:50px;">
+        @foreach ($product_active as $w)
+        
+        <a href="{{url('/product_detail')}}/{{$w->product_id}}"  style="text-decoration:none;">
+        <div class="col-lg-3 col-xs-6 col-sm-4 col-md-3 center">
+            <div class="thumbnail" style="text-align: center;">
+                <img src="{{asset('/public/storage/').'/'.$w->photo}}" alt="" style="width: 100%; height: 170px;">
+                    <div style="height: 60px;">
+                            <h4 class="black">
+                            @if(strlen($w->product_name) > 60 )
+                            {{substr($w->product_name,0,60)."..."}}
+                            @else
+                            {{$w->product_name}}
+                            @endif
+                        </h4>
+                    </div>
+                    
+                <b>{{$w->store_name}}</b>
+                <h3>IDR {{$w->max_price}}</h3>
+                    <p class="my-rating" data-rating="{{$w->average_rating}}"></p>
+            </div>
+        </div>
+        </a>
+        @endforeach
     </div>
 @endsection
 

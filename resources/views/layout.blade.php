@@ -64,7 +64,7 @@
             </div>
         </div>
         <div class="page-footer">
-            <div class="page-footer-inner"> 2018 &copy; DressMarketplace
+            <div class="page-footer-inner"> 2018 &copy; DressMarketplace | <a href="{{url('/faq')}}">FAQ</a>
                
             </div>
             <div class="scroll-to-top">

@@ -274,7 +274,7 @@ class StoreController extends Controller
                     $product->decoration_id = $request->decoration_id;
                     $product->patterntype_id = $request->patterntype_id;
                     $product->product_type = "0";
-                    $product->product_active_status = "0";
+                    $product->product_active_status = "1";
                     $product->product_ownership = "0";
 
                     $product->save();

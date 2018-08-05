@@ -164,16 +164,20 @@ var Login = function() {
                     required: true
                 },
                 phone_number: {
-                    required: true
-                },
-                email: {
                     required: true,
+                    number:true
                 },
-                password: {
-                    required: true
+                register_email: {
+                    required: true,
+                    email : true
+                },
+                register_password: {
+                    required: true,
+                    minlength: 6
                 },
                 rpassword: {
                     required: true,
+                    minlength: 6,
                     equalTo: "#register_password"
                 },
 
