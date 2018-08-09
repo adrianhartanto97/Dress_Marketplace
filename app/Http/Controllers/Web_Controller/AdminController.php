@@ -15,6 +15,8 @@ use \Exception;
 use \stdClass;
 use Illuminate\Support\Facades\Input;
 use App\Param_Settings;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminController extends Controller
 {
@@ -153,36 +155,71 @@ class AdminController extends Controller
 
     public function manage_product (Request $request)
     {
-        $pending_product = DB::table('view_product')
-                            ->select('*')
-                            ->where("product_type" , "0")
-                            ->where("product_active_status" , "0")
-                            ->where("product_ownership" , "0")
+        // $pending_product = DB::table('view_product')
+        //                     ->select('*')
+        //                     ->where("product_type" , "0")
+        //                     ->where("product_active_status" , "0")
+        //                     ->where("product_ownership" , "0")
+        //                     ->get();
+
+        $product_report = DB::table('view_product_report AS a')
+                            ->join('product AS b', 'a.product_id', '=', 'b.product_id')
+                            ->select('b.*')
+                            ->get();
+        foreach($product_report as $p)
+        {
+            $report = DB::table('product_report AS a')
+                        ->join('user AS b','a.user_id', '=', 'b.user_id')
+                        ->select('a.*','b.full_name')
+                        ->where("a.product_id" , $p->product_id)
+                        ->get();
+
+            $p->report = $report;
+        }
+
+        $nonactive_product = DB::table('view_admin_nonactive_product AS a')
                             ->get();
 
-         $product_active = DB::table('view_product')
+        // foreach ($pending_product as $p) {
+        //     $price = DB::table('product_price')
+        //             ->select('*')
+        //             ->where("product_id" , $p->product_id)
+        //             ->get();
+
+        //     $size =  DB::table('product_size')
+        //             ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
+        //             ->select('product_size.size_id', 'product_size_attribute.size_name')
+        //             ->where("product_id" , $p->product_id)
+        //             ->get();
+        //     $p->price = $price;
+        //     $p->size = $size;
+        // }
+
+        return view('pages.admin.admin_panel_manage_product',['active_nav' => "manage_product", 'product_report' => $product_report, 'nonactive_product' => $nonactive_product]);
+        //print_r($pending_product);
+    }
+
+    public function product_active(Request $request)
+    {
+        $product_active = DB::table('view_product_recommendation')
                             ->select('*')
                             ->where("product_active_status" , "1")
                             ->get();
+        $collection = collect($product_active);
+        
+        $page = Input::get('page', 1);
+        $perPage = 10;
+        
+        $transaction = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('admin/product_active')]);
 
-        foreach ($pending_product as $p) {
-            $price = DB::table('product_price')
-                    ->select('*')
-                    ->where("product_id" , $p->product_id)
-                    ->get();
-
-            $size =  DB::table('product_size')
-                    ->join('product_size_attribute', 'product_size.size_id', '=', 'product_size_attribute.size_id')
-                    ->select('product_size.size_id', 'product_size_attribute.size_name')
-                    ->where("product_id" , $p->product_id)
-                    ->get();
-            $p->price = $price;
-            $p->size = $size;
-        }
-
-        return view('pages.admin.admin_panel_manage_product',['active_nav' => "manage_product", 'pending_product' => $pending_product,'product_active'=>$product_active]);
-        //print_r($pending_product);
+        return view('pages.admin.admin_product_active', 
+            [
+                'product_active' => $transaction
+            ]
+        )->render();
     }
+
+
 
     public function accept_product (Request $request) 
     {
@@ -208,6 +245,22 @@ class AdminController extends Controller
             DB::table('product')
             ->where('product_id', $request->product_id)
             ->update(['product_active_status' => '2', 'reject_comment' => $request->reject_comment]);
+            }
+        catch (Exception $e) {
+            $status = false;
+            print_r($e->getMessage());
+        }
+        return response()->json(['status' => $status, 'message' => $message], 200);
+    }
+
+    public function set_nonactive_product (Request $request) 
+    {
+        $message = "success";
+        $status = true;
+        try {
+            DB::table('product')
+            ->where('product_id', $request->product_id)
+            ->update(['product_active_status' => '2']);
             }
         catch (Exception $e) {
             $status = false;

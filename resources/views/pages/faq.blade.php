@@ -185,7 +185,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane active" id="tab_2">
+                <div class="tab-pane" id="tab_2">
                     <div class="faq-page faq-content-1">
                         <div class="faq-content-container">
                             <div class="row">

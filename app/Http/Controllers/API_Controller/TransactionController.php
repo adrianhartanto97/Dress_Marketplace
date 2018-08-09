@@ -18,6 +18,7 @@ use App\Store_Courier_Service;
 use App\Product;
 use App\Product_Size;
 use App\Product_Price;
+use App\Product_Report;
 use App\Cart;
 use App\Sales_Transaction_Header;
 use App\Sales_Transaction_Payment;
@@ -1317,5 +1318,37 @@ class TransactionController extends Controller
             $message = $error->getMessage();
             return response()->json(['status'=>$status,'message'=>$message],200);
         }
+    }
+
+    public function report_product(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $product_id = $request->product_id;
+            $issue = $request->issue;
+            $comment = $request->comment;
+
+            $report = new Product_Report();
+            $report->product_id = $product_id;
+            $report->user_id = $user_id;
+            $report->issue = $issue;
+            $report->comment = $comment;
+            $report->save();
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
     }
 }

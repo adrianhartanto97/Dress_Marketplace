@@ -43,6 +43,7 @@ return array(
     'App\\Partnership_Request_Price' => $baseDir . '/app/Partnership_Request_Price.php',
     'App\\Product' => $baseDir . '/app/Product.php',
     'App\\Product_Price' => $baseDir . '/app/Product_Price.php',
+    'App\\Product_Report' => $baseDir . '/app/Product_Report.php',
     'App\\Product_Review_Rating' => $baseDir . '/app/Product_Review_Rating.php',
     'App\\Product_Size' => $baseDir . '/app/Product_Size.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',

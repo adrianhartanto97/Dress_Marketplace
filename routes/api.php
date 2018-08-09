@@ -108,4 +108,4 @@ Route::post('delete_all_product_from_bag', 'API_Controller\TransactionController
 Route::post('dashboard', 'API_Controller\StoreController@dashboard');
 Route::post('delete_product', 'API_Controller\ProductController@delete_product');
 Route::post('filter_product_store', 'API_Controller\StoreController@filter_product_store');
-
+Route::post('report_product', 'API_Controller\TransactionController@report_product');

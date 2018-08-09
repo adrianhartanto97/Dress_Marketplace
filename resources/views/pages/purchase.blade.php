@@ -209,7 +209,10 @@
                                                             <span class="required"> * </span>
                                                         </label>
                                                         <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="amount" value="@if(!$p->amount){{$p->invoice_grand_total}}@else{{$p->amount}}@endif"/>
+                                                            <input type="text" class="form-control" id = "amount_{{$p->transaction_id}}" name="amount" value="@if($p->amount){{$p->amount}}@endif"/>
+                                                            @if(!$p->amount)
+                                                            <input type="checkbox" id="same_{{$p->transaction_id}}"> Same as Order<br>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -881,6 +884,23 @@
             $('input[name="date"]').datepicker({
                 format : 'yyyy-mm-dd'
             });
+            
+            @foreach ($purchase_payment as $p)
+            var netto_{{$p->transaction_id}} = {{$p->invoice_grand_total}}
+
+            $("#same_{{$p->transaction_id}}").change(function() {
+                var ischecked= $(this).is(':checked');
+                if(ischecked) {
+                    $('#amount_{{$p->transaction_id}}').val(netto_{{$p->transaction_id}});
+                    $('#amount_{{$p->transaction_id}}').prop("readonly", true);
+                }
+                else {
+                    $('#amount_{{$p->transaction_id}}').val(0);
+                    $('#amount_{{$p->transaction_id}}').prop("readonly", false);
+                }
+            });
+
+            @endforeach
         });
     </script>
 @endsection

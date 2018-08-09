@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::post('admin/submit_testing', 'Web_Controller\AdminController@submit_testing');
     Route::post('admin/generate_recommendation_api', 'Web_Controller\AdminController@generate_recommendation_api');
     Route::post('admin/product_recommendation', 'Web_Controller\AdminController@product_recommendation');
+    Route::get('admin/product_active', 'Web_Controller\AdminController@product_active');
+    Route::post('admin/set_nonactive_product', 'Web_Controller\AdminController@set_nonactive_product');
 });
 
 Route::post('proses', 'Web_Controller\SellerController@test');
@@ -135,3 +137,4 @@ Route::get('filter_product_store', 'Web_Controller\App2Controller@filter_product
 Route::post('filter_product_store', 'Web_Controller\App2Controller@filter_product_store');
 
 Route::get('faq', 'Web_Controller\AppController@faq_page');
+Route::post('report_product', 'Web_Controller\AppController@report_product');

@@ -185,6 +185,12 @@
                                 <div class="col-md-12" style="text-align:center; margin-top:20px;">
                                     <button type="button" class="btn red btn-lg" data-toggle="modal" href="#add_to_bag" @if($login_info->login_status == false or $product_detail->product_info->available_status == 'N') disabled @endif>Add to Bag</button>
                                 </div>
+
+                                @if($login_info->login_status == true)
+                                <div class="col-md-12" style="margin-top:30px;text-align:right;">
+                                    <a data-toggle="modal" href="#report"> <i class="fa fa-commenting-o"></i> Report Product </a>
+                                </div>
+                                @endif
                             </div>
 
                             <!--begin modal -->
@@ -239,6 +245,57 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
                                             <button type="submit" id="btn_bag" class="btn red" form="form1" disabled>Add to Bag</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!--end modal -->
+
+                            <!--begin modal -->
+                            <div class="modal fade bs-modal-sm" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title">Report Product</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ action('Web_Controller\AppController@report_product') }}" class="form-horizontal" id="form3">
+                                                {{ csrf_field() }}
+                                                <div class="form-body">
+                                                    <input type="hidden" name="product_id" value="{{$product_detail->product_info->product_id}}">
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3">
+                                                            What's the issue?
+                                                        </label>
+                                                        <div class="col-md-7">
+                                                            <select class="form-control" name="issue" id="report_issue">
+                                                                <option value="Image does not match product">Image does not match product</option>
+                                                                <option value="Offensive or adult content">Offensive or adult content</option>
+                                                                <option value="Incorrect Information">Incorrect Information</option>
+                                                                <option value="Missing Information">Missing Information</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3">
+                                                            Comment (Opsional)
+                                                        </label>
+                                                        <div class="col-md-7">
+                                                            <textarea class="form-control" name="comment" id="report_comment"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                            <button type="submit" id="btn_report" class="btn red" form="form3">Submit</button>
                                         </div>
                                     </div>
                                     <!-- /.modal-content -->

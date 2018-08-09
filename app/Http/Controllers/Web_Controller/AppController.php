@@ -768,4 +768,33 @@ class AppController extends Controller
             echo $e->getMessage();
         }
     }
+
+    public function report_product(Request $request)
+    {
+        try {
+            $product_id = $request->product_id;
+            $issue = $request->issue;
+            $comment = $request->comment;
+
+            $jwt = $request->cookie('jwt');
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'report_product', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'product_id' => $product_id,
+                    'issue' => $issue,
+                    'comment' => $comment
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }
