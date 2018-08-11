@@ -792,7 +792,25 @@
                         </div>
 
                         <div class="tab-pane" id="tab_5">
-                            <div id="transaction_history_container">
+                            <div class="tabbable-custom">
+                                <ul class="nav nav-tabs ">
+                                    <li class="active">
+                                        <a href="#tab_1_t" data-toggle="tab"> Success Transaction </a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_2_t" data-toggle="tab"> Rejected Payment </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1_t">
+                                        <div id="transaction_history_container">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tab_2_t">
+                                        <div id="reject_payment_history_container">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -871,12 +889,29 @@
             });
             $.ajax({
                 url: "http://localhost/dress_marketplace/transaction_history",
+                async: false,
                 data : {
                     
                 },
                 dataType: 'html',
                 success: function(html) {
                     $('#transaction_history_container').html(html);
+                    App.unblockUI();
+                }
+            });
+
+            App.blockUI({
+                boxed: true
+            });
+            $.ajax({
+                url: "http://localhost/dress_marketplace/reject_payment_history",
+                async: false,
+                data : {
+                    
+                },
+                dataType: 'html',
+                success: function(html) {
+                    $('#reject_payment_history_container').html(html);
                     App.unblockUI();
                 }
             });

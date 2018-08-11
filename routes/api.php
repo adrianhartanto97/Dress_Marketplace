@@ -109,3 +109,4 @@ Route::post('dashboard', 'API_Controller\StoreController@dashboard');
 Route::post('delete_product', 'API_Controller\ProductController@delete_product');
 Route::post('filter_product_store', 'API_Controller\StoreController@filter_product_store');
 Route::post('report_product', 'API_Controller\TransactionController@report_product');
+Route::post('reject_payment_history', 'API_Controller\TransactionController@reject_payment_history');

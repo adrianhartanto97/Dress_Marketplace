@@ -907,6 +907,60 @@ class TransactionController extends Controller
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
 
+    public function reject_payment_history (Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $invoice = DB::table('view_sales_transaction_payment AS a')
+                        ->join('company_bank_account AS b', 'a.company_bank_id', '=', 'b.bank_id')
+                        ->select('a.*', 'b.bank_name as company_bank_name', 'b.branch as company_bank_branch', 'b.account_number as company_bank_account_number', 'name_in_account as company_bank_name_account', 'logo as company_bank_logo')
+                        ->where('user_id', $user_id)
+                        ->where('payment_status', 'Reject')
+                        ->get();
+
+            foreach ($invoice as $t) {
+                $order_store = DB::table('view_sales_transaction_store')
+                                ->where('transaction_id', $t->transaction_id)
+                                ->where('user_id', $user_id)
+                                ->get();
+                $t->order_store = $order_store; 
+                foreach ($order_store as $store)
+                {
+                    
+                    $product = DB::table('view_transaction_summary_product')
+                                ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                ->where('transaction_id',$store->transaction_id)
+                                ->where('store_id',$store->store_id)
+                                ->get();
+                    foreach ($product as $p) {
+                        $product_size = DB::table('view_transaction_detail_product')
+                                ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                                ->where('transaction_id',$store->transaction_id)
+                                ->where('store_id',$store->store_id)
+                                ->where('product_id',$p->product_id)
+                                ->get();
+                        $p->size_info = $product_size;
+                    }
+                    $store->product = $product;
+                    
+                }
+            }
+
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$invoice],200);
+            
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
     public function transaction_history (Request $request)
     {
         try {
@@ -914,10 +968,20 @@ class TransactionController extends Controller
             $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
             $user_id = $decoded->data->user_id;
 
-            $transaction = DB::table('view_order_status')
-                            ->where('user_id', $user_id)
-                            ->where('state', '5')
-                            ->get();
+            $invoice = DB::table('view_order_status')
+                        ->distinct('transaction_id', 'invoice_date')
+                        ->where('user_id', $user_id)
+                        ->where('state', '5')
+                        ->get();
+            
+            foreach($invoice as $i) {
+                $transaction = DB::table('view_order_status')
+                    ->where('user_id', $user_id)
+                    ->where('state', '5')
+                    ->where('transaction_id', $i->transaction_id)
+                    ->get();
+                $i->transaction = $transaction;
+            }
                             
             foreach ($transaction as $t) {   
                 $product = DB::table('view_transaction_summary_product')
@@ -975,7 +1039,7 @@ class TransactionController extends Controller
                 
             }
             $status = true;
-            return response()->json(['status'=>$status,'result'=>$transaction],200);
+            return response()->json(['status'=>$status,'result'=>$invoice],200);
         }
         catch(Exception $error)
         {

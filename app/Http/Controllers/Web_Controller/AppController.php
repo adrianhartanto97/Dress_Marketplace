@@ -721,6 +721,41 @@ class AppController extends Controller
         }
     }
 
+    public function reject_payment_history(Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $login_info = $this->get_login_info($jwt);
+            $client = new Client();
+            $res = $client->post($this->base_url.'reject_payment_history', [
+                'form_params' => [
+                    'token' => $jwt
+                ]
+            ]);
+
+            $history = json_decode($res->getBody())->result;
+            $collection = collect($history);
+            //$transaction = new LengthAwarePaginator($collection, count($collection), 1, 1, ['path'=>url('transaction_history')]);
+            
+            $page = Input::get('page', 1);
+            $perPage = 5;
+	        
+	        $transaction = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('reject_payment_history')]);
+
+            return view('pages.reject_payment_history', 
+                [
+                    'transaction' => $transaction
+                ]
+            )->render();
+
+            //$users = DB::table('user')->paginate(1);
+            //print_r($transaction);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function transaction_history (Request $request)
     {
         try {
@@ -738,7 +773,7 @@ class AppController extends Controller
             //$transaction = new LengthAwarePaginator($collection, count($collection), 1, 1, ['path'=>url('transaction_history')]);
             
             $page = Input::get('page', 1);
-            $perPage = 1;
+            $perPage = 5;
 	        
 	        $transaction = new LengthAwarePaginator($collection->forPage($page, $perPage), $collection->count(), $perPage, $page, ['path'=>url('transaction_history')]);
 
