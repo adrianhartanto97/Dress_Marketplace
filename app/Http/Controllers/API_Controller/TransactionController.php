@@ -1415,4 +1415,62 @@ class TransactionController extends Controller
 
         return response()->json(['status'=>$status,'message'=>$message],200);
     }
+
+    function get_notification(Request $request)
+    {
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+
+            $result = DB::table('notification')
+                        ->where('user_id', $user_id)
+                        ->orderBy('date','desc')
+                        ->get();
+
+            $count_unread = DB::table('notification')
+                            ->where('user_id', $user_id)
+                            ->where('status_read',0)
+                            ->count();
+            
+            $status = true;
+            return response()->json(['status'=>$status,'result'=>$result, 'count_unread' => $count_unread],200);
+        }
+        catch(Exception $error)
+        {
+            $status = false;
+            $message = $error->getMessage();
+            return response()->json(['status'=>$status,'message'=>$message],200);
+        }
+    }
+
+    public function read_notification(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $jwt = $request->token;
+            $decoded = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $user_id = $decoded->data->user_id;
+            $notification_id = $request->notification_id;
+
+            $db = DB::table('notification')
+                    ->where([
+                        'id' =>$notification_id,
+                        'user_id' => $user_id
+                    ])
+                    ->update(['status_read' => 1]);
+
+            DB::commit();
+            $status = true;
+            $message = "Submitted Successfully";  
+        }
+        catch(Exception $error)
+        {
+            DB::rollback();
+            $status = false;
+            $message = $error->getMessage();
+        }
+
+        return response()->json(['status'=>$status,'message'=>$message],200);
+    }
 }

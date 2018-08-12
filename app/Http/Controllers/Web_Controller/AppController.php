@@ -33,6 +33,7 @@ class AppController extends Controller
         $user_info = new stdClass();
         $user_store_info = new stdClass();
         $user_cart_info = new stdClass();
+        $notification = new stdClass();
         $client = new Client();
         if ($jwt) {
             try{
@@ -80,6 +81,18 @@ class AppController extends Controller
             catch (Exception $e) {
                 $login_status = false;
             }
+
+            try {
+                $user_notification = $client->post($this->base_url.'get_notification', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+                $notification = json_decode($user_notification->getBody());
+            }
+            catch (Exception $e) {
+                $login_status = false;
+            }
         }
         else {
             $login_status = false;
@@ -90,6 +103,7 @@ class AppController extends Controller
         $result->user_info = $user_info;
         $result->user_store_info = $user_store_info;
         $result->user_cart_info = $user_cart_info;
+        $result->notification = $notification;
 
         return $result;
     }
@@ -826,6 +840,39 @@ class AppController extends Controller
             $body = json_decode($res->getBody());
 
             return Redirect::back()->with('status', $body->status)->with('message', $body->message);
+        }
+
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function read_notification(Request $request)
+    {
+        try {
+            $notification_id = $request->notification_id;
+            $transaction_code = $request->transaction_code;
+
+            $jwt = $request->cookie('jwt');
+
+            $client = new Client();
+            $res = $client->post($this->base_url.'read_notification', [
+                'form_params' => [
+                    'token' => $jwt,
+                    'notification_id' => $notification_id
+                ]
+            ]);
+
+            $body = json_decode($res->getBody());
+
+            // if ($transaction_code == "PAYMENT-ACCEPT") {
+            //     return redirect('purchase#tab_2');
+            // }
+            // else if(transaction_code == "PAYMENT-REJECT") {
+            //     return redirect('purchase#tab_2_t');  
+            // } 
+
+            return response()->json(['status'=>'true','message'=>'success'],200);
         }
 
         catch (Exception $e) {

@@ -21,7 +21,7 @@
                         </div>
                     </form> -->
 
-                    <form class="search-form search-form-expanded" action="{{ action('Web_Controller\App2Controller@search') }}"" method="post" id="search" enctype="multipart/form-data">
+                    <form class="search-form search-form-expanded" action="{{ action('Web_Controller\App2Controller@search') }}" method="post" id="search" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search..." name="product_name" value="" style="color: white;">
@@ -62,14 +62,40 @@
                             <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-bell"></i>
-<!--                                     <span class="badge badge-default"> 7 </span>
- -->                                </a>
+                                        <span class="badge badge-default"> {{$login_info->notification->count_unread}} </span>                               
+                                </a>
                                 <ul class="dropdown-menu">
-                                    <li>
+                                    <!-- <li>
                                         <a href="{{url('/purchase')}}" class="list-group-item"> Purchase </a>
                                     </li>
                                     <li>
                                         <a href="javascript:;" class="list-group-item"> Request for Quotation </a>                  
+                                    </li> -->
+                                    <li class="external">
+                                        <h3>
+                                            <span class="bold">{{$login_info->notification->count_unread}} new</span> notifications</h3>
+                                        <!-- <a href="page_user_profile_1.html">view all</a> -->
+                                    </li>
+                                    <li>
+                                        <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                            @foreach ($login_info->notification->result as $r)
+                                            <li>
+                                                <a onclick="read_notification({{$r->id}},'{{$r->transaction_code}}')">
+                                                    <span class="time">
+                                                        @if($r->status_read == 0)
+                                                        New
+                                                        @endif
+                                                    </span>
+                                                    <span class="details">
+                                                        <span class="label label-sm label-icon label-@if($r->transaction_code == 'PAYMENT-ACCEPT')success @elseif($r->transaction_code == 'PAYMENT-REJECT')danger @endif">
+                                                            <i class="fa fa-@if($r->transaction_code == 'PAYMENT-ACCEPT')check @elseif($r->transaction_code == 'PAYMENT-REJECT')close @endif"></i>
+                                                        </span> 
+                                                        {{$r->transaction_code}} (id : {{$r->transaction_number}}) <br>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
                                     </li>
                                 </ul>
                             </li>
@@ -286,3 +312,30 @@
                 </div>
                 <!-- END HEADER INNER -->
             </div>
+
+<script>
+    function read_notification(notification_id, transaction_code) {
+        $.ajax({
+            type:"POST",
+            url : "http://localhost/dress_marketplace/read_notification",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data : {
+                notification_id : notification_id,
+                transaction_code : transaction_code,
+            },
+            success : function(response) {
+                if (transaction_code == "PAYMENT-ACCEPT") {
+                    window.location.href="{{url('/purchase#tab_2')}}";
+                }
+                else if(transaction_code == "PAYMENT-REJECT") {
+                    window.location.href="{{url('/purchase#tab_2_t')}}";
+                }
+            },
+            error: function() {
+                alert('Error occured');
+            }
+        });
+    }
+</script>

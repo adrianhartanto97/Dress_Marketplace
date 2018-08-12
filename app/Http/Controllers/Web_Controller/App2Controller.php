@@ -34,6 +34,7 @@ class App2Controller extends Controller
         $user_store_info = new stdClass();
         $user_cart_info = new stdClass();
         $user_wishlist_info = new stdClass();
+        $notification = new stdClass();
         $client = new Client();
         if ($jwt) {
             try{
@@ -92,6 +93,18 @@ class App2Controller extends Controller
             catch (Exception $e) {
                 $login_status = false;
             }
+
+            try {
+                $user_notification = $client->post($this->base_url.'get_notification', [
+                    'form_params' => [
+                        'token' => $jwt
+                    ]
+                ]);
+                $notification = json_decode($user_notification->getBody());
+            }
+            catch (Exception $e) {
+                $login_status = false;
+            }
         }
         else {
             $login_status = false;
@@ -103,6 +116,7 @@ class App2Controller extends Controller
         $result->user_store_info = $user_store_info;
         $result->user_cart_info = $user_cart_info;
         $result->user_wishlist_info = $user_wishlist_info;
+        $result->notification = $notification;
         return $result;
     }
 

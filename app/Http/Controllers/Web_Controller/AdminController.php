@@ -319,6 +319,16 @@ class AdminController extends Controller
                 ->update(['balance' => DB::raw("balance + ".$dif)]);
             }
 
+            DB::table('notification')->insert([
+                [
+                    'date' => date('Y-m-d H:i:s'), 
+                    'transaction_code' => 'PAYMENT-ACCEPT',
+                    'transaction_number' => $transaction_id,
+                    'user_id' => $user_id,
+                    'status_read' => 0
+                ]
+            ]);
+
             DB::commit();
             $status= true;
             $message = "success";
@@ -359,6 +369,15 @@ class AdminController extends Controller
             ->where('user_id', $user_id)
             ->update(['balance' => DB::raw("balance + ".$receive_amount)]);
             
+            DB::table('notification')->insert([
+                [
+                    'date' => date('Y-m-d H:i:s'), 
+                    'transaction_code' => 'PAYMENT-REJECT',
+                    'transaction_number' => $transaction_id,
+                    'user_id' => $user_id,
+                    'status_read' => 0
+                ]
+            ]);
 
             DB::commit();
             $status= true;
