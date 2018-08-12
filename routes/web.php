@@ -140,3 +140,5 @@ Route::post('filter_product_store', 'Web_Controller\App2Controller@filter_produc
 
 Route::get('faq', 'Web_Controller\AppController@faq_page');
 Route::post('report_product', 'Web_Controller\AppController@report_product');
+Route::get('terms_of_service', 'Web_Controller\AppController@terms_of_service_page');
+Route::get('privacy_policy', 'Web_Controller\AppController@privacy_policy_page');

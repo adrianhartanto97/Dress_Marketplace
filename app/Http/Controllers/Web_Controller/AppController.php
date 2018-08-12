@@ -879,4 +879,30 @@ class AppController extends Controller
             echo $e->getMessage();
         }
     }
+
+    public function terms_of_service_page(Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.tos',['login_info' => $login_info]);
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
+
+    public function privacy_policy_page(Request $request)
+    {
+        try {
+            $jwt = $request->cookie('jwt');
+            $login_info = $this->get_login_info($jwt);
+            return view('pages.privacy_policy',['login_info' => $login_info]);
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
 }

@@ -65,7 +65,8 @@
         </div>
         <div class="page-footer">
             <div class="page-footer-inner"> 2018 &copy; DressMarketplace | <a href="{{url('/faq')}}">FAQ</a>
-               
+            | <a href="{{url('/terms_of_service')}}">Terms of Service</a> 
+            | <a href="{{url('/privacy_policy')}}">Privacy Policy</a>
             </div>
             <div class="scroll-to-top">
                 <i class="icon-arrow-up"></i>
