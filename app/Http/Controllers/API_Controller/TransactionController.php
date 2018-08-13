@@ -981,63 +981,65 @@ class TransactionController extends Controller
                     ->where('transaction_id', $i->transaction_id)
                     ->get();
                 $i->transaction = $transaction;
-            }
-                            
-            foreach ($transaction as $t) {   
-                $product = DB::table('view_transaction_summary_product')
-                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
-                            ->where('transaction_id',$t->transaction_id)
-                            ->where('store_id',$t->store_id)
-                            ->get();
-                foreach ($product as $p) {
-                    $product_size = DB::table('view_transaction_detail_product')
+
+                foreach ($transaction as $t) {   
+                    $product = DB::table('view_transaction_summary_product')
+                                ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                ->where('transaction_id',$t->transaction_id)
+                                ->where('store_id',$t->store_id)
+                                ->get();
+                    foreach ($product as $p) {
+                        $product_size = DB::table('view_transaction_detail_product')
+                                ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
+                                ->where('transaction_id',$t->transaction_id)
+                                ->where('store_id',$t->store_id)
+                                ->where('product_id',$p->product_id)
+                                ->get();
+                        $p->size_info = $product_size;
+                    }
+                    $t->product_ordered = $product;
+    
+                    
+                    $accept = DB::table('view_order_approve_summary_product')
+                                ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                ->where('transaction_id',$t->transaction_id)
+                                ->where('store_id',$t->store_id)
+                                ->where('accept_status','1')
+                                ->get();
+                    foreach($accept as $a) {
+                        $product_size = DB::table('view_order_approve_detail_product')
                             ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
                             ->where('transaction_id',$t->transaction_id)
                             ->where('store_id',$t->store_id)
-                            ->where('product_id',$p->product_id)
-                            ->get();
-                    $p->size_info = $product_size;
-                }
-                $t->product_ordered = $product;
-
-                
-                $accept = DB::table('view_order_approve_summary_product')
-                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
-                            ->where('transaction_id',$t->transaction_id)
-                            ->where('store_id',$t->store_id)
                             ->where('accept_status','1')
+                            ->where('product_id',$a->product_id)
                             ->get();
-                foreach($accept as $a) {
-                    $product_size = DB::table('view_order_approve_detail_product')
-                        ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
-                        ->where('transaction_id',$t->transaction_id)
-                        ->where('store_id',$t->store_id)
-                        ->where('accept_status','1')
-                        ->where('product_id',$a->product_id)
-                        ->get();
-                    $a->size_info = $product_size;
-                }
-                $t->product_accepted = $accept;
-
-                $reject = DB::table('view_order_approve_summary_product')
-                            ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                        $a->size_info = $product_size;
+                    }
+                    $t->product_accepted = $accept;
+    
+                    $reject = DB::table('view_order_approve_summary_product')
+                                ->select(DB::raw('product_id, product_name, product_photo, price_unit, total_qty, price_total'))
+                                ->where('transaction_id',$t->transaction_id)
+                                ->where('store_id',$t->store_id)
+                                ->where('accept_status','2')
+                                ->get();
+                    foreach($reject as $r) {
+                        $product_size = DB::table('view_order_approve_detail_product')
+                            ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
                             ->where('transaction_id',$t->transaction_id)
                             ->where('store_id',$t->store_id)
                             ->where('accept_status','2')
+                            ->where('product_id',$r->product_id)
                             ->get();
-                foreach($reject as $r) {
-                    $product_size = DB::table('view_order_approve_detail_product')
-                        ->select(DB::raw('product_id, product_size_id, size_name, product_qty '))
-                        ->where('transaction_id',$t->transaction_id)
-                        ->where('store_id',$t->store_id)
-                        ->where('accept_status','2')
-                        ->where('product_id',$r->product_id)
-                        ->get();
-                    $r->size_info = $product_size;
+                        $r->size_info = $product_size;
+                    }
+                    $t->product_rejected = $reject;
+                    
                 }
-                $t->product_rejected = $reject;
-                
             }
+                            
+            
             $status = true;
             return response()->json(['status'=>$status,'result'=>$invoice],200);
         }
